@@ -1,0 +1,112 @@
+body {
+    .header-wrapper {
+        background-color: $navbar-color;
+        z-index: 2;
+    
+        .header {
+            padding-top: 20px;
+            padding-bottom: 20px;
+    
+            .header-content {
+                display: flex;
+                justify-content: flex-end;
+    
+                .sidebar-toggle {
+                    display: none;
+                    cursor: pointer;
+    
+                    .bar1,
+                    .bar2,
+                    .bar3 {
+                        width: 35px;
+                        height: 5px;
+                        background-color: #ffffff;
+                        margin: 6px 0;
+                        transition: 0.4s;
+                        border-radius: 2px;
+                        pointer-events: none;
+                    }
+    
+                    &.change {
+                        .bar1 {
+                            transform: translate(0, 11px) rotate(-45deg);
+                        }
+    
+                        .bar2 {
+                            opacity: 0;
+                        }
+    
+                        .bar3 {
+                            transform: translate(0, -11px) rotate(45deg);
+                        }
+                    }
+                }
+    
+                nav {
+                    a {
+                        color: $title-color;
+                        font-size: 20px;
+                        text-decoration: none;
+    
+                        &:hover {
+                            color: $title-color-hover;
+                        }
+    
+                        &:not(:last-child) {
+                            margin-right: 20px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    &.with-sidebar {
+
+        .header-wrapper {
+            .header {
+                margin-left: 240px;
+                padding: 20px;
+            }
+        }
+    }
+}
+
+//for small laptops
+@media (max-width: 1199px) {
+    
+}
+
+// for tablets
+@media (max-width: 991px) {
+    body {
+        &.with-sidebar {
+            .header-wrapper {
+                .header {
+                    margin-left: 0;
+                    padding-left: 0;
+                    padding-right: 0;
+
+                    .header-content {
+                        justify-content: space-between;
+
+                        .sidebar-toggle {
+                            display: inline-block;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+// for phones
+@media (max-width: 767px) {
+    body {
+        &.with-sidebar {
+            .header-wrapper {
+
+            }
+        }
+    }
+}
