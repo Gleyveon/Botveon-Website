@@ -1,26 +1,38 @@
+import { config } from "dotenv";
 import express, { Express } from "express";
+import session from "express-session"
+import passport from "passport";
 import routes from "../routes";
 import cors from "cors";
-import session from "express-session"
+import store = require("connect-mongo");
+
+config();
+require('../strategies/discord');
 
 export function createApp (): Express {
     const app = express();
 
     // Enable Parsing Middleware for requests
     app.use(express.json());
-    app.use(express.urlencoded());
+    app.use(express.urlencoded({ extended: true }));
 
     // Enable cors
     app.use(cors({ origin: ["http://localhost:3000"], credentials: true, }));
 
-    // Sessions
+    //Enable sessions
     app.use(session({
-        secret: 'kml;zxhjfvoszjid0-vjiojksalkdmcklldsk;jnfv;l',
+        secret: 'asdkjhaksjdhkasjhdoiu',
         resave: false,
         saveUninitialized: false,
-        cookie: { maxAge: 1000 * 60 * 60 * 24 * 7 } // 7 days
+        cookie: { maxAge: 1000 * 60 * 60 * 24 * 7 }, // 7 days
+        store: store.create({mongoUrl: process.env.MONGODB_SRV})
     }));
 
-    app.use(`/api`, routes);
+    // Enable passport
+    app.use(passport.initialize());
+    app.use(passport.session());
+
+    app.use('/api', routes);
+
     return app;
 }

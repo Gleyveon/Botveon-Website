@@ -1,5 +1,6 @@
 import { createApp } from "./utils/createApp";
 import { config } from "dotenv"; 
+import './database/index';
 config();
 
 const PORT = process.env.PORT || 3001;
