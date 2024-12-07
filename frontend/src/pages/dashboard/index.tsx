@@ -1,23 +1,37 @@
 // src/pages/Dashboard.jsx
-import { useNavigate } from "react-router-dom";
-import { GuildContext } from "../../utils/contexts/GuildContext"
-import { mockGuilds } from "../../__mocks__/guilds";
-import { useContext } from "react";
+import { useEffect, useState } from "react";
+import { fetchMutualGuilds } from "../../utils/api";
+import { Guild } from "../../utils/types";
+
 import './styles.scss';
 
+
 function Dashboard() {
-  const navigate = useNavigate();
-  const { updateGuildId } = useContext(GuildContext);
 
-  const guilds = mockGuilds.map((guild) => (
-    <li key={guild.id} onClick={() => {
-      updateGuildId(guild.id);
-      navigate(`/guild/${guild.id}/community`);
-    }} style={{ cursor: "pointer" }}>
-      {guild.name}
-    </li>
+  const [data, setData] = useState<Guild[] | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    fetchMutualGuilds()
+      .then(data => {
+        setData(data);
+        setLoading(false);
+      })
+      .catch(err => {
+        setError(err);
+        setLoading(false);
+      });
+  }, []);
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error loading data!</p>;
+  if (!data) return <p>No guilds found</p>
+
+  const guilds = data.map((guild) => (
+    <li key={guild.id}>{guild.name}</li>
   ));
-
+  
   return (
     <div>
       <h1>Welcome to the Dashboard!</h1>

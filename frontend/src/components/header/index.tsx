@@ -6,6 +6,7 @@ type HeaderProps = {
 };
 
 function Header({ user }: HeaderProps) {
+
   return (
     <div className="header-wrapper">
       <div className="header">
@@ -26,7 +27,7 @@ function Header({ user }: HeaderProps) {
                 {user ? (
                   <Link to="/logout">Logout</Link>
                 ) : (
-                  <Link to="/login">Login</Link>
+                  <a href='http://localhost:3001/api/auth/discord'>Login</a>
                 )}
               </nav>
             </header>

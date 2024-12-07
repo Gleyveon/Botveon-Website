@@ -1,11 +1,11 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { GuildContext } from './utils/contexts/GuildContext';
 
 // components
 import Header from './components/header';
 import Footer from './components/footer';
 
 // pages
+import Testing from './pages/testing';
 import Community from './pages/community';
 import Dashboard from './pages/dashboard';
 import Economy from './pages/economy';
@@ -15,22 +15,18 @@ import Join from './pages/join';
 import Level from './pages/level';
 import PageNotFound from './pages/page-not-found';
 
-
-import { useState } from 'react';
-
 function RouteApp() {
-
-  const [guildId, setGuildId] = useState('');
-  const updateGuildId = (id: string) => setGuildId(id);
 
   return (
     <Router>
-      <GuildContext.Provider value={{ guildId, updateGuildId }}>
         <div className="app-layout">
           <Header user={false}/>
 
           <main>
             <Routes>
+              {/* Testing Route */}
+              <Route path="/testing" element={<Testing />} />
+
               {/* Main Routes */}
               <Route path="/" element={<Home />} />
               <Route path="/dashboard" element={<Dashboard />} />
@@ -49,7 +45,6 @@ function RouteApp() {
 
           <Footer />
         </div>
-      </GuildContext.Provider>
     </Router>
   );
 }
