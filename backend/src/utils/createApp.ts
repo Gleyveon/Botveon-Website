@@ -17,7 +17,7 @@ export function createApp (): Express {
     app.use(express.urlencoded({ extended: true }));
 
     // Enable cors
-    app.use(cors({ origin: ["http://localhost:3000"], credentials: true, }));
+    app.use(cors({ origin: ["http://localhost:5173"], credentials: true, }));
 
     //Enable sessions
     app.use(session({

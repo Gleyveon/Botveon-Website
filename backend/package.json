@@ -17,7 +17,9 @@
     "typescript": "^5.7.2"
   },
   "dependencies": {
+    "@types/axios": "^0.9.36",
     "@types/express-session": "^1.18.0",
+    "axios": "^1.7.9",
     "connect-mongo": "^5.1.0",
     "cors": "^2.8.5",
     "express": "^4.17.2",
