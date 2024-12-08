@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 
 // components
 import Header from './components/header';
@@ -29,7 +29,11 @@ function RouteApp() {
 
               {/* Main Routes */}
               <Route path="/" element={<Home />} />
+              <Route path="/home" element={<Home />} />
               <Route path="/dashboard" element={<Dashboard />} />
+
+              {/* Redirect /guild to /dashboard */}
+              <Route path="/guild" element={<Navigate to="/dashboard" replace />} />
 
               {/* Nested Routes for Guilds */}
               <Route path="/guild/:guildId" element={<Guild />} />

@@ -1,4 +1,5 @@
 // src/pages/Dashboard.jsx
+import { Link } from 'react-router-dom';
 import { useEffect, useState } from "react";
 import { fetchMutualGuilds } from "../../utils/api";
 import { Guild } from "../../utils/types";
@@ -28,15 +29,32 @@ function Dashboard() {
   if (error) return <p>Error loading data!</p>;
   if (!data) return <p>No guilds found</p>
 
-  const guilds = data.map((guild) => (
-    <li key={guild.id}>{guild.name}</li>
-  ));
-  
+  const guilds = data.map((guild) => {
+    // Define the guild icon URL with a fallback for missing icons
+    const guildIcon = guild.icon
+      ? `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.png`
+      : 'src/assets/img/landscape-placeholder-svgrepo-com.svg';
+
+    return (
+      <Link to={`/guild/${guild.id}`} className="guild-link" key={guild.id}>
+        <div className="guild">
+          <div className="guild_image"><img src={guildIcon} alt={guild.name} /></div>
+          <div className="guild_name title-white">
+            <p>{guild.name}</p>
+          </div>
+        </div>
+      </Link>
+    );
+  });
+
   return (
     <div>
-      <h1>Welcome to the Dashboard!</h1>
-      <p>This is the second page of your application.</p>
-      <ul>{guilds}</ul>
+      <div className="container">
+        <h1>Welcome to the Dashboard!</h1>
+        <div className="guild-list">
+          {guilds}
+        </div>
+      </div>
     </div>
   );
 }
