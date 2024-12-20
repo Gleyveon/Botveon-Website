@@ -11,7 +11,7 @@ const api = axios.create({
 export const fetchMutualGuilds = async () => {
     try {
       const response = await api.get('/guilds');
-      return response.data.guilds;
+      return response.data;
     } catch (err) {
         console.error('Error fetching data: ', err);
         throw err;

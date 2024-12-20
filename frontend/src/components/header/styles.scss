@@ -1,0 +1,47 @@
+// src/components/header
+.component.header-component {
+    .header {
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-top: 15px;
+            padding-bottom: 15px;
+    
+            nav {
+                a {
+                    color: $primary-link-color;
+                    text-decoration: none;
+                    font-size: 20px;
+                    font-weight: 400;
+                    margin-left: 20px;
+                    transition-duration: 0.3s;
+
+                    &:hover {
+                        color: $primary-link-color-hover;
+                    }
+    
+                    &:last-child {
+                        color: white;
+                        padding: 5px 30px;
+                        border-radius: 50px;
+                        background-color: $primary-accent-color;
+    
+                        &:hover {
+                            background-color: $primary-accent-color-hover;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+//for small laptops
+@media (max-width: 1199px) {}
+
+// for tablets
+@media (max-width: 991px) {}
+
+// for phones
+@media (max-width: 767px) {}

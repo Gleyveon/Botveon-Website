@@ -1,0 +1,47 @@
+// src/components/wave-section
+.component.wave-section-component {
+
+    .wave-wrapper {
+        .wave-top {
+            height: 80px;
+            position: relative;
+            overflow: hidden;
+
+            .wave-top-container {
+                position: absolute;
+                top: -87px;
+                left: 0;
+                width: 100%;
+
+                .wave-svg {
+                    width: 100%;
+                    height: 250px;
+                }
+            }
+        }
+
+        .wave-content {
+            background-color: $highlight-background-color;
+            padding-top: 30px;
+            padding-bottom: 50px;
+        }
+
+        .wave-bottom {
+            height: 80px;
+            position: relative;
+            overflow: hidden;
+
+            .wave-bottom-container {
+                position: absolute;
+                top: -120px;
+                left: 0;
+                width: 100%;
+
+                .wave-svg {
+                    width: 100%;
+                    height: 250px;
+                }
+            }
+        }
+    }
+}

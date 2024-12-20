@@ -1,43 +1,20 @@
+html,
 body {
-    height: 100vh;
-    background: radial-gradient(circle at center, $secondary-background-color, $primary-background-color);
-    color: white;
-    margin: 0;
+    background: linear-gradient(180deg, #121212, #191919);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    font-family: 'Poppins', sans-serif;
 
-    // add sidebar on certain pages
-    &.with-sidebar {
-        .main {
-            margin-left: 240px;
-            padding: 20px;
-        }
+    main {
+        min-height: calc(100vh - 60px);
     }
 }
 
 //for small laptops
-@media (max-width: 1199px) {
-
-}
+@media (max-width: 1199px) {}
 
 // for tablets
-@media (max-width: 991px) {
-    body {
-        &.with-sidebar {
-            .main {
-                margin-left: 0;
-                padding: 0;
-            }
-        }
-    }
-}
+@media (max-width: 991px) {}
 
 // for phones
-@media (max-width: 767px) {
-    body {
-        &.with-sidebar {
-            .main {
-                margin-left: 0;
-                padding: 0;
-            }
-        }
-    }
-}
+@media (max-width: 767px) {}

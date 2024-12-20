@@ -5,6 +5,7 @@ import { fetchMutualGuilds } from "../../utils/api";
 import { Guild } from "../../utils/types";
 
 import './styles.scss';
+import Loading from '../../components/loading';
 
 
 function Dashboard() {
@@ -25,7 +26,7 @@ function Dashboard() {
       });
   }, []);
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <Loading />;
   if (error) return <p>Error loading data!</p>;
   if (!data) return <p>No guilds found</p>
 
@@ -37,23 +38,37 @@ function Dashboard() {
 
     return (
       <Link to={`/guild/${guild.id}`} className="guild-link" key={guild.id}>
-        <div className="guild">
+
+        <div className="guild-card">
+          <div className="guild-icon-wrapper">
+            <img src={guildIcon} alt="server icon" className="guild-icon" />
+          </div>
+          <div className="guild-content">
+            <div className="title">{guild.name}</div>
+          </div>
+          <img src={guildIcon} alt="blurred server icon" className="guild-background" />
+        </div>
+
+        {/* <div className="guild">
           <div className="guild_image"><img src={guildIcon} alt={guild.name} /></div>
           <div className="guild_name title-white">
             <p>{guild.name}</p>
           </div>
-        </div>
+        </div> */}
+
+
       </Link>
     );
   });
 
   return (
-    <div>
+    <div className='page dashboard-page'>
       <div className="container">
-        <h1>Welcome to the Dashboard!</h1>
-        <div className="guild-list">
-          {guilds}
-        </div>
+          <h1>Configure servers:</h1>
+
+          <div className="guild-cards">
+            {guilds}
+          </div>
       </div>
     </div>
   );

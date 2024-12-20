@@ -1,11 +1,67 @@
+// src/components/footer
+import { Link } from 'react-router-dom';
+import './styles.scss';
+
 function Footer() {
 
-    return (
-      <div>
-        <h1>Footer lole</h1>
+  return (
+    <div className="component footer-component">
+
+      <div className="footer">
+        <div className="container">
+          <div className="footer-sections-top">
+            <div className="row">
+
+              <div className="column col-md-3">
+                <div className="footer-section">
+                  <div className="section-title">Get started:</div>
+                  <div className="section-links">
+                    <a href="https://discord.com/oauth2/authorize?client_id=817845132363038750&scope=bot&permissions=1095216131705&redirect_uri=http%3A%2F%2Flocalhost%3A5173%2Ftesting" target='_blank' rel="noopener noreferrer">Invite bot</a>
+                  </div>
+                </div>
+              </div>
+
+              <div className="column col-md-3">
+                <div className="footer-section">
+                  <div className="section-title">Explore:</div>
+                  <div className="section-links">
+                    <a href="/features">Features</a>
+                    <a href="/commands">Commands</a>
+                  </div>
+                </div>
+              </div>
+
+              <div className="column col-md-3">
+                <div className="footer-section">
+                  <div className="section-title">Contact:</div>
+                  <div className="section-links">
+                    <a href="mailto:support@botveon.com">Mail</a>
+                    <a href="https://discord.gg/P3x9xtgFRH" target="_blank" rel="noopener noreferrer">Support Server</a>
+                  </div>
+                </div>
+              </div>
+
+              <div className="column col-md-3">
+                <div className="footer-section">
+                  <div className="section-title">Legal:</div>
+                  <div className="section-links">
+                  <a href="/privacy">Privacy Policy</a>
+                  <a href="/terms">Terms of Service</a>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+          <div className="footer-sections-bottom">
+            <div className="footer-section">
+              <div className='copyright'>&copy; {new Date().getFullYear()} Botveon. All rights reserved.</div>
+            </div>
+          </div>
+        </div>
       </div>
-    );
-  }
-  
-  export default Footer;
-  
+    </div>
+  );
+}
+
+export default Footer;

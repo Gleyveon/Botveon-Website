@@ -1,9 +1,9 @@
-// src/pages/Guild.jsx
+// src/pages/guild
 import './styles.scss';
 
 function Guild() {
   return (
-    <div className='guild-page'>
+    <div className='page guild-age'>
       <h1>Welcome to the Guild Page</h1>
     </div>
   );

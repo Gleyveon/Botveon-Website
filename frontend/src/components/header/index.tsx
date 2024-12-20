@@ -1,34 +1,21 @@
+// src/components/header
 import { Link } from 'react-router-dom';
-import './style.scss';
+import './styles.scss';
 
-type HeaderProps = {
-  user: boolean | null; // Define the expected type of `user`
-};
-
-function Header({ user }: HeaderProps) {
+function Header() {
 
   return (
-    <div className="header-wrapper">
-      <div className="header">
-        <div className="container">
-          <div className="header-content">
-            {/* Sidebar toggle */}
-            <div className="sidebar-toggle">
-              <div className="bar1"></div>
-              <div className="bar2"></div>
-              <div className="bar3"></div>
-            </div>
+    <div className="component header-component">
+      <div className="header-wrapper">
+        <div className="header">
+          <div className="container">
             <header>
               <nav>
-                {/* Links */}
-                <Link to="/">Home</Link>
-                <Link to="/dashboard">Dashboard</Link>
-                {/* Conditional rendering based on the user */}
-                {user ? (
-                  <Link to="/logout">Logout</Link>
-                ) : (
-                  <a href='http://localhost:3001/api/auth/discord'>Login</a>
-                )}
+                <Link to="/home">home</Link>
+                <Link to="/features">features</Link>
+                <Link to="/commands">commands</Link>
+                <Link to="/dashboard">dashboard</Link>
+                <a href='http://localhost:3001/api/auth/discord'>Login</a>
               </nav>
             </header>
           </div>

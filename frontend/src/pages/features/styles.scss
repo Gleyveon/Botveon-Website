@@ -1,0 +1,68 @@
+// src/pages/features
+.page.features-page {
+    .feature-showcase {
+        display: flex;
+        flex-direction: column;
+        gap: 40px;
+        padding-left: 200px;
+        padding-right: 200px;
+
+        .showcase-title {
+            text-align: center;
+            font-size: 40px;
+            font-weight: bold;
+            color: $primary-title-color;
+        }
+
+        .feature {
+            display: flex;
+            background: linear-gradient(145deg, #1c1c1c, #141414);
+            width: 100%;
+            padding: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease;
+            justify-content: space-between;
+            border-radius: 30px;
+            border: 1px solid rgb(75, 75, 75);
+            transition: transform 0.3s ease;
+            overflow: hidden;
+
+            &:hover {
+                transform: scale(1.02);
+            }
+
+            .feature-text {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+
+
+                .title {
+                    color: white;
+                    font-size: 20px;
+                    font-weight: bold;
+                }
+
+                .description {
+                    color: rgb(212, 212, 212);
+                }
+            }
+
+            .image {
+                border-radius: 20px;
+                height: 150px;
+                width: 400px;
+                object-fit: cover;
+            }
+        }
+    }
+}
+
+//for small laptops
+@media (max-width: 1199px) {}
+
+// for tablets
+@media (max-width: 991px) {}
+
+// for phones
+@media (max-width: 767px) {}
