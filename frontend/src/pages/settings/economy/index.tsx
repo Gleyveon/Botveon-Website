@@ -1,4 +1,4 @@
-// src/pages/Economy.jsx
+// src/pages/Economy.tsx
 import './styles.scss';
 
 function Economy() {

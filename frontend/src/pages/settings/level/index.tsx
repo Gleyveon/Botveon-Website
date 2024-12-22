@@ -1,4 +1,4 @@
-// src/pages/Level.jsx
+// src/pages/Level.tsx
 import './styles.scss';
 
 function Level() {

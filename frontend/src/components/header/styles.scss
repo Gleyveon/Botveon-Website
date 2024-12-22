@@ -1,47 +1,286 @@
 // src/components/header
-.component.header-component {
-    .header {
-        header {
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
-            padding-top: 15px;
-            padding-bottom: 15px;
-    
-            nav {
-                a {
-                    color: $primary-link-color;
-                    text-decoration: none;
-                    font-size: 20px;
-                    font-weight: 400;
-                    margin-left: 20px;
-                    transition-duration: 0.3s;
+header {
+    .component.header-component {
+        height: 70px;
+        width: 100%;
 
-                    &:hover {
-                        color: $primary-link-color-hover;
+        .header-wrapper {
+            position: fixed;
+            width: 100%;
+            z-index: 5;
+            background: linear-gradient(180deg, #121212, #191919);
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+
+            &.hidden {
+                display: none;
+            }
+
+            .header {
+                display: flex;
+                justify-content: flex-end;
+                align-items: center;
+                width: 100%;
+
+                .menu-toggle {
+                    display: none;
+                    cursor: pointer;
+                    right: 0;
+
+                    .bar1,
+                    .bar2,
+                    .bar3 {
+                        width: 35px;
+                        height: 5px;
+                        background-color: #ffffff;
+                        margin: 6px 0;
+                        transition: 0.4s;
+                        border-radius: 2px;
+                        pointer-events: none;
+                        transition-delay: 0.2s;
                     }
+
+                    &.open {
+                        .bar1 {
+                            transform: translate(0, 11px) rotate(-45deg);
+                        }
+
+                        .bar2 {
+                            opacity: 0;
+                        }
+
+                        .bar3 {
+                            transform: translate(0, -11px) rotate(45deg);
+                        }
+                    }
+                }
+            }
+
+            .nav-wrapper {
+                display: flex;
+                justify-content: flex-end;
+
+                nav {
+                    display: flex;
+                    align-items: center;
+                    padding-top: 15px;
+                    padding-bottom: 15px;
+
+                    a {
+                        color: $primary-link-color;
+                        text-decoration: none;
+                        font-size: 20px;
+                        font-weight: 400;
+                        margin-left: 20px;
+                        transition-delay: 0.2s;
+
+                        &.link {
+                            &:hover {
+                                color: $primary-link-color-hover;
+                            }
+                        }
+
+                        &.login-button {
+                            color: white;
+                            padding: 5px 30px;
+                            border-radius: 50px;
+                            background-color: $primary-accent-color;
+
+                            &:hover {
+                                background-color: $primary-accent-color-hover;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        
+
+        .sidebar-header-wrapper {
+
+            &.active {
+                .overlay {
+                    opacity: 1;
+                    pointer-events: all;
+                }
     
-                    &:last-child {
-                        color: white;
-                        padding: 5px 30px;
-                        border-radius: 50px;
-                        background-color: $primary-accent-color;
-    
-                        &:hover {
-                            background-color: $primary-accent-color-hover;
+                .sidebar-header {
+                    transform: translateX(0);
+                }
+            }
+
+            .overlay {
+                position: fixed;
+                background-color: rgba(black, 0.5);
+                height: 100%;
+                width: 100%;
+                top: 0;
+                left: 0;
+                z-index: 4;
+                opacity: 0;
+                transition: opacity 0.3s ease-in-out;
+                pointer-events: none;
+            }
+
+            .sidebar-header {
+                position: fixed;
+                height: 100vh;
+                width: 100%;
+                z-index: 5;
+                background: linear-gradient(180deg, #121212, #191919);
+                background-repeat: no-repeat;
+                background-attachment: fixed;
+                padding: 20px 30px;
+                max-width: 375px;
+                transform: translateX(-100%);
+                transition: transform 0.3s ease-in-out;
+
+                .menu-toggle-wrapper {
+                    display: flex;
+                    width: 100%;
+                    justify-content: end;
+                    padding-bottom: 20px;
+                    border-bottom: 1px solid rgb(48, 48, 48);
+
+                    .menu-toggle {
+                        cursor: pointer;
+                        right: 0;
+
+                        .bar1,
+                        .bar2,
+                        .bar3 {
+                            width: 35px;
+                            height: 5px;
+                            background-color: #ffffff;
+                            margin: 6px 0;
+                            transition: 0.4s;
+                            border-radius: 2px;
+                            pointer-events: none;
+                            transition-delay: 0.20s;
+                        }
+
+                        &.open {
+                            .bar1 {
+                                transform: translate(0, 11px) rotate(-45deg);
+                            }
+
+                            .bar2 {
+                                opacity: 0;
+                            }
+
+                            .bar3 {
+                                transform: translate(0, -11px) rotate(45deg);
+                            }
+                        }
+                    }
+                }
+
+                .nav-wrapper {
+                    display: flex;
+                    justify-content: flex-start;
+
+                    .nav {
+                        flex-direction: column;
+                        padding: 0;
+                        padding-top: 20px;
+                        width: 100%;
+
+                        a {
+                            color: $primary-link-color;
+                            text-decoration: none;
+                            font-size: 25px;
+                            font-weight: 400;
+                            white-space: nowrap;
+                            text-overflow: ellipsis;
+                            overflow: hidden;
+                            transition-duration: 0.3s;
+
+                            &.link {
+                                width: 100%;
+                                text-align: center;
+                                border-radius: 5px;
+                                margin-bottom: 5px;
+
+                                &.active {
+                                    pointer-events: none;
+                                    background-color: $highlight-background-color;
+                                }
+
+                                &:hover {
+                                    background-color: #292929;
+                                }
+                            }
+                        }
+
+                        .login-button-wrapper {
+                            position: absolute;
+                            height: fit-content;
+                            padding-top: 20px;
+                            bottom: 20px;
+                            width: calc(100% - 60px);
+                            border-top: 1px solid rgb(48, 48, 48);
+
+                            .login-button {
+                                display: block;
+                                background-color: $primary-accent-color;
+                                color: white;
+                                text-align: center;
+                                width: 100%;
+                                padding: 5px 30px;
+                                border-radius: 5px;
+
+                                &:hover {
+                                    background-color: $primary-accent-color-hover;
+                                }
+                            }
                         }
                     }
                 }
             }
         }
     }
+
+    &.with-sidebar {
+        //background-color: $primary-background-color;
+    }
+
+    //for small laptops
+    @media (max-width: 1199px) {
+        .component.header-component {
+            .header-wrapper {
+                .header {
+                    height: 70px;
+                    justify-content: space-between;
+
+                    .menu-toggle {
+                        display: block;
+                    }
+                }
+
+                .nav-wrapper {
+                    display: none;
+                }
+            }
+        }
+    }
+
+    // for tablets
+    @media (max-width: 991px) {}
+
+    // for phones
+    @media (max-width: 767px) {
+        .component.header-component {
+
+            &:after {
+                display: none;
+            }
+
+            .sidebar-header-wrapper {
+                .sidebar-header {
+                    max-width: none;
+                }
+            }
+        }
+    }
 }
-
-//for small laptops
-@media (max-width: 1199px) {}
-
-// for tablets
-@media (max-width: 991px) {}
-
-// for phones
-@media (max-width: 767px) {}

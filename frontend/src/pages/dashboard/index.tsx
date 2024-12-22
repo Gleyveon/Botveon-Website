@@ -1,4 +1,4 @@
-// src/pages/Dashboard.jsx
+// src/pages/Dashboard.tsx
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from "react";
 import { fetchMutualGuilds } from "../../utils/api";

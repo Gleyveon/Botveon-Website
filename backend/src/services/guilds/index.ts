@@ -19,7 +19,7 @@ export async function getUserGuildsService(id: string) {
     return axios.get<Guild[]>(`${DISCORD_API_URL}/users/@me/guilds`, {
         headers: { Authorization: `Bearer ${user.accessToken}`}
     });
-} 
+}
 
 export async function getMutualGuildsService(id: string) {
     const { data: botGuilds } = await getBotGuildsService();
@@ -29,4 +29,11 @@ export async function getMutualGuildsService(id: string) {
     const mutualGuilds = adminUserGuilds.filter((guild) => botGuilds.some((botGuilds) => botGuilds.id === guild.id));
 
     return mutualGuilds;
+}
+
+export function getGuildService(id: string) {
+    const TOKEN = process.env.DISCORD_BOT_TOKEN;
+    return axios.get(`${DISCORD_API_URL}/guilds/${id}`, {
+        headers: { Authorization: `Bot ${TOKEN}`}
+    });
 }

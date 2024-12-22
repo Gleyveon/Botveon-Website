@@ -1,4 +1,4 @@
-// src/pages/Join.jsx
+// src/pages/Join.tsx
 import './styles.scss';
 
 function join() {

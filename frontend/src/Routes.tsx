@@ -1,8 +1,8 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 
-// components
-import Header from './components/header';
-import Footer from './components/footer';
+// Layouts
+import DefaultLayout from './layout/defaultlayout';
+import SidebarLayout from './layout/sidebarlayout';
 
 // pages
 import Commands from './pages/commands'
@@ -16,45 +16,35 @@ import Join from './pages/settings/join';
 import Level from './pages/settings/level';
 import PageNotFound from './pages/page-not-found';
 import Testing from './pages/testing';
-import Loading from './components/loading';
 
 function RouteApp() {
 
   return (
     <Router>
-      <div className="app-layout">
-        <Header />
+      <Routes>
 
-        <main>
-          <Routes>
-            {/* Testing Route */}
-            {/* <Route path="/testing" element={<Testing />} /> */}
+        <Route element={<DefaultLayout />}>
+          <Route path="/" element={<Home />} />
+          <Route path="/home" element={<Home />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/commands" element={<Commands />} />
+          <Route path="/features" element={<Features />} />
+        </Route>
 
-            {/* Main Routes */}
-            <Route path="/" element={<Home />} />
-            <Route path="/home" element={<Home />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/commands" element={<Commands />} />
-            <Route path="/features" element={<Features />} />
+        <Route element={<SidebarLayout />}>
+          <Route path="/guild" element={<Navigate to="/dashboard" replace />} />
+          <Route path="/guild/:guildId" element={<Guild />} />
+          <Route path="/guild/:guildId/community" element={<Community />} />
+          <Route path="/guild/:guildId/join" element={<Join />} />
+          <Route path="/guild/:guildId/economy" element={<Economy />} />
+          <Route path="/guild/:guildId/level" element={<Level />} />
+        </Route>
 
+        <Route element={<DefaultLayout />}>
+          <Route path="*" element={<PageNotFound />} />
+        </Route>
 
-            {/* Redirect /guild to /dashboard */}
-            <Route path="/guild" element={<Navigate to="/dashboard" replace />} />
-
-            {/* Nested Routes for Guilds */}
-            <Route path="/guild/:guildId" element={<Guild />} />
-            <Route path="/guild/:guildId/community" element={<Community />} />
-            <Route path="/guild/:guildId/join" element={<Join />} />
-            <Route path="/guild/:guildId/economy" element={<Economy />} />
-            <Route path="/guild/:guildId/level" element={<Level />} />
-
-            {/* No page found */}
-            <Route path="*" element={<PageNotFound />} />
-          </Routes>
-        </main>
-
-        <Footer />
-      </div>
+      </Routes>
     </Router>
   );
 }

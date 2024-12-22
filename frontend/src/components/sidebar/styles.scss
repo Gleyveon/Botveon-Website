@@ -1,14 +1,16 @@
 // src/components/sidebar
-.sidebar {
+.component.sidebar-component {
     position: fixed;
     height: 100%;
     width: 240px;
     transition: 0.5s;
-    z-index: 1;
     overflow: hidden;
 
-    background: linear-gradient($primary-sidebar-color, $secondary-sidebar-color);
+    background: linear-gradient(180deg, #121212, #191919);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
     box-shadow: 5px 0 5px rgba(0, 0, 0, 0.1);
+    //border-right: 1px solid rgb(59, 59, 59);
 
     .menu {
         margin-top: 50px;
@@ -41,33 +43,32 @@
             }
         }
     }
-}
 
-//for small laptops
-@media (max-width: 1199px) {
-    
-}
+    //for small laptops
+    @media (max-width: 1199px) {}
 
-// for tablets
-@media (max-width: 991px) {
-    body {
-        &.with-sidebar {
-            .sidebar {
-                display: none;
-                &.active {
-                    display: inline-block;
+    // for tablets
+    @media (max-width: 991px) {
+        body {
+            &.with-sidebar {
+                .sidebar {
+                    display: none;
+
+                    &.active {
+                        display: inline-block;
+                    }
                 }
             }
         }
     }
-}
 
-// for phones
-@media (max-width: 767px) {
-    body {
-        &.with-sidebar {
-            .sidebar {
-                width: 100%;
+    // for phones
+    @media (max-width: 767px) {
+        body {
+            &.with-sidebar {
+                .sidebar {
+                    width: 100%;
+                }
             }
         }
     }

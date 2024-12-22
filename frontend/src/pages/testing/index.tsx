@@ -1,4 +1,4 @@
-// src/pages/testing.jsx
+// src/pages/testing.tsx
 import { Link } from 'react-router-dom';
 import './styles.scss';
 

@@ -1,4 +1,4 @@
-// src/pages/Community.jsx
+// src/pages/Community.tsx
 import { useContext } from "react";
 import './styles.scss';
 

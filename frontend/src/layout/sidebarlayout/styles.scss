@@ -1,0 +1,11 @@
+// src/layout/sidebarlayout
+.layout.sidebar-layout {
+    background: linear-gradient(180deg, $highlight-background-color, $secondary-background-color);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    font-family: 'Poppins', sans-serif;
+
+    main {
+        padding-left: 240px;
+    }
+}
