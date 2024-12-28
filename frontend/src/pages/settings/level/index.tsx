@@ -1,10 +1,14 @@
-// src/pages/Level.tsx
+// src/pages/settings/level
+import { useParams } from 'react-router-dom';
+import { useContext } from "react";
 import './styles.scss';
 
 function Level() {
+  const { guildId } = useParams();
+
   return (
-    <div className='level-page'>
-      <h1>Welcome to the Level Page</h1>
+    <div className="page page-level">
+      
     </div>
   );
 }

@@ -17,3 +17,23 @@ export const fetchMutualGuilds = async () => {
         throw err;
     }
   };
+
+  export const fetchCommunitySettings = async (guildID: string) => {
+    try {
+      const response = await api.get(`/guilds/${guildID}/community`);
+      return response.data;
+    } catch (err) {
+        console.error('Error fetching data: ', err);
+        throw err;
+    }
+  }
+
+  export const updateCommunitySettings = async (guildID: string, settings: { threadChannels: string[]; upvoteChannels: string[]; bumpChannel: string | undefined }) => {
+    try {
+        const response = await api.post(`/guilds/${guildID}/community`, settings);
+        return response.data;
+    } catch (err) {
+        console.error('Error submitting settings: ', err);
+        throw err;
+    }
+};

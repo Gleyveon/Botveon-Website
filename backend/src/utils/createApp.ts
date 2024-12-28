@@ -5,12 +5,26 @@ import passport from "passport";
 import routes from "../routes";
 import cors from "cors";
 import store = require("connect-mongo");
+import rateLimit from "express-rate-limit";
+
 
 config();
 require('../strategies/discord');
 
 export function createApp (): Express {
     const app = express();
+
+    // Rate Limiting: Limit to 100 requests per IP per 15 minutes
+    const limiter = rateLimit({
+        windowMs: 1000 * 60, // 1 minutes
+        max: 100, // Limit each IP to 100 requests
+        standardHeaders: true, // Send rate limit info in response headers
+        legacyHeaders: false, // Disable X-RateLimit-* headers
+        message: "Too many requests from this IP, please try again later.",
+    });
+
+    // Apply the rate limiter to all API routes
+    app.use("/api", limiter);
 
     // Enable Parsing Middleware for requests
     app.use(express.json());

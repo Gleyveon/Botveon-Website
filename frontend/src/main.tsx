@@ -6,7 +6,7 @@ import './styles/main.scss';
 import Routes from './Routes.tsx';
 
 createRoot(document.getElementById('root')!).render(
-  // <StrictMode>
+  <StrictMode>
     <Routes />
-  // </StrictMode>,
+  </StrictMode>,
 )

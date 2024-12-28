@@ -1,4 +1,4 @@
-// src/components/settings/components/input-field
+// src/components/settings/subcomponents/input-field
 import './styles.scss';
 
 function InputField() {

@@ -8,9 +8,9 @@ export interface User {
 }
 
 const UserSchema = new Schema<User>({
-    discordId: { type: mongoose.SchemaTypes.String, required: true, unique: true, },
-    accessToken: { type: mongoose.SchemaTypes.String, required: true, },
-    refreshToken: { type: mongoose.SchemaTypes.String, required: true, },
+    discordId: { type: Schema.Types.String, required: true, unique: true, },
+    accessToken: { type: Schema.Types.String, required: true, },
+    refreshToken: { type: Schema.Types.String, required: true, },
     //email: { type: mongoose.SchemaTypes.String, require: true, },
 });
 

@@ -1,12 +1,16 @@
-// src/pages/Join.tsx
+// src/pages/settings/join
+import { useParams } from 'react-router-dom';
+import { useContext } from "react";
 import './styles.scss';
 
-function join() {
+function Join() {
+  const { guildId } = useParams();
+
   return (
-    <div className='join-page'>
-      <h1>Welcome to the Join Page</h1>
+    <div className="page page-join">
+      
     </div>
   );
 }
 
-export default join;
+export default Join;

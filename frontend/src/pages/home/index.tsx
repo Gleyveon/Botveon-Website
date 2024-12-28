@@ -1,7 +1,7 @@
 // src/pages/home
 import './styles.scss';
 
-import WaveSection from '../../components/wave-section';
+import WaveSection from '../../components/shared/wave-section';
 import { useState } from 'react';
 
 function Home() {

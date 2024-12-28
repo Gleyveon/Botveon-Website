@@ -1,10 +1,14 @@
-// src/pages/Economy.tsx
+// src/pages/settings/economy
+import { useParams } from 'react-router-dom';
+import { useContext } from "react";
 import './styles.scss';
 
 function Economy() {
+  const { guildId } = useParams();
+
   return (
-    <div className='economy-page'>
-      <h1>Welcome to the Economy Page</h1>
+    <div className="page page-economy">
+      
     </div>
   );
 }

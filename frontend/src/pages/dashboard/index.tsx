@@ -5,7 +5,7 @@ import { fetchMutualGuilds } from "../../utils/api";
 import { Guild } from "../../utils/types";
 
 import './styles.scss';
-import Loading from '../../components/loading';
+import Loading from '../../components/shared/loading';
 
 
 function Dashboard() {
