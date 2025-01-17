@@ -20,5 +20,16 @@ export const communitySettingsSchema = Joi.object({
     bumpChannel: Joi.string()
     .regex(channelIdPattern)
     .message('Bump channel ID must be a string with 17 to 20 numeric characters.')
-    .optional()
+});
+
+export const joinSettingsSchema = Joi.object({
+
+});
+
+export const economySettingsSchema = Joi.object({
+
+});
+
+export const levelSettingsSchema = Joi.object({
+
 });

@@ -1,10 +1,7 @@
 // src/pages/settings/community
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from "react";
-import { APIChannel } from 'discord-api-types/v9';
 import { fetchCommunitySettings, updateCommunitySettings } from '../../../utils/api';
-import axios from 'axios';
-
 import './styles.scss';
 
 // import components
@@ -71,13 +68,13 @@ function Community() {
     <div className="page page-community">
 
       <div className="container">
-        <Settings title="Level Up message" description="See level-up messages upon gaining a new level.">
+        <Settings title="Selected thread channels" description="Automatically create threads on every message created within the selected channels.">
           <Selector itemCategory='channel' selectionMode='multiple' items={channels} selectedItems={threadChannels} setSelectedItems={setThreadChannels} />
         </Settings>
-        <Settings title="Level Up message" description="See level-up messages upon gaining a new level.">
+        <Settings title="Selected upvote/downvote channels" description="Automatically create upvote/downvote reactions on every message created within the selected channels.">
           <Selector itemCategory='channel' selectionMode='multiple' items={channels} selectedItems={upvoteChannels} setSelectedItems={setUpvoteChannels} />
         </Settings>
-        <Settings title="Level Up message" description="See level-up messages upon gaining a new level.">
+        <Settings title="Selected bump channel" description="Monitor bump messages from Disboard (a Discord Bot) and remove all non-bump messages. Server members receive a reward of 50 currency for bumping your server.">
           <Selector itemCategory='channel' selectionMode='singular' items={channels} selectedItems={bumpChannel ? [bumpChannel] : []} setSelectedItems={(selected: string[]) => setBumpChannel(selected[0] || undefined)} />
         </Settings>
         <button onClick={handleSubmit}>Save Settings</button>
