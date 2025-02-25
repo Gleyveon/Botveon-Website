@@ -216,9 +216,74 @@ export async function updateEconomySettingsController(req: Request, res: Respons
 }
 
 export async function getLevelSettingsController(req: Request, res: Response) {
+    const user = req.user as User;
+    const { id } = req.params;
 
+    try {
+        const guilds = await getMutualGuildsService(user.id);
+        const valid = guilds.some((guild) => guild.id === id);
+        if (!valid) { return res.sendStatus(403) };
+
+        let { data: channels } = await getChannelsService(id);
+        let { data: roles } = await getRolesService(id);
+
+        channels = sortChannelsService(channels);
+        roles = sortRolesService(roles)
+
+
+        const guildSettings = await GuildData.findOne({ serverID: id });
+
+        if (!guildSettings) {
+            return res.status(404).send({ message: "Guild settings not found" });
+        }
+
+        res.send({
+            channels: channels,
+            roles: roles,
+            levelUpMessages: guildSettings.levelUpMessages,
+            levelUpRoles: guildSettings.levelUpRoles,
+            boostRoles: guildSettings.boostRoles,
+        });
+
+    } catch (err) {
+        console.log(err);
+        res.status(400).send('Error')
+    }
 }
 
 export async function updateLevelSettingsController(req: Request, res: Response) {
+    const user = req.user as User;
+    const { id: guildId } = req.params;
+    const { levelUpMessages, levelUpRoles, boostRoles } = req.body;
 
+    try {
+        // Ensure the user has access to the guild
+        const guilds = await getMutualGuildsService(user.id);
+        const valid = guilds.some((guild) => guild.id === guildId);
+        if (!valid) {
+            return res.status(403).json({ error: "Forbidden: You don't have access to this guild." });
+        }
+
+        const existingSettings = await GuildData.findOne({ serverID: guildId });
+
+        if (existingSettings) {
+            existingSettings.levelUpMessages = levelUpMessages;
+            existingSettings.levelUpRoles = levelUpRoles;
+            existingSettings.boostRoles = boostRoles;
+
+            await existingSettings.save();
+        } else {
+            await GuildData.create({
+                guildId,
+                levelUpMessages: levelUpMessages,
+                levelUpRoles: levelUpRoles,
+                boostRoles: boostRoles,
+            });
+        }
+
+        return res.status(200).json({ message: "Level settings updated successfully." });
+    } catch (err) {
+        console.error("Error updating level settings:", err);
+        return res.status(500).json({ error: "Internal server error." });
+    }
 }

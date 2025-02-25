@@ -8,7 +8,12 @@ export interface Guild {
         namePlural: string;
     };
     adminRoles: string[];
-    boostRoles: string[];
+    boostRoles: {
+        roleID: string;
+        boost: number;
+        stackable: boolean;
+        equation: "add" | "multiply";
+    }[];
     joinRoles: string[];
     stickyRoles: string[];
     levelUpRoles: {
@@ -26,6 +31,7 @@ export interface Guild {
     modRoles: string[];
     bannedRole?: string;
     levelUpMessages: boolean;
+    levelUpChannel: string;
     persistentRoles: boolean;
     threadChannels: string[];
     upvoteChannels: string[];
@@ -43,7 +49,7 @@ export interface Guild {
             };
         }[];
         includeUserAvatar: boolean;
-        sendImidiate: boolean;
+        sendImmediate: boolean;
     };
     goodbyeChannel?: {
         channelID: string;
@@ -59,7 +65,7 @@ export interface Guild {
             };
         }[];
         includeUserAvatar: boolean;
-        sendImidiate: boolean;
+        sendImmediate: boolean;
     };
     infractionChannel?: string;
     bumpChannel?: string;
@@ -94,17 +100,17 @@ const GuildSchema = new Schema<Guild>(
         currency: {
             icon: {
                 type: Schema.Types.String,
-                default: "🪙",
+                // default: "🪙",
                 maxlength: 64
             },
             nameSingular: {
                 type: Schema.Types.String,
-                default: "coin",
+                // default: "coin",
                 maxlength: 32
             },
             namePlural: {
                 type: Schema.Types.String,
-                default: "coins",
+                // default: "coins",
                 maxlength: 32
             }
         },
@@ -119,14 +125,42 @@ const GuildSchema = new Schema<Guild>(
             }
         },
         boostRoles: {
-            type: [Schema.Types.String],
+            type: [
+                {
+                    roleID: {
+                        type: Schema.Types.String,
+                        required: true,
+                        validate: {
+                            validator: function (value: string) {
+                                return /^[0-9]{17,20}$/.test(value);
+                            },
+                            message: "Role ID must be a numeric string between 17 and 20 characters."
+                        }
+                    },
+                    boost: {
+                        type: Schema.Types.Number,
+                        required: true,
+                        min: [0, "boost must be at least 0."],
+                        max: [9999, "Boost must be under 9999"],
+                        validate: {
+                            validator: function (value: number) {
+                                return typeof value === "number" && !isNaN(value);
+                            },
+                            message: "Boost must be a valid number."
+                        }
+                    },
+                    stackable: {
+                        type: Boolean,
+                        required: true
+                    },
+                    equation: {
+                        type: String,
+                        enum: ["add", "multiply"],
+                        required: true
+                    }
+                }
+            ],
             default: [],
-            validate: {
-                validator: function (values: string[]) {
-                    return values.every(value => /^[0-9]{17,20}$/.test(value));
-                },
-                message: "Each role ID must be a numeric string between 17 and 20 characters."
-            }
         },
         joinRoles: {
             type: [Schema.Types.String],
@@ -241,6 +275,15 @@ const GuildSchema = new Schema<Guild>(
         levelUpMessages: {
             type: Schema.Types.Boolean,
             default: true
+        },
+        levelUpChannel: {
+            type: Schema.Types.String,
+            validate: {
+                validator: function (value: string) {
+                    return /^[0-9]{17,20}$/.test(value);
+                },
+                message: "LevelUpChannel must be a numeric string between 17 and 20 characters."
+            } 
         },
         persistentRoles: {
             type: Schema.Types.Boolean,
@@ -370,25 +413,25 @@ const GuildSchema = new Schema<Guild>(
         },
         infractionChannel: {
             type: Schema.Types.String,
-            match: /^[0-9]{17,20}$/, // Validate that it's a valid Discord channel ID (17-20 digits)
+            match: /^[0-9]{17,20}$/,
         },
         bumpChannel: {
             type: Schema.Types.String,
-            match: /^[0-9]{17,20}$/, // Validate that it's a valid Discord channel ID (17-20 digits)
+            match: /^[0-9]{17,20}$/,
         },
         registration: {
             type: {
                 channelID: {
                     type: Schema.Types.String,
-                    match: /^[0-9]{17,20}$/, // Validate channel ID to be a string of 17-20 digits
+                    match: /^[0-9]{17,20}$/,
                 },
                 messageID: {
                     type: Schema.Types.String,
-                    match: /^[0-9]{17,20}$/, // Validate message ID to be a string of 17-20 digits
+                    match: /^[0-9]{17,20}$/,
                 },
                 roleID: {
                     type: Schema.Types.String,
-                    match: /^[0-9]{17,20}$/, // Validate role ID to be a string of 17-20 digits
+                    match: /^[0-9]{17,20}$/,
                 },
                 message: {
                     type: Schema.Types.String,

@@ -1,461 +1,241 @@
 // src/components/settings/subcomponents/selector
+
 .setting-subcomponent.selector {
     .setting-item {
         .selector {
             position: relative;
             max-width: 600px;
 
-            &.singular,
-            &.multiple {
-                .active-list {
-                    display: flex;
-                    flex-wrap: wrap;
-                    gap: 10px;
-                    background-color: $selection-input-color;
-                    padding: 10px;
-                    border-radius: 10px;
+            .active-list {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 10px;
+                background-color: $selection-input-color;
+                padding: 10px;
+                border-radius: 10px;
 
-                    .list-item {
-                        padding: 5px 10px;
-                        border-radius: 15px;
-                        cursor: pointer;
-                        background-color: #252a3b;
-                        border: 1px solid transparent;
-                        transition: 250ms;
-                        align-items: center;
-                        display: none;
-
-                        .channel-icon-wrapper {
-                            box-sizing: border-box;
-                            height: 15px;
-                            width: 15px;
-                            margin-right: 10px;
-                            margin-top: 2px;
-                            border-radius: 15px;
-                            overflow: hidden;
-
-                            .channel-delete-color {
-                                visibility: hidden;
-                                height: 100%;
-                                width: 100%;
-                                background-color: #00FFFF;
-                                background-image: url("../../../assets/img/icons/close.png");
-                                background-repeat: no-repeat;
-                                background-position: center;
-                                background-size: 40%;
-                                filter: invert(1);
-                                transform: translateY(-100%);
-                                transition: transform 250ms ease, visibility 0s 250ms;
-
-                            }
-
-                            .channel-color {
-                                display: flex;
-                                height: 100%;
-                                width: 100%;
-                                align-items: center;
-                                justify-content: center;
-                                transform: translateY(-100%);
-                                transition: transform 250ms ease;
-
-                                .channel-icon {
-                                    height: 100%;
-                                    width: 100%;
-                                }
-                            }
-                        }
-
-                        .role-color-wrapper {
-                            height: 15px;
-                            width: 15px;
-                            border-radius: 10px;
-                            margin-right: 10px;
-                            overflow: hidden;
-                            pointer-events: none;
-
-                            .role-delete-color {
-                                visibility: hidden;
-                                height: 100%;
-                                width: 100%;
-                                background-image: url("../../../assets/img/icons/close.png");
-                                background-repeat: no-repeat;
-                                background-position: center;
-                                background-size: 40%;
-                                filter: invert(1);
-                                transform: translateY(-100%);
-                                transition: transform 250ms ease, visibility 0s 250ms;
-                            }
-
-                            .role-color {
-                                height: 100%;
-                                width: 100%;
-                                transform: translateY(-100%);
-                                transition: transform 250ms ease;
-                            }
-                        }
-
-                        &.active {
-                            display: flex;
-                        }
-
-                        &:hover {
-                            border: 1px solid red;
-
-                            .channel-icon-wrapper {
-                                .channel-color {
-                                    visibility: visible;
-                                    transform: translateY(0);
-                                    transition: transform 250ms ease;
-                                }
-
-                                .channel-delete-color {
-                                    visibility: visible;
-                                    transform: translateY(0);
-                                    transition: transform 250ms ease;
-                                }
-                            }
-
-                            .role-color-wrapper {
-                                .role-color {
-                                    visibility: visible;
-                                    transform: translateY(0);
-                                    transition: transform 250ms ease;
-                                }
-
-                                .role-delete-color {
-                                    visibility: visible;
-                                    transform: translateY(0);
-                                    transition: transform 250ms ease;
-                                }
-                            }
-                        }
-                    }
-
-                    .add-button {
-                        color: white;
-                        padding: 5px 10px;
-                        border: none;
-                        border-radius: 15px;
-                        cursor: pointer;
-                        background-color: #252a3b;
-                        transition: 200ms;
-
-                        &.hidden {
-                            display: none;
-                        }
-
-                        &:hover {
-                            background-color: #3a4059;
-                        }
-                    }
-                }
-            }
-
-            &.inputs {
-                .active-list {
-                    background-color: $selection-input-color;
-                    padding: 10px;
-                    border-radius: 10px;
-                    width: 100%;
-                    max-width: 600px;
-                    overflow-y: auto;
-
-                    .flex-table {
-                        display: grid;
-                        grid-template-columns: 1fr minmax(auto, max-content) minmax(auto, max-content) minmax(auto, max-content) minmax(auto, max-content);
-                        grid-auto-columns: minmax(auto, max-content);
-                        align-items: center;
-                        column-gap: 10px;
-
-                        .flex-table-header {
-                            display: contents;
-
-                            .flex-table-title {
-                                line-height: 1;
-                                margin-bottom: 5px;
-                                font-weight: bold;
-                            }
-                        }
-
-                        .flex-table-row {
-                            display: none;
-
-                            >* {
-                                padding-bottom: 10px;
-                            }
-
-                            &.active {
-                                display: contents;
-                            }
-                        }
-
-                        .flex-table-header,
-                        .flex-table-row {
-
-                            .flex-table-col {
-                                &.list-item-role-wrapper {
-                                    min-width: 80px;
-                                    white-space: nowrap;
-                                    overflow: hidden;
-                                    text-overflow: ellipsis;
-
-                                    .list-item-role {
-                                        display: flex;
-                                        align-items: center;
-                                        flex-grow: 1;
-                                        flex-shrink: 1;
-                                        min-width: 0;
-                                        padding: 5px 10px;
-                                        border-radius: 5px;
-                                        background-color: #252a3b;
-
-                                        .role-color-wrapper {
-                                            flex-shrink: 0;
-                                            height: 15px;
-                                            width: 15px;
-                                            border-radius: 10px;
-                                            margin-right: 10px;
-                                            overflow: hidden;
-                                            pointer-events: none;
-
-                                            .role-color {
-                                                height: 100%;
-                                                width: 100%;
-                                            }
-                                        }
-
-                                        .text-content {
-                                            overflow: hidden;
-                                            text-overflow: ellipsis;
-                                            white-space: nowrap;
-                                        }
-                                    }
-                                }
-
-                                &.list-item-input {
-                                    min-width: 80px;
-                                    position: relative;
-
-                                    .input-field-level,
-                                    .input-field-boost {
-                                        padding: 5px 10px;
-                                        background-color: $secondary-background-color;
-                                        border-radius: 5px;
-
-                                        input {
-                                            width: 100%;
-                                            color: white;
-                                            background-color: $secondary-background-color;
-                                            border: none;
-                                            outline: none;
-                                            text-align: center;
-                                            padding: 0;
-
-                                            // Remove increase/decrease arrows
-                                            appearance: none;
-                                            -webkit-appearance: textfield;
-                                            -moz-appearance: none;
-
-                                            &::-webkit-inner-spin-button,
-                                            &::-webkit-outer-spin-button {
-                                                -webkit-appearance: none;
-                                                margin: 0;
-                                            }
-                                        }
-                                    }
-
-                                    .input-select-stackable,
-                                    .input-select-equation {
-
-                                        button {
-                                            padding: 5px 10px;
-                                            background-color: $secondary-background-color;
-                                            color: white;
-                                            border-radius: 5px;
-                                            height: 34px;
-
-                                            position: relative;
-                                            width: 100%;
-                                            border: none;
-                                            outline: none;
-
-                                            &[disabled]:hover {
-                                                cursor: not-allowed;
-                                            }
-                                        }
-                                    }
-
-                                    .input-select-dropdown {
-                                        position: absolute;
-                                        width: 100%;
-                                        background-color: #3a4059;
-                                        border-radius: 10px;
-                                        z-index: 1;
-                                        overflow: hidden;
-                                        display: none;
-
-                                        label {
-                                            width: 100%;
-                                            display: flex;
-                                            justify-content: center;
-                                            align-items: center;
-
-                                            input {
-                                                appearance: none;
-                                                -webkit-appearance: none;
-                                                -moz-appearance: none;
-                                            }
-
-                                            span {
-                                                text-align: center;
-                                            }
-
-                                            &:hover {
-                                                background-color: #444c67;
-                                            }
-                                        }
-
-                                        &.active {
-                                            display: block;
-                                        }
-                                    }
-                                }
-
-                                .list-item-delete {
-                                    flex-shrink: 0;
-                                    height: 28px;
-                                    width: 28px;
-                                    background-color: rgba(#00ff9d, 0.6);
-                                    background-image: url("../../../assets/img/icons/close.png");
-                                    background-repeat: no-repeat;
-                                    background-position: center;
-                                    background-size: 50%;
-                                    filter: invert(1);
-                                    border-radius: 5px;
-
-                                    &:hover {
-                                        background-color: rgba(#00ff9d, 1);
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    .add-button {
-                        color: white;
-                        padding: 5px 10px;
-                        border: none;
-                        border-radius: 15px;
-                        cursor: pointer;
-                        background-color: #252a3b;
-                        transition: 200ms;
-
-                        &.hidden {
-                            display: none;
-                        }
-
-                        &:hover {
-                            background-color: #3a4059;
-                        }
-                    }
-                }
-            }
-
-            &.singular,
-            &.multiple,
-            &.inputs {
-                .inactive-list-wrapper {
+                .list-item {
+                    padding: 5px 10px;
+                    border-radius: 15px;
+                    cursor: pointer;
+                    background-color: #252a3b;
+                    border: 1px solid transparent;
+                    transition: 250ms;
+                    align-items: center;
                     display: none;
-                    position: absolute;
-                    background-color: #3a4059;
-                    border-radius: 10px;
-                    width: 100%;
-                    padding: 0 10px 0 0;
-                    margin-top: 3px;
-                    z-index: 1;
-                    overflow: hidden;
 
-                    ::-webkit-scrollbar {
-                        width: 8px;
-                        background-color: rgba(0, 0, 0, 0);
-                        -webkit-border-radius: 100px;
-                    }
+                    .channel-icon-wrapper {
+                        box-sizing: border-box;
+                        height: 15px;
+                        width: 15px;
+                        margin-right: 10px;
+                        margin-top: 2px;
+                        border-radius: 15px;
+                        overflow: hidden;
 
-                    ::-webkit-scrollbar:hover {
-                        background-color: rgba(0, 0, 0, 0.09);
-                    }
+                        .channel-delete-color {
+                            visibility: hidden;
+                            height: 100%;
+                            width: 100%;
+                            background-color: #00FFFF;
+                            background-image: url("../../assets/img/icons/close.png");
+                            background-repeat: no-repeat;
+                            background-position: center;
+                            background-size: 40%;
+                            filter: invert(1);
+                            transform: translateY(-100%);
+                            transition: transform 250ms ease, visibility 0s 250ms;
 
-                    ::-webkit-scrollbar-thumb:vertical {
-                        background: rgba(0, 0, 0, 0.5);
-                        -webkit-border-radius: 100px;
-                    }
+                        }
 
-                    ::-webkit-scrollbar-thumb:vertical:active {
-                        background: rgba(0, 0, 0, 0.61);
-                        -webkit-border-radius: 100px;
-                    }
-
-                    .inactive-list {
-                        max-height: 200px;
-                        overflow-y: auto;
-
-                        .list-item {
+                        .channel-color {
                             display: flex;
+                            height: 100%;
+                            width: 100%;
                             align-items: center;
-                            border-radius: 5px;
-                            padding-left: 10px;
+                            justify-content: center;
+                            transform: translateY(-100%);
+                            transition: transform 250ms ease;
 
-                            input {
-                                display: none;
+                            .channel-icon {
+                                height: 100%;
+                                width: 100%;
                             }
+                        }
+                    }
 
-                            &.active {
-                                display: none;
-                            }
+                    .role-color-wrapper {
+                        height: 15px;
+                        width: 15px;
+                        border-radius: 10px;
+                        margin-right: 10px;
+                        overflow: hidden;
+                        pointer-events: none;
 
-                            .channel-icon-wrapper {
-                                pointer-events: none;
+                        .role-delete-color {
+                            visibility: hidden;
+                            height: 100%;
+                            width: 100%;
+                            background-image: url("../../assets/img/icons/close.png");
+                            background-repeat: no-repeat;
+                            background-position: center;
+                            background-size: 40%;
+                            filter: invert(1);
+                            transform: translateY(-100%);
+                            transition: transform 250ms ease, visibility 0s 250ms;
+                        }
 
-                                .channel-color {
-                                    margin-right: 10px;
-
-                                    .channel-icon {
-                                        height: 15px;
-                                        width: 15px;
-                                    }
-                                }
-                            }
-
-                            .role-color {
-                                height: 15px;
-                                width: 15px;
-                                border-radius: 10px;
-                                margin-top: 2px;
-                                margin-right: 10px;
-                                pointer-events: none;
-                            }
-
-                            .item-name {
-                                line-height: 1;
-                                padding: 5px 0 5px 0;
-                                pointer-events: none;
-                            }
-
-                            &:hover {
-                                background-color: #444c67;
-                            }
+                        .role-color {
+                            height: 100%;
+                            width: 100%;
+                            transform: translateY(-100%);
+                            transition: transform 250ms ease;
                         }
                     }
 
                     &.active {
-                        display: block;
+                        display: flex;
+                    }
+
+                    &:hover {
+                        border: 1px solid red;
+
+                        .channel-icon-wrapper {
+                            .channel-color {
+                                visibility: visible;
+                                transform: translateY(0);
+                                transition: transform 250ms ease;
+                            }
+
+                            .channel-delete-color {
+                                visibility: visible;
+                                transform: translateY(0);
+                                transition: transform 250ms ease;
+                            }
+                        }
+
+                        .role-color-wrapper {
+                            .role-color {
+                                visibility: visible;
+                                transform: translateY(0);
+                                transition: transform 250ms ease;
+                            }
+
+                            .role-delete-color {
+                                visibility: visible;
+                                transform: translateY(0);
+                                transition: transform 250ms ease;
+                            }
+                        }
+                    }
+                }
+
+                .add-button {
+                    color: white;
+                    padding: 5px 10px;
+                    border: none;
+                    border-radius: 15px;
+                    cursor: pointer;
+                    background-color: #252a3b;
+                    transition: 200ms;
+
+                    &.hidden {
+                        display: none;
+                    }
+
+                    &:hover {
+                        background-color: #3a4059;
                     }
                 }
             }
 
-            // .submit-button {
-            //     /*margin-top: 15px;*/
-            // }
+            .inactive-list-wrapper {
+                display: none;
+                position: absolute;
+                background-color: #3a4059;
+                border-radius: 10px;
+                width: 100%;
+                padding: 0 10px 0 0;
+                margin-top: 3px;
+                z-index: 1;
+                overflow: hidden;
+
+                ::-webkit-scrollbar {
+                    width: 8px;
+                    background-color: rgba(0, 0, 0, 0);
+                    -webkit-border-radius: 100px;
+                }
+
+                ::-webkit-scrollbar:hover {
+                    background-color: rgba(0, 0, 0, 0.09);
+                }
+
+                ::-webkit-scrollbar-thumb:vertical {
+                    background: rgba(0, 0, 0, 0.5);
+                    -webkit-border-radius: 100px;
+                }
+
+                ::-webkit-scrollbar-thumb:vertical:active {
+                    background: rgba(0, 0, 0, 0.61);
+                    -webkit-border-radius: 100px;
+                }
+
+                .inactive-list {
+                    max-height: 200px;
+                    overflow-y: auto;
+
+                    .list-item {
+                        display: flex;
+                        align-items: center;
+                        border-radius: 5px;
+                        padding-left: 10px;
+
+                        input {
+                            display: none;
+                        }
+
+                        &.active {
+                            display: none;
+                        }
+
+                        .channel-icon-wrapper {
+                            pointer-events: none;
+
+                            .channel-color {
+                                margin-right: 10px;
+
+                                .channel-icon {
+                                    height: 15px;
+                                    width: 15px;
+                                }
+                            }
+                        }
+
+                        .role-color {
+                            height: 15px;
+                            width: 15px;
+                            border-radius: 10px;
+                            margin-top: 2px;
+                            margin-right: 10px;
+                            pointer-events: none;
+                        }
+
+                        .item-name {
+                            line-height: 1;
+                            padding: 5px 0 5px 0;
+                            pointer-events: none;
+                        }
+
+                        &:hover {
+                            background-color: #444c67;
+                        }
+                    }
+                }
+
+                &.active {
+                    display: block;
+                }
+            }
         }
     }
 }

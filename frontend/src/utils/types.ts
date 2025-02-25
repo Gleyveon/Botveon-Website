@@ -6,3 +6,21 @@ export type Guild = {
     permissions: string;
     features: string[];
 }
+
+export interface Role {
+    id: string;
+    name: string;
+    color: string;
+}
+
+export interface LevelRole {
+    roleID: string;
+    level: number;
+}
+
+export interface BoostRole {
+    roleID: string;
+    boost: number;
+    stackable: boolean;
+    equation: "add" | "multiply" | undefined;
+}

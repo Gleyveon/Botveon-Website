@@ -1,0 +1,306 @@
+// src/components/settings/selector-levels
+import { useState, useRef, useEffect, useDebugValue } from 'react';
+import { Role, BoostRole } from '../../../utils/types';
+import './styles.scss';
+
+interface componentProps {
+    items: Role[];
+    selectedItems: BoostRole[];
+    setSelectedItems: (items: BoostRole[]) => void;
+}
+
+const BoostSelector = ({ items, selectedItems, setSelectedItems }: componentProps) => {
+
+    const [isDropdownActive, setDropdownActive] = useState(false);
+    const [timeoutId, setTimeoutId] = useState<number | null>(null);
+    const [stackableDropdowns, setStackableDropdowns] = useState<{ id: string, timeout: any }[]>([]);
+    const dropdownRef = useRef<HTMLDivElement | null>(null);
+
+
+    /*
+    * =============================================================================================
+    *
+    * Selecting/Deselecting channels:
+    *
+    * =============================================================================================
+    */
+
+    const toggleItem = (id: string, boost: number) => {
+        console.log(selectedItems);
+        
+        const isActive = selectedItems.some(obj => obj.roleID === id);
+
+        const updatedItems = isActive
+            ? selectedItems.filter(obj => obj.roleID !== id)
+            : [...selectedItems, { roleID: id, boost }];
+        setSelectedItems(updatedItems);
+    };
+
+
+    /*
+    * =============================================================================================
+    *
+    * Opening/Closing Channel/Role Dropdown:
+    *
+    * =============================================================================================
+    */
+
+    const toggleRoleDropdown = () => {
+        setDropdownActive(!isDropdownActive);
+    };
+
+    // Close dropdown after a delay
+    const handleRoleMouseOut = () => {
+        const id = window.setTimeout(() => setDropdownActive(false), 200);
+        setTimeoutId(id);
+    };
+
+    // Cancel closing dropdown if mouse comes back
+    const handleRoleMouseOver = () => {
+        if (timeoutId) {
+            clearTimeout(timeoutId);
+            //setTimeoutId(null);
+        }
+    };
+
+    // Auto scroll down, when dropdown appears under screen
+    // useEffect(() => {
+    //     if (isDropdownActive && dropdownRef.current) {
+    //         const dropdownPosition = dropdownRef.current.getBoundingClientRect();
+    //         const dropdownHeight = dropdownPosition.height;
+    //         const windowHeight = window.innerHeight;
+    //         const distanceFromBottom = dropdownPosition.bottom - windowHeight;
+
+    //         // If the dropdown will go below the screen, scroll the page down to ensure it's fully visible
+    //         if (distanceFromBottom > 0) {
+    //             window.scrollBy(0, distanceFromBottom); // Scroll down
+    //         }
+    //     }
+    // }, [isDropdownActive]);
+
+
+    /*
+    * =============================================================================================
+    *
+    * Opening/Closing Selection Dropdown:
+    *
+    * =============================================================================================
+    */
+
+    // toggle dropdown from being active:
+    function toggleStackableDropdown(id: string) {
+        if (stackableDropdowns.some((obj) => obj.id === id)) {
+            setStackableDropdowns((prevState) =>
+                prevState.filter((obj) => obj.id !== id)
+            );
+        } else {
+            setStackableDropdowns((prevState) => [...prevState, { id: id, timeout: null }]);
+        }
+    }
+
+    // Make the dropdown inactive in 200ms by creating a timeout
+    function handleMouseOut2(id: string) {
+
+        // remove dropdown in 200ms
+        const timeout = setTimeout(() => {
+            setStackableDropdowns((prevState) =>
+                prevState.filter((obj) => obj.id !== id)
+            );
+        }, 200);
+
+        // save function in dropdown useState (So it can be deleted before the timeout runs out)
+        setStackableDropdowns((prevState) =>
+            prevState.map((obj) =>
+                obj.id === id ? { ...obj, timeout: timeout } : obj
+            )
+        );
+    }
+
+    // Cancel making the dropdown inactive by clearing the timeout
+    function handleMouseOver2(id: string) {
+
+        const existingTimeout = stackableDropdowns.find(obj => obj.id === id);
+
+        // Clear the timeout
+        if (existingTimeout?.timeout) {
+            clearTimeout(existingTimeout.timeout);
+        }
+    }
+
+    // Close dropdown when a selection has been made
+    function closeStackableDropdown(id: string) {
+        setStackableDropdowns((prevState) =>
+            prevState.filter((obj) => obj.id !== id)
+        );
+    }
+
+
+    /*
+    * =============================================================================================
+    *
+    * Changing Selection Value:
+    *
+    * =============================================================================================
+    */
+
+    const changeBoost = (roleID: string, boost: string) => {
+        const numericBoost = parseFloat(boost);
+        if (isNaN(numericBoost)) return;
+
+        const updatedItems = selectedItems.map((role) =>
+            role.roleID === roleID ? { ...role, boost: numericBoost } : role
+        );
+
+        setSelectedItems(updatedItems);
+    };
+
+    const changeStackable = (roleID: string, stackable: boolean) => {
+
+        let updatedItems = selectedItems;
+
+        if (stackable === false) {
+            updatedItems = updatedItems.map((role) =>
+                role.roleID === roleID ? { ...role, equation: undefined } : role
+            );
+        }
+
+        updatedItems = updatedItems.map((role) =>
+            role.roleID === roleID ? { ...role, stackable: stackable } : role
+        );
+
+        setSelectedItems(updatedItems);
+    };
+
+    const changeEquation = (roleID: string, equation: string) => {
+        if (equation !== 'add' && equation !== 'multiply') { return }
+
+        const updatedItems = selectedItems.map((role) =>
+            role.roleID === roleID ? { ...role, equation: equation } : role
+        );
+
+        setSelectedItems(updatedItems);
+    };
+
+    return (
+        <div className="setting-subcomponent boost-selector">
+
+            <div className="setting-item">
+                <div className='selector inputs'>
+                    <div className="active-list">
+
+                        <div className="flex-table">
+                            <div className="flex-table-header">
+                                <div className="flex-table-col list-item-role-wrapper"><div className="flex-table-title">Role</div></div>
+                                <div className="flex-table-col"><div className="flex-table-title">Boost</div></div>
+                                <div className="flex-table-col"><div className="flex-table-title">Stackable</div></div>
+                                <div className="flex-table-col"><div className="flex-table-title">Equation</div></div>
+                                <div className="flex-table-col"><div className="flex-table-title"></div></div>
+                            </div>
+
+                            {items.map((item, index) => {
+                                const selectedItem = selectedItems.find(obj => obj.roleID === item.id);
+
+                                const boost = selectedItem?.boost;
+                                const stackable = selectedItem?.stackable || false;
+                                const equation = selectedItem?.equation;
+
+                                return (
+                                    <div key={item.id} className={`flex-table-row list-item-wrapper ${!!selectedItem ? ' active' : ''}`}>
+
+                                        <div className="flex-table-col list-item-role-wrapper">
+                                            <div className="list-item-role">
+                                                <div className="role-color-wrapper">
+                                                    <div className="role-delete-color" style={{ backgroundColor: "#00FFFF" }}></div>
+                                                    <div className="role-color" style={{ backgroundColor: `#${item.color.toString(16).padStart(6, '0')}` }}></div>
+                                                </div>
+                                                <div className="text-content">{item.name}</div>
+                                            </div>
+                                        </div>
+
+                                        <div className="flex-table-col list-item-input">
+                                            <div className="input-field-boost">
+                                                <input type="number" placeholder="2" value={boost} min="0.01" max="5" step="0.01" onChange={(e) => changeBoost(item.id, e.target.value)}></input>
+                                            </div>
+                                        </div>
+
+                                        <div className="flex-table-col list-item-input">
+                                            <div className="input-select-stackable">
+                                                <button
+                                                    type="button"
+                                                    className="selector-button"
+                                                    onClick={() => toggleStackableDropdown('stackable' + item.id)}
+                                                    onMouseEnter={() => handleMouseOver2('stackable' + item.id)}
+                                                    onMouseLeave={() => handleMouseOut2('stackable' + item.id)}>
+                                                    {stackable ? "Yes" : "No"}
+                                                </button>
+                                            </div>
+                                            <div
+                                                className={`input-select-dropdown ${stackableDropdowns.some(obj => obj.id === 'stackable' + item.id) ? "active" : ""}`}
+                                                onMouseEnter={() => handleMouseOver2('stackable' + item.id)}
+                                                onMouseLeave={() => handleMouseOut2('stackable' + item.id)}>
+                                                <label onClick={() => {changeStackable(item.id, true); closeStackableDropdown('stackable' + item.id);}}>
+                                                    <span>Yes</span>
+                                                </label>
+                                                <label onClick={() => {changeStackable(item.id, false); closeStackableDropdown('stackable' + item.id);}}>
+                                                    <span>No</span>
+                                                </label>
+                                            </div>
+                                        </div>
+
+                                        <div className="flex-table-col list-item-input">
+                                            <div className="input-select-equation">
+                                                <button
+                                                    type="button"
+                                                    className="selector-button"
+                                                    disabled={stackable === false}
+                                                    onClick={() => toggleStackableDropdown('equation' + item.id)}
+                                                    onMouseEnter={() => handleMouseOver2('equation' + item.id)}
+                                                    onMouseLeave={() => handleMouseOut2('equation' + item.id)}>
+                                                    {equation ? equation : stackable ? "" : " - "}
+                                                </button>
+                                            </div>
+                                            <div
+                                                className={`input-select-dropdown ${stackableDropdowns.some(obj => obj.id === 'equation' + item.id) ? "active" : ""}`}
+                                                onMouseEnter={() => handleMouseOver2('equation' + item.id)}
+                                                onMouseLeave={() => handleMouseOut2('equation' + item.id)}>
+                                                <label onClick={(e) => { changeEquation(item.id, 'add'); closeStackableDropdown('equation' + item.id); }}>
+                                                    <span>Add</span>
+                                                </label>
+                                                <label onClick={(e) => { changeEquation(item.id, 'multiply'); closeStackableDropdown('equation' + item.id); }}>
+                                                    <span>Multiply</span>
+                                                </label>
+                                            </div>
+                                        </div>
+
+                                        <div className="flex-table-col">
+                                            <div className="list-item-delete" onClick={() => toggleItem(item.id)}></div>
+                                        </div>
+                                    </div>
+                                )
+                            }
+                            )}
+                        </div>
+                        <button type="button" className="add-button" onClick={toggleRoleDropdown} onMouseEnter={handleRoleMouseOver} onMouseLeave={handleRoleMouseOut}>+ Add Role</button>
+                    </div>
+                    <div className={`inactive-list-wrapper${isDropdownActive ? " active" : ""}`} onMouseEnter={handleRoleMouseOver} onMouseLeave={handleRoleMouseOut} ref={dropdownRef}>
+                        <div className="inactive-list">
+                            {items.map((item) => (
+                                <div key={item.id} className={`list-item ${selectedItems.some(obj => obj.roleID === item.id) ? ' active' : ''}`} onClick={() => toggleItem(item.id)}>
+                                    <div className="role-color-wrapper">
+                                        <div className="role-delete-color" style={{ backgroundColor: "#00FFFF" }}></div>
+                                        <div className="role-color" style={{ backgroundColor: `#${item.color.toString(16).padStart(6, '0')}` }}></div>
+                                    </div>
+                                    <div className="item-name">
+                                        {item.name}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div >
+    );
+}
+
+export default BoostSelector;

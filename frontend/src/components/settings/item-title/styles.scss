@@ -1,0 +1,57 @@
+// src/components/settings/item-title
+.setting-subcomponent.item-title {
+    .setting-item-title-wrapper {
+        display: flex;
+        padding-bottom: 10px;
+        align-items: center;
+
+        .setting-item-title {
+            font-size: 17px;
+            line-height: 1;
+            color: #d7d7d7;
+            padding-left: 5px;
+            flex-grow: 0;
+        }
+
+        .info-button-wrapper {
+            position: relative;
+            padding-left: 10px;
+            flex-grow: 1;
+
+            .info-button {
+                font-size: 17px;
+                line-height: 1;
+                color: $subtitle-color;
+                cursor: pointer;
+                width: fit-content;
+            }
+
+            .info-dropdown {
+                top: -10px;
+                left: 35px;
+                position: absolute;
+                background-color: #566185;
+                border-radius: 10px;
+                padding: 10px;
+                z-index: 1;
+                display: none;
+
+                &::before {
+                    content: "";
+                    position: absolute;
+                    top: 20px;
+                    left: -19px;
+                    border-width: 10px;
+                    border-style: solid;
+                    border-color: transparent #566185 transparent transparent;
+                    transform: translateY(-50%);
+                    pointer-events: none;
+                }
+
+                &.active {
+                    display: block;
+                }
+            }
+        }
+    }
+}

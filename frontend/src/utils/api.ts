@@ -57,3 +57,43 @@ export const updateJoinSettings = async (guildID: string, settings: any ) => {
     throw err;
   }
 };
+
+export const fetchEconomySettings = async (guildID: string) => {
+  try {
+    const response = await api.get(`/guilds/${guildID}/economy`);
+    return response.data;
+  } catch (err) {
+    console.error('Error fetching data: ', err);
+    throw err;
+  }
+}
+
+export const updateEconomySettings = async (guildID: string, settings: any ) => {
+  try {
+    const response = await api.post(`/guilds/${guildID}/economy`, settings);
+    return response.data;
+  } catch (err) {
+    console.error('Error submitting settings: ', err);
+    throw err;
+  }
+};
+
+export const fetchLevelSettings = async (guildID: string) => {
+  try {
+    const response = await api.get(`/guilds/${guildID}/level`);
+    return response.data;
+  } catch (err) {
+    console.error('Error fetching data: ', err);
+    throw err;
+  }
+}
+
+export const updateLevelSettings = async (guildID: string, settings: any ) => {
+  try {
+    const response = await api.post(`/guilds/${guildID}/level`, settings);
+    return response.data;
+  } catch (err) {
+    console.error('Error submitting settings: ', err);
+    throw err;
+  }
+};

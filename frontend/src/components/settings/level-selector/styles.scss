@@ -1,0 +1,305 @@
+.setting-subcomponent.level-selector {
+    .setting-item {
+        .selector {
+            position: relative;
+            max-width: 600px;
+
+            .active-list {
+                background-color: $selection-input-color;
+                padding: 10px;
+                border-radius: 10px;
+                width: 100%;
+                max-width: 600px;
+                overflow-y: auto;
+
+                .flex-table {
+                    display: grid;
+                    grid-template-columns: 1fr minmax(auto, max-content) minmax(auto, max-content);
+                    grid-auto-columns: minmax(auto, max-content);
+                    align-items: center;
+                    column-gap: 10px;
+
+                    .flex-table-header {
+                        display: contents;
+
+                        .flex-table-title {
+                            line-height: 1;
+                            margin-bottom: 5px;
+                            font-weight: bold;
+                        }
+                    }
+
+                    .flex-table-row {
+                        display: none;
+
+                        >* {
+                            padding-bottom: 10px;
+                        }
+
+                        &.active {
+                            display: contents;
+                        }
+                    }
+
+                    .flex-table-header,
+                    .flex-table-row {
+
+                        .flex-table-col {
+                            &.list-item-role-wrapper {
+                                min-width: 80px;
+                                white-space: nowrap;
+                                overflow: hidden;
+                                text-overflow: ellipsis;
+
+                                .list-item-role {
+                                    display: flex;
+                                    align-items: center;
+                                    flex-grow: 1;
+                                    flex-shrink: 1;
+                                    min-width: 0;
+                                    padding: 5px 10px;
+                                    border-radius: 5px;
+                                    background-color: #252a3b;
+
+                                    .role-color-wrapper {
+                                        flex-shrink: 0;
+                                        height: 15px;
+                                        width: 15px;
+                                        border-radius: 10px;
+                                        margin-right: 10px;
+                                        overflow: hidden;
+                                        pointer-events: none;
+
+                                        .role-color {
+                                            height: 100%;
+                                            width: 100%;
+                                        }
+                                    }
+
+                                    .text-content {
+                                        overflow: hidden;
+                                        text-overflow: ellipsis;
+                                        white-space: nowrap;
+                                    }
+                                }
+                            }
+
+                            &.list-item-input {
+                                min-width: 80px;
+                                max-width: 100px;
+                                position: relative;
+
+                                .input-field-level,
+                                .input-field-boost {
+                                    padding: 5px 10px;
+                                    background-color: #252a3b;
+                                    border-radius: 5px;
+
+                                    input {
+                                        width: 100%;
+                                        color: white;
+                                        background-color: #252a3b;
+                                        border: none;
+                                        outline: none;
+                                        text-align: center;
+                                        padding: 0;
+
+                                        // Remove increase/decrease arrows
+                                        appearance: none;
+                                        -webkit-appearance: textfield;
+                                        -moz-appearance: none;
+
+                                        &::-webkit-inner-spin-button,
+                                        &::-webkit-outer-spin-button {
+                                            -webkit-appearance: none;
+                                            margin: 0;
+                                        }
+                                    }
+                                }
+
+                                .input-select-stackable,
+                                .input-select-equation {
+
+                                    button {
+                                        padding: 5px 10px;
+                                        background-color: #252a3b;
+                                        color: white;
+                                        border-radius: 5px;
+                                        height: 34px;
+
+                                        position: relative;
+                                        width: 100%;
+                                        border: none;
+                                        outline: none;
+
+                                        &[disabled]:hover {
+                                            cursor: not-allowed;
+                                        }
+                                    }
+                                }
+
+                                .input-select-dropdown {
+                                    position: absolute;
+                                    width: 100%;
+                                    background-color: #3a4059;
+                                    border-radius: 10px;
+                                    z-index: 1;
+                                    overflow: hidden;
+                                    display: none;
+
+                                    label {
+                                        width: 100%;
+                                        display: flex;
+                                        justify-content: center;
+                                        align-items: center;
+
+                                        input {
+                                            appearance: none;
+                                            -webkit-appearance: none;
+                                            -moz-appearance: none;
+                                        }
+
+                                        span {
+                                            text-align: center;
+                                        }
+
+                                        &:hover {
+                                            background-color: #444c67;
+                                        }
+                                    }
+
+                                    &.active {
+                                        display: block;
+                                    }
+                                }
+                            }
+
+                            .list-item-delete {
+                                flex-shrink: 0;
+                                height: 28px;
+                                width: 28px;
+                                background-color: rgba(#00ff9d, 0.6);
+                                background-image: url("../../../assets/img/icons/close.png");
+                                background-repeat: no-repeat;
+                                background-position: center;
+                                background-size: 50%;
+                                filter: invert(1);
+                                border-radius: 5px;
+
+                                &:hover {
+                                    background-color: rgba(#00ff9d, 1);
+                                }
+                            }
+                        }
+                    }
+                }
+
+                .add-button {
+                    color: white;
+                    padding: 5px 10px;
+                    border: none;
+                    border-radius: 15px;
+                    cursor: pointer;
+                    background-color: #252a3b;
+                    transition: 200ms;
+
+                    &.hidden {
+                        display: none;
+                    }
+
+                    &:hover {
+                        background-color: #3a4059;
+                    }
+                }
+            }
+
+            .inactive-list-wrapper {
+                display: none;
+                position: absolute;
+                background-color: #3a4059;
+                border-radius: 10px;
+                width: 100%;
+                padding: 0 10px 0 0;
+                margin-top: 3px;
+                z-index: 1;
+                overflow: hidden;
+
+                ::-webkit-scrollbar {
+                    width: 8px;
+                    background-color: rgba(0, 0, 0, 0);
+                    -webkit-border-radius: 100px;
+                }
+
+                ::-webkit-scrollbar:hover {
+                    background-color: rgba(0, 0, 0, 0.09);
+                }
+
+                ::-webkit-scrollbar-thumb:vertical {
+                    background: rgba(0, 0, 0, 0.5);
+                    -webkit-border-radius: 100px;
+                }
+
+                ::-webkit-scrollbar-thumb:vertical:active {
+                    background: rgba(0, 0, 0, 0.61);
+                    -webkit-border-radius: 100px;
+                }
+
+                .inactive-list {
+                    max-height: 200px;
+                    overflow-y: auto;
+
+                    .list-item {
+                        display: flex;
+                        align-items: center;
+                        border-radius: 5px;
+                        padding-left: 10px;
+
+                        input {
+                            display: none;
+                        }
+
+                        &.active {
+                            display: none;
+                        }
+
+                        .channel-icon-wrapper {
+                            pointer-events: none;
+
+                            .channel-color {
+                                margin-right: 10px;
+
+                                .channel-icon {
+                                    height: 15px;
+                                    width: 15px;
+                                }
+                            }
+                        }
+
+                        .role-color {
+                            height: 15px;
+                            width: 15px;
+                            border-radius: 10px;
+                            margin-top: 2px;
+                            margin-right: 10px;
+                            pointer-events: none;
+                        }
+
+                        .item-name {
+                            line-height: 1;
+                            padding: 5px 0 5px 0;
+                            pointer-events: none;
+                        }
+
+                        &:hover {
+                            background-color: #444c67;
+                        }
+                    }
+                }
+
+                &.active {
+                    display: block;
+                }
+            }
+        }
+    }
+}

@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { useEffect } from 'react';
 
 // Layouts
 import DefaultLayout from './layout/defaultlayout';
@@ -18,6 +19,14 @@ import PageNotFound from './pages/page-not-found';
 import Testing from './pages/testing';
 
 function RouteApp() {
+
+  useEffect(() => {
+    const isFirefox = /firefox/i.test(navigator.userAgent);
+
+    if (isFirefox) {
+      document.body.style.background = '#121212';
+    }
+  }, []);
 
   return (
     <Router>
