@@ -40,6 +40,7 @@ function RouteApp() {
           <Route path="/features" element={<Features />} />
         </Route>
 
+        <Route path='/testing' element={<Testing />}></Route>
         <Route element={<SidebarLayout />}>
           <Route path="/guild" element={<Navigate to="/dashboard" replace />} />
           <Route path="/guild/:guildId" element={<Guild />} />

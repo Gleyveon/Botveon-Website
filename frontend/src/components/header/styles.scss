@@ -90,6 +90,17 @@ header {
                                 background-color: $primary-accent-color-hover;
                             }
                         }
+
+                        &.logout-button {
+                            color: white;
+                            padding: 5px 30px;
+                            border-radius: 50px;
+                            background-color: $primary-accent-color;
+
+                            &:hover {
+                                background-color: $primary-accent-color-hover;
+                            }
+                        }
                     }
                 }
             }
@@ -186,6 +197,16 @@ header {
                         padding-top: 20px;
                         width: 100%;
 
+                        .dropdown {
+                            padding-bottom: 20px;
+                            margin-bottom: 20px;
+                            border-bottom: 1px solid rgb(48, 48, 48);
+
+                            padding-top: 20px;
+                            margin-top: 20px;
+                            border-top: 1px solid rgb(48, 48, 48);
+                        }
+
                         a {
                             color: $primary-link-color;
                             text-decoration: none;
@@ -210,6 +231,10 @@ header {
                                 &:hover {
                                     background-color: #292929;
                                 }
+
+                                &:last-of-type {
+                                    margin-bottom: 0;
+                                }
                             }
                         }
 
@@ -221,7 +246,7 @@ header {
                             width: calc(100% - 60px);
                             border-top: 1px solid rgb(48, 48, 48);
 
-                            .login-button {
+                            .login-button, .logout-button {
                                 display: block;
                                 background-color: $primary-accent-color;
                                 color: white;

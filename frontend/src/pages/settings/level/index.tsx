@@ -14,6 +14,7 @@ import Selector from '../../../components/settings/selector'
 import LevelSelector from '../../../components/settings/level-selector';
 import BoostSelector from '../../../components/settings/boost-selector';
 import Toggle from '../../../components/settings/toggle';
+import SaveChanges from '../../../components/settings/save-changes';
 
 function Level() {
   const { guildId } = useParams();
@@ -83,7 +84,8 @@ function Level() {
         <Settings title='Xp Boost Roles' description='Give certain roles an additional xp boost.'>
           <BoostSelector items={roles} selectedItems={boostRoles} setSelectedItems={setBoostRoles}></BoostSelector>
         </Settings>
-        <button onClick={handleSubmit}>Save Settings</button>
+
+        <SaveChanges settings={{ levelUpMessages, levelUpRoles, boostRoles }} onSave={handleSubmit}></SaveChanges>
       </div>
     </div>
   );

@@ -8,6 +8,16 @@ const api = axios.create({
   withCredentials: true,
 });
 
+export const fetchUser = async () => {
+  try {
+    const response = await api.get('/auth/user');
+    return response.data;
+  } catch (err) {
+    console.error('Error fetching data: ', err);
+    throw err;
+  }
+};
+
 export const fetchMutualGuilds = async () => {
   try {
     const response = await api.get('/guilds');

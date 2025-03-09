@@ -7,8 +7,13 @@ export type Guild = {
     features: string[];
 }
 
+export interface Channel {
+    channelID: string;
+    name: string;
+}
+
 export interface Role {
-    id: string;
+    roleID: string;
     name: string;
     color: string;
 }
@@ -23,4 +28,13 @@ export interface BoostRole {
     boost: number;
     stackable: boolean;
     equation: "add" | "multiply" | undefined;
+}
+
+export interface ShopItem {
+    itemID: string | undefined;
+    name: string | undefined;
+    description: string | undefined;
+    category: "role" | "channel" | "emoji" | "custom" | undefined;
+    price: Number;
+    metadata: any | undefined;
 }

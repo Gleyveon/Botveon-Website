@@ -1,0 +1,55 @@
+// src/components/shared/dropdown
+.component.dropdown-component {
+
+    .dropdown-header {
+        position: relative;
+        background-color: transparent;
+        width: 100%;
+        padding: 0;
+        border: none;
+        margin-bottom: 0;
+
+        color: $primary-link-color;
+        text-decoration: none;
+        text-align: center;
+        font-size: 25px;
+        font-weight: 400;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        transition-delay: 200ms;
+
+        .dropdown-icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            transition: transform 300ms ease-in-out;
+        }
+
+        &.active {
+            margin-bottom: 5px;
+            transition-delay: 0ms;
+
+            .dropdown-icon {
+                transform: translateY(-50%) rotateX(180deg);
+            }
+        }
+    }
+
+    .dropdown-content {
+        display: flex;
+        justify-content: flex-start;
+        flex-direction: column;
+
+        max-height: 0;
+        overflow: hidden;
+        transition: all 300ms ease-in-out;
+        
+
+        &.active {
+            max-height: 500px;
+            transition: all 300ms ease-in-out;
+        }
+    }
+}

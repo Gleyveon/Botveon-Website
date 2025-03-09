@@ -7,5 +7,24 @@
 
     main {
         padding-left: 240px;
+        padding-top: 50px;
+        padding-bottom: 150px;
+    }
+
+    //for small laptops
+    @media (max-width: 1199px) {
+    }
+
+    // for tablets
+    @media (max-width: 991px) {
+        main {
+            padding-left: 0;
+        }
+    }
+
+    // for phones
+    @media (max-width: 767px) {
+
     }
 }
+

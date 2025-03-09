@@ -49,27 +49,11 @@
 
     // for tablets
     @media (max-width: 991px) {
-        body {
-            &.with-sidebar {
-                .sidebar {
-                    display: none;
-
-                    &.active {
-                        display: inline-block;
-                    }
-                }
-            }
-        }
+        display: none;
     }
 
     // for phones
     @media (max-width: 767px) {
-        body {
-            &.with-sidebar {
-                .sidebar {
-                    width: 100%;
-                }
-            }
-        }
+        
     }
 }

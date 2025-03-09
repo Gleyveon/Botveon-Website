@@ -11,3 +11,10 @@ export type Guild = {
     permissions: string;
     features: string[];
 }
+
+export type UserData = {
+    id: string;
+    username: string;
+    avatar: string;
+    discriminator: string;
+}

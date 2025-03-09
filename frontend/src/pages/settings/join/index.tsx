@@ -13,6 +13,7 @@ import Selector from '../../../components/settings/selector'
 import InputField from '../../../components/settings/input-field'
 import TextField from '../../../components/settings/text-field';
 import Toggle from '../../../components/settings/toggle';
+import SaveChanges from '../../../components/settings/save-changes';
 
 
 
@@ -49,7 +50,7 @@ function Join() {
 
   const [persistentRoles, setPersistentRoles] = useState<boolean>(false);
 
-  
+
   if (!guildId) {
     return <p>Error loading data!</p>;
   }
@@ -143,7 +144,7 @@ function Join() {
   if (error) return <p>Error loading data!</p>;
 
   return (
-    <div className="page page-community">
+    <div className="page page-join">
 
       <div className="container">
 
@@ -183,8 +184,16 @@ function Join() {
           <Toggle toggleValue={persistentRoles} setToggleValue={setPersistentRoles}></Toggle>
         </Settings>
 
-
-        <button onClick={handleSubmit}>Save Settings</button>
+        <SaveChanges settings={
+          {
+            joinRoles, stickyRoles,
+            registrationRole, registrationChannel, registrationTitle, registrationDescription, registrationFooter,
+            welcomeChannel, welcomeChannelPicture, welcomeChannelTitle, welcomeChannelDescription, welcomeChannelFooter,
+            goodbyeChannel, goodbyeChannelPicture, goodbyeChannelTitle, goodbyeChannelDescription, goodbyeChannelFooter,
+            persistentRoles
+          }
+        } onSave={handleSubmit}></SaveChanges>
+        
       </div>
 
     </div>

@@ -5,9 +5,9 @@ import WaveSection from '../../components/shared/wave-section';
 import { useState } from 'react';
 
 function Home() {
-  const [serverCount, setServerCount] = useState("0");
-  const [userCount, setUserCount] = useState("0");
-  const [commands, setCommands] = useState(0);
+  const [serverCount, setServerCount] = useState("358+");
+  const [userCount, setUserCount] = useState("70413+");
+  const [commands, setCommands] = useState("30+");
 
   return (
     <div className="page home-page">

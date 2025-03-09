@@ -1,19 +1,19 @@
-// src/components/settings/selector-levels
+// src/components/settings/input-selector
 import { useState, useEffect } from 'react';
-import { Role, LevelRole } from '../../../utils/types';
+import { Role, Channel, ShopItem } from '../../../utils/types';
 import './styles.scss';
 
 interface componentProps {
-    items: Role[];
-    selectedItems: LevelRole[];
-    setSelectedItems: (levelRole: LevelRole[]) => void;
+    items: Role[] | Channel[];
+    itemsType: "Role" | "Channel";
+    selectedItems: ShopItem[];
+    setSelectedItems: (ShopItems: ShopItem[]) => void;
 }
 
-const Selector = ({ items, selectedItems, setSelectedItems }: componentProps) => {
+const Selector = ({ items, itemsType, selectedItems, setSelectedItems }: componentProps) => {
 
     const [isDropdownActive, setDropdownActive] = useState(false);
     const [timeoutId, setTimeoutId] = useState<number | null>(null);
-
     
     /*
     * =============================================================================================
@@ -23,12 +23,12 @@ const Selector = ({ items, selectedItems, setSelectedItems }: componentProps) =>
     * =============================================================================================
     */
 
-    const toggleItem = (id: string, level: number) => {
-        const isActive = selectedItems.some(obj => obj.roleID === id);
+    const toggleItem = (id: string) => {
+        const isActive = selectedItems.some(obj => obj.itemID === id);
 
-        const updatedItems = isActive
-            ? selectedItems.filter(obj => obj.roleID !== id)
-            : [...selectedItems, { roleID: id, level }];
+        const updatedItems : ShopItem[] = isActive
+            ? selectedItems.filter(obj => obj.itemID !== id)
+            : [...selectedItems, { itemID: id }];
         setSelectedItems(updatedItems);
     };
     
@@ -68,12 +68,28 @@ const Selector = ({ items, selectedItems, setSelectedItems }: componentProps) =>
     * =============================================================================================
     */
 
-    const changeValue = (roleID: string, level: any) => {
-        const numericLevel = parseFloat(level);
-        if (isNaN(numericLevel)) return;
+    const changeTitle = (itemID: string, title: any) => {
         
         const updatedItems = selectedItems.map((role) =>
-            role.roleID === roleID ? { ...role, level: numericLevel } : role
+            role.itemID === itemID ? { ...role, title } : role
+        );
+
+        setSelectedItems(updatedItems);
+    };
+
+    const changeDescription = (itemID: string, description: any) => {
+        
+        const updatedItems = selectedItems.map((role) =>
+            role.itemID === itemID ? { ...role, description } : role
+        );
+
+        setSelectedItems(updatedItems);
+    };
+
+    const changePrice = (itemID: string, price: any) => {
+        
+        const updatedItems = selectedItems.map((role) =>
+            role.itemID === itemID ? { ...role, price } : role
         );
 
         setSelectedItems(updatedItems);
@@ -94,7 +110,7 @@ const Selector = ({ items, selectedItems, setSelectedItems }: componentProps) =>
                             </div>
 
                             {items.map((item) => (
-                                <div key={item.id} className={`flex-table-row list-item-wrapper ${selectedItems.some(obj => obj.roleID === item.id) ? ' active' : ''}`}>
+                                <div key={item.id} className={`flex-table-row list-item-wrapper ${selectedItems.some(obj => obj.itemID === item.id) ? ' active' : ''}`}>
 
                                     <div className="flex-table-col list-item-role-wrapper">
                                         <div className="list-item-role">
@@ -108,7 +124,19 @@ const Selector = ({ items, selectedItems, setSelectedItems }: componentProps) =>
 
                                     <div className="flex-table-col list-item-input">
                                         <div className="input-field-level">
-                                            <input className="number" type='number' placeholder="lvl 0" value={selectedItems.find(obj => obj.roleID === item.id)?.level} min="0" max="9999" onChange={(e) => changeValue(item.id, e.target.value)}></input>
+                                            <input className="number" type='number' placeholder="lvl 0" value={selectedItems.find(obj => obj.itemID === item.id)?.level} min="0" max="9999" onChange={(e) => changeValue(item.id, e.target.value)}></input>
+                                        </div>
+                                    </div>
+
+                                    <div className="flex-table-col list-item-input">
+                                        <div className="input-field-level">
+                                            <input className="number" type='number' placeholder="lvl 0" value={selectedItems.find(obj => obj.itemID === item.id)?.level} min="0" max="9999" onChange={(e) => changeValue(item.id, e.target.value)}></input>
+                                        </div>
+                                    </div>
+
+                                    <div className="flex-table-col list-item-input">
+                                        <div className="input-field-level">
+                                            <input className="number" type='number' placeholder="lvl 0" value={selectedItems.find(obj => obj.itemID === item.id)?.level} min="0" max="9999" onChange={(e) => changeValue(item.id, e.target.value)}></input>
                                         </div>
                                     </div>
 
@@ -123,7 +151,7 @@ const Selector = ({ items, selectedItems, setSelectedItems }: componentProps) =>
                     <div className={`inactive-list-wrapper${isDropdownActive ? " active" : ""}`} onMouseEnter={handleMouseOver} onMouseLeave={handleMouseOut}>
                         <div className="inactive-list">
                             {items.map((item) => (
-                                <div key={item.id} className={`list-item ${selectedItems.some(obj => obj.roleID === item.id) ? ' active' : ''}`} onClick={() => toggleItem(item.id)}>
+                                <div key={item.id} className={`list-item ${selectedItems.some(obj => obj.itemID === item.id) ? ' active' : ''}`} onClick={() => toggleItem(item.id)}>
                                     <div className="role-color-wrapper">
                                         <div className="role-delete-color" style={{ backgroundColor: "#00FFFF" }}></div>
                                         <div className="role-color" style={{ backgroundColor: `#${item.color.toString(16).padStart(6, '0')}` }}></div>

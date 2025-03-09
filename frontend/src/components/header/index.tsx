@@ -1,14 +1,23 @@
 // src/components/header
 import React, { useState, useEffect } from 'react';
-import { Link, NavLink, useLocation } from 'react-router-dom';
+import { Link, NavLink, useLocation, useParams } from 'react-router-dom';
+import { useUser } from '../../context/UserContext';
 import './styles.scss';
 
+// import components:
+import Dropdown from '../shared/dropdown';
+
 function Header() {
+  const { guildId } = useParams();
+  const user = useUser();
+
   const [sidebarToggle, setSidebarToggle] = useState(false);
 
   const location = useLocation();
   const currentUrl = `${window.location.origin}${location.pathname}${location.search}${location.hash}`;
   const redirectUrl = location.pathname.startsWith('/guild/') ? currentUrl : `${window.location.origin}/dashboard`;
+
+  const isGuildPage = location.pathname.startsWith('/guild/');
 
   function toggleSidebar() {
     sidebarToggle ? setSidebarToggle(false) : setSidebarToggle(true);
@@ -56,7 +65,12 @@ function Header() {
                 <NavLink className='link' to="/features">features</NavLink>
                 <NavLink className='link' to="/commands">commands</NavLink>
                 <NavLink className='link' to="/dashboard">dashboard</NavLink>
-                <a className='login-button' href={`http://localhost:3001/api/auth/discord?redirect=${encodeURIComponent(redirectUrl)}`}>Login</a>
+                {user ? (
+                  // <a className="username">{user.username}</a>
+                  <a className="logout-button" href={`http://localhost:3001/api/auth/logout`}>Logout</a>
+                ) : (
+                  <a className='login-button' href={`http://localhost:3001/api/auth/discord?redirect=${encodeURIComponent(redirectUrl)}`}>Login</a>
+                )}
               </nav>
             </div>
 
@@ -79,12 +93,42 @@ function Header() {
 
           <div className="nav-wrapper">
             <div className='nav'>
-              <NavLink className='link' to="/home">Home</NavLink>
-              <NavLink className='link' to="/features">Features</NavLink>
-              <NavLink className='link' to="/commands">Commands</NavLink>
-              <NavLink className='link' to="/dashboard">Dashboard</NavLink>
+
+            {!isGuildPage && (
+              <>
+                <NavLink className='link' to="/home">Home</NavLink>
+                <NavLink className='link' to="/features">Features</NavLink>
+                <NavLink className='link' to="/commands">Commands</NavLink>
+                <NavLink className='link' to="/dashboard">Dashboard</NavLink>
+              </>
+            )}
+              
+            {isGuildPage && (
+              <>
+                <NavLink className='link' to={`/guild/${guildId}/community`}>Community</NavLink>
+                <NavLink className='link' to={`/guild/${guildId}/join`}>Joining/Leaving</NavLink>
+                <NavLink className='link' to={`/guild/${guildId}/economy`}>Economy</NavLink>
+                <NavLink className='link' to={`/guild/${guildId}/level`}>Level/Xp</NavLink>
+
+                
+                <Dropdown classname='dropdown' title='Additional links'>
+                  <NavLink className='link' to="/home">Home</NavLink>
+                  <NavLink className='link' to="/features">Features</NavLink>
+                  <NavLink className='link' to="/commands">Commands</NavLink>
+                  <NavLink className='link' to="/dashboard">Dashboard</NavLink>
+                </Dropdown>
+              </>
+            )}
+
+              
+
               <div className="login-button-wrapper">
-                <a className='login-button' href={`http://localhost:3001/api/auth/discord?redirect=${encodeURIComponent(redirectUrl)}`}>Login with Discord</a>
+              {user ? (
+                  // <a className="username">{user.username}</a>
+                  <a className="logout-button" href={`http://localhost:3001/api/auth/logout`}>Logout</a>
+                ) : (
+                  <a className='login-button' href={`http://localhost:3001/api/auth/discord?redirect=${encodeURIComponent(redirectUrl)}`}>Login with Discord</a>
+                )}
               </div>
             </div>
           </div>

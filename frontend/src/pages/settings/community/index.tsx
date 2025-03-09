@@ -10,6 +10,7 @@ import Loading from '../../../components/shared/loading';
 
 // import subcomponents
 import Selector from '../../../components/settings/selector'
+import SaveChanges from '../../../components/settings/save-changes';
 
 
 
@@ -77,7 +78,7 @@ function Community() {
         <Settings title="Selected bump channel" description="Monitor bump messages from Disboard (a Discord Bot) and remove all non-bump messages. Server members receive a reward of 50 currency for bumping your server.">
           <Selector itemCategory='channel' selectionMode='singular' items={channels} selectedItems={bumpChannel ? [bumpChannel] : []} setSelectedItems={(selected: string[]) => setBumpChannel(selected[0] || undefined)} />
         </Settings>
-        <button onClick={handleSubmit}>Save Settings</button>
+        <SaveChanges settings={{threadChannels, upvoteChannels, bumpChannel}} onSave={handleSubmit}></SaveChanges>
       </div>
 
     </div>
