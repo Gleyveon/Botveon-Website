@@ -28,6 +28,7 @@ function Level() {
   const [levelUpMessages, setLevelUpMessages] = useState<boolean>(false);
   const [levelUpRoles, setLevelUpRoles] = useState<LevelRole[]>([]);
   const [boostRoles, setBoostRoles] = useState<BoostRole[]>([]);
+  const [invalidFields, setInvalidFields] = useState<string[]>([]);
 
   if (!guildId) {
     return <p>Error loading data!</p>;
@@ -49,22 +50,33 @@ function Level() {
       });
   }, [guildId]);
 
+  const validateFields = () => {
+    const invalidRoles = levelUpRoles
+      .filter((role) => role.level === undefined || isNaN(role.level) || role.level <= 0) // Check if level is undefined, not a number, or <= 0
+      .map((role) => role.roleID);
+
+    setInvalidFields(invalidRoles);
+    return invalidRoles.length === 0; // Return true if all fields are valid
+  };
+
   const handleSubmit = async () => {
-    console.log("submitting data!");
-    
-      try {
-        const settings = {
-          levelUpMessages,
-          levelUpRoles,
-          boostRoles
-        };
-        await updateLevelSettings(guildId, settings);
-        alert('Settings saved successfully!');
-      } catch (err) {
-        console.error('Error saving settings:', err);
-        alert('Failed to save settings. Please try again.');
-      }
-    };
+    const isValid = validateFields();
+
+    if (!isValid) { return; }
+
+    try {
+      const settings = {
+        levelUpMessages,
+        levelUpRoles,
+        boostRoles
+      };
+      await updateLevelSettings(guildId, settings);
+      alert('Settings saved successfully!');
+    } catch (err) {
+      console.error('Error saving settings:', err);
+      alert('Failed to save settings. Please try again.');
+    }
+  };
 
   if (loading) return <Loading />;
   if (error) return <p>Error loading data!</p>;
@@ -73,13 +85,13 @@ function Level() {
     <div className="page page-level">
       <div className="container">
         <Settings title="Level Up Messages" description="See level-up messages upon gaining a new level.">
-          <Toggle toggleValue={levelUpMessages} setToggleValue={setLevelUpMessages}/>
+          <Toggle toggleValue={levelUpMessages} setToggleValue={setLevelUpMessages} />
         </Settings>
         {/* <Settings title='Level Up Channel' description='Select what channel the level-up messages get sent in.'>
           <Select ></Select>
         </Settings> */}
         <Settings title='Level-up Role Rewards' description='Add Level Roles to reward your active members.'>
-          <LevelSelector items={roles} selectedItems={levelUpRoles} setSelectedItems={setLevelUpRoles}></LevelSelector>
+          <LevelSelector items={roles} selectedItems={levelUpRoles} setSelectedItems={setLevelUpRoles} invalidFields={invalidFields}></LevelSelector>
         </Settings>
         <Settings title='Xp Boost Roles' description='Give certain roles an additional xp boost.'>
           <BoostSelector items={roles} selectedItems={boostRoles} setSelectedItems={setBoostRoles}></BoostSelector>

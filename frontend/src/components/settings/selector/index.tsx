@@ -2,6 +2,9 @@
 import { useState } from 'react';
 import './styles.scss';
 
+// components
+import InfoButton from '../../shared/info-button'
+
 interface Channel {
     id: string;
     name: string;
@@ -17,6 +20,8 @@ interface Role {
 type Item = Role | Channel;
 
 interface componentProps {
+    title?: string; 
+    info?: string;
     itemCategory: "role" | "channel";
     selectionMode: "singular" | "multiple";
     items: Item[];
@@ -24,9 +29,10 @@ interface componentProps {
     setSelectedItems: (value: string[]) => void;
 }
 
-const Selector = ({ itemCategory, selectionMode, items, selectedItems, setSelectedItems }: componentProps) => {
+const Selector = ({ title, info, itemCategory, selectionMode, items, selectedItems, setSelectedItems }: componentProps) => {
 
     const [isDropdownActive, setDropdownActive] = useState(false);
+    const [isMouseInside, setIsMouseInside] = useState(false)
     const [timeoutId, setTimeoutId] = useState<number | null>(null);
 
     function isChannel(item: Item): item is Channel {
@@ -50,6 +56,7 @@ const Selector = ({ itemCategory, selectionMode, items, selectedItems, setSelect
         if (selectionMode === "singular") {
             const isAlreadySelected = selectedItems.includes(id);
             setSelectedItems(isAlreadySelected ? [] : [id]);
+            setDropdownActive(false);
         } else {
             const isActive = selectedItems.includes(id);
             const updatedItems = isActive
@@ -72,10 +79,16 @@ const Selector = ({ itemCategory, selectionMode, items, selectedItems, setSelect
     };
 
     // Close dropdown after a delay
-    const handleMouseOut = () => {
+    const handleMouseOut = (event: React.MouseEvent) => {
+        const relatedTarget = event.relatedTarget as HTMLElement | null;
+    
+        if (relatedTarget?.closest('.add-button, .inactive-list-wrapper')) {return};
+    
+        // Close dropdown after a delay
         const id = window.setTimeout(() => setDropdownActive(false), 200);
         setTimeoutId(id);
     };
+    
 
     // Cancel closing dropdown if mouse comes back
     const handleMouseOver = () => {
@@ -89,6 +102,7 @@ const Selector = ({ itemCategory, selectionMode, items, selectedItems, setSelect
         <div className="setting-subcomponent selector">
 
             <div className="setting-item">
+                <InfoButton title={title} info={info} />
                 <div className={`selector ${selectionMode}`}>
                     <div className="active-list">
                         {items.map((item) => (
@@ -115,7 +129,7 @@ const Selector = ({ itemCategory, selectionMode, items, selectedItems, setSelect
                                 {item.name}
                             </div>
                         ))}
-                        <button type="button" className="add-button" onClick={toggleDropdown} onMouseEnter={handleMouseOver} onMouseLeave={handleMouseOut}>+ Add {itemCategory === "channel" ? "Channel" : "Role"}</button>
+                        <button type="button" className={`add-button${selectionMode === "singular" && selectedItems.length > 0 ? " hidden" : ""}`} onClick={toggleDropdown} onMouseEnter={handleMouseOver} onMouseLeave={handleMouseOut}>+ Add {itemCategory === "channel" ? "Channel" : "Role"}</button>
                     </div>
                     <div className={`inactive-list-wrapper${isDropdownActive ? " active" : ""}`} onMouseEnter={handleMouseOver} onMouseLeave={handleMouseOut}>
                         <div className="inactive-list">

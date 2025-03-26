@@ -20,16 +20,19 @@ import Testing from './pages/testing';
 
 function RouteApp() {
 
-  useEffect(() => {
-    const isFirefox = /firefox/i.test(navigator.userAgent);
+  // useEffect(() => {
+  //   const isFirefox = /firefox/i.test(navigator.userAgent);
 
-    if (isFirefox) {
-      document.body.style.background = '#121212';
-    }
-  }, []);
+  //   if (isFirefox) {
+  //     document.body.style.background = '#121212';
+  //   }
+  // }, []);
 
   return (
     <Router>
+      
+        
+
       <Routes>
 
         <Route element={<DefaultLayout />}>

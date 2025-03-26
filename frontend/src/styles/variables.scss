@@ -3,15 +3,15 @@ $primary-accent-color-hover: rgba($primary-accent-color, 0.7);
 $secondary-accent-color: green;
 $secondary-accent-color-hover: green;
 
-$primary-background-color: #121212;
-$secondary-background-color: #191919;
-$highlight-background-color: #202020;
+$primary-background-color: #080f1e;
+$secondary-background-color: #080f1e;
+$highlight-background-color: #121929;
 
 $primary-title-color: #f0f0f0;
 $primary-description-color: #d0d0d0;
 
-$secondary-title-color: #a5a5a5;
-$secondary-description-color: #686868;
+$secondary-title-color: #f0f0f0;
+$secondary-description-color: #bebebe;
 
 $highlight-title-color: white;
 $highlight-description-color: white; //idk yet
@@ -19,10 +19,22 @@ $highlight-description-color: white; //idk yet
 $primary-link-color: #e6e6e6;
 $primary-link-color-hover: rgba($primary-link-color, 0.8);
 
-$secondary-link-color: #686868;
+$secondary-link-color: #bebebe;
 $secondary-link-color-hover: #c0c0c0;
 
 // Temp: 
 $selection-box-color: #111525;
 $subtitle-color: #d7d7d7;
 $selection-input-color: #1B1F30;
+
+// Settings:
+$setting-background-color: #121929;
+$setting-content-color: #182033;
+$setting-input-color: #1f283d; 
+$setting-item-color: #1f283d; 
+$setting-button-color: #1f283d; 
+$setting-button-color-hover: #273249;
+$setting-dropdown-color: #273249;
+$setting-dropdown-color-hover: #323e58;
+
+

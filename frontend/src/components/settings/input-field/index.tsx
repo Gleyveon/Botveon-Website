@@ -2,7 +2,7 @@
 import './styles.scss';
 
 // import subcomponents
-import ItemTitle from '../item-title'
+import ItemTitle from '../../shared/info-button'
 
 interface componentProps {
     title?: string; 

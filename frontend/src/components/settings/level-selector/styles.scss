@@ -5,7 +5,7 @@
             max-width: 600px;
 
             .active-list {
-                background-color: $selection-input-color;
+                background-color: $setting-content-color;
                 padding: 10px;
                 border-radius: 10px;
                 width: 100%;
@@ -59,7 +59,7 @@
                                     min-width: 0;
                                     padding: 5px 10px;
                                     border-radius: 5px;
-                                    background-color: #252a3b;
+                                    background-color: $setting-item-color;
 
                                     .role-color-wrapper {
                                         flex-shrink: 0;
@@ -89,16 +89,19 @@
                                 max-width: 100px;
                                 position: relative;
 
-                                .input-field-level,
-                                .input-field-boost {
+                                .input-field-level {
                                     padding: 5px 10px;
-                                    background-color: #252a3b;
+                                    background-color: $setting-input-color;
                                     border-radius: 5px;
+
+                                    &.invalid {
+                                        border: 1px solid red;
+                                    }
 
                                     input {
                                         width: 100%;
                                         color: white;
-                                        background-color: #252a3b;
+                                        background-color: $setting-input-color;
                                         border: none;
                                         outline: none;
                                         text-align: center;
@@ -114,62 +117,6 @@
                                             -webkit-appearance: none;
                                             margin: 0;
                                         }
-                                    }
-                                }
-
-                                .input-select-stackable,
-                                .input-select-equation {
-
-                                    button {
-                                        padding: 5px 10px;
-                                        background-color: #252a3b;
-                                        color: white;
-                                        border-radius: 5px;
-                                        height: 34px;
-
-                                        position: relative;
-                                        width: 100%;
-                                        border: none;
-                                        outline: none;
-
-                                        &[disabled]:hover {
-                                            cursor: not-allowed;
-                                        }
-                                    }
-                                }
-
-                                .input-select-dropdown {
-                                    position: absolute;
-                                    width: 100%;
-                                    background-color: #3a4059;
-                                    border-radius: 10px;
-                                    z-index: 1;
-                                    overflow: hidden;
-                                    display: none;
-
-                                    label {
-                                        width: 100%;
-                                        display: flex;
-                                        justify-content: center;
-                                        align-items: center;
-
-                                        input {
-                                            appearance: none;
-                                            -webkit-appearance: none;
-                                            -moz-appearance: none;
-                                        }
-
-                                        span {
-                                            text-align: center;
-                                        }
-
-                                        &:hover {
-                                            background-color: #444c67;
-                                        }
-                                    }
-
-                                    &.active {
-                                        display: block;
                                     }
                                 }
                             }
@@ -194,29 +141,40 @@
                     }
                 }
 
-                .add-button {
-                    color: white;
-                    padding: 5px 10px;
-                    border: none;
-                    border-radius: 15px;
-                    cursor: pointer;
-                    background-color: #252a3b;
-                    transition: 200ms;
+                .bottom-wrapper {
+                    display: flex;
+                    align-items: center;
+                    gap: 20px;
 
-                    &.hidden {
-                        display: none;
+                    .add-button {
+                        color: white;
+                        padding: 5px 10px;
+                        border: none;
+                        border-radius: 15px;
+                        cursor: pointer;
+                        background-color: $setting-button-color;
+                        transition: 200ms;
+                        white-space: nowrap;
+    
+                        &.hidden {
+                            display: none;
+                        }
+    
+                        &:hover {
+                            background-color: $setting-button-color-hover;
+                        }
                     }
 
-                    &:hover {
-                        background-color: #3a4059;
+                    .error-message {
+                        color: red;
                     }
-                }
+                } 
             }
 
             .inactive-list-wrapper {
                 display: none;
                 position: absolute;
-                background-color: #3a4059;
+                background-color: $setting-dropdown-color;
                 border-radius: 10px;
                 width: 100%;
                 padding: 0 10px 0 0;
@@ -291,7 +249,7 @@
                         }
 
                         &:hover {
-                            background-color: #444c67;
+                            background-color: $setting-dropdown-color-hover;
                         }
                     }
                 }

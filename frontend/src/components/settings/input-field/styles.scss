@@ -3,7 +3,7 @@
     .setting-item {
         .input-field {
             position: relative;
-            background-color: $selection-input-color;
+            background-color: $setting-content-color;
             min-height: 54px;
             max-width: 600px;
             padding: 15px 20px;
@@ -12,7 +12,7 @@
             input {
                 width: 100%;
                 color: white;
-                background-color: $selection-input-color;
+                background-color: $setting-content-color;
                 border: none;
                 outline: none;
             }

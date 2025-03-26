@@ -28,6 +28,18 @@ function Header() {
   }
 
   useEffect(() => {
+    if (sidebarToggle) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [sidebarToggle]);
+
+  useEffect(() => {
     function handleResize() {
       if (window.innerWidth > 1199) {
         closeSidebar();

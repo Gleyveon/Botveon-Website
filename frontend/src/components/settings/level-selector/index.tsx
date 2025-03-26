@@ -1,5 +1,5 @@
 // src/components/settings/selector-levels
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Role, LevelRole } from '../../../utils/types';
 import './styles.scss';
 
@@ -7,9 +7,10 @@ interface componentProps {
     items: Role[];
     selectedItems: LevelRole[];
     setSelectedItems: (levelRole: LevelRole[]) => void;
+    invalidFields: string[];
 }
 
-const Selector = ({ items, selectedItems, setSelectedItems }: componentProps) => {
+const Selector = ({ items, selectedItems, setSelectedItems, invalidFields }: componentProps) => {
 
     const [isDropdownActive, setDropdownActive] = useState(false);
     const [timeoutId, setTimeoutId] = useState<number | null>(null);
@@ -46,7 +47,12 @@ const Selector = ({ items, selectedItems, setSelectedItems }: componentProps) =>
     };
 
     // Close dropdown after a delay
-    const handleMouseOut = () => {
+    const handleMouseOut = (event: React.MouseEvent) => {
+        const relatedTarget = event.relatedTarget as HTMLElement | null;
+    
+        if (relatedTarget?.closest('.add-button, .inactive-list-wrapper')) {return};
+    
+        // Close dropdown after a delay
         const id = window.setTimeout(() => setDropdownActive(false), 200);
         setTimeoutId(id);
     };
@@ -70,7 +76,6 @@ const Selector = ({ items, selectedItems, setSelectedItems }: componentProps) =>
 
     const changeValue = (roleID: string, level: any) => {
         const numericLevel = parseFloat(level);
-        if (isNaN(numericLevel)) return;
         
         const updatedItems = selectedItems.map((role) =>
             role.roleID === roleID ? { ...role, level: numericLevel } : role
@@ -107,7 +112,7 @@ const Selector = ({ items, selectedItems, setSelectedItems }: componentProps) =>
                                     </div>
 
                                     <div className="flex-table-col list-item-input">
-                                        <div className="input-field-level">
+                                        <div className={`input-field-level${invalidFields.includes(item.id) ? ' invalid' : ''}`}>
                                             <input className="number" type='number' placeholder="lvl 0" value={selectedItems.find(obj => obj.roleID === item.id)?.level} min="0" max="9999" onChange={(e) => changeValue(item.id, e.target.value)}></input>
                                         </div>
                                     </div>
@@ -118,7 +123,12 @@ const Selector = ({ items, selectedItems, setSelectedItems }: componentProps) =>
                                 </div>
                             ))}
                         </div>
-                        <button type="button" className="add-button" onClick={toggleDropdown} onMouseEnter={handleMouseOver} onMouseLeave={handleMouseOut}>+ Add Role</button>
+                        <div className="bottom-wrapper">
+                            <button type="button" className="add-button" onClick={toggleDropdown} onMouseEnter={handleMouseOver} onMouseLeave={handleMouseOut}>+ Add Role</button>
+                            { invalidFields.length > 0 && (
+                                <div className="error-message">* Please fill all out fields correctly!</div>
+                            )}
+                        </div>
                     </div>
                     <div className={`inactive-list-wrapper${isDropdownActive ? " active" : ""}`} onMouseEnter={handleMouseOver} onMouseLeave={handleMouseOut}>
                         <div className="inactive-list">

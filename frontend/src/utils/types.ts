@@ -8,19 +8,20 @@ export type Guild = {
 }
 
 export interface Channel {
-    channelID: string;
+    id: string;
     name: string;
+    type: number;
 }
 
 export interface Role {
-    roleID: string;
+    id: string;
     name: string;
     color: string;
 }
 
 export interface LevelRole {
     roleID: string;
-    level: number;
+    level: number | undefined;
 }
 
 export interface BoostRole {

@@ -157,27 +157,27 @@ function Join() {
         </Settings>
 
         <Settings title='Registration' description='Add an extra step before new members gain access to the server.'>
-          <Selector itemCategory='role' selectionMode='singular' items={roles} selectedItems={registrationRole ? [registrationRole] : []} setSelectedItems={(selected: string[]) => setRegistrationRole(selected[0] || undefined)}></Selector>
-          <Selector itemCategory='channel' selectionMode='singular' items={channels} selectedItems={registrationChannel ? [registrationChannel] : []} setSelectedItems={(selected: string[]) => setRegistrationChannel(selected[0] || undefined)}></Selector>
-          <InputField placeholder='Embed title:' input={registrationTitle} setInput={setRegistrationTitle}></InputField>
-          <TextField placeholder='Embed description:' text={registrationDescription} setText={setRegistrationDescription}></TextField>
-          <InputField placeholder='Embed footer' input={registrationFooter} setInput={setRegistrationFooter}></InputField>
+          <Selector title='Role:' info='This role will be given upon joining and taken away upon registering.' itemCategory='role' selectionMode='singular' items={roles} selectedItems={registrationRole ? [registrationRole] : []} setSelectedItems={(selected: string[]) => setRegistrationRole(selected[0] || undefined)}></Selector>
+          <Selector title='Channel:' info='This will be the channel where the registration message will be sent to.' itemCategory='channel' selectionMode='singular' items={channels} selectedItems={registrationChannel ? [registrationChannel] : []} setSelectedItems={(selected: string[]) => setRegistrationChannel(selected[0] || undefined)}></Selector>
+          <InputField title='Embed Title:' info='You can make use of <@userID>, <#channelID>, <@&roleID>' placeholder='Embed title:' input={registrationTitle} setInput={setRegistrationTitle}></InputField>
+          <TextField title='Embed Description:' info='You can make use of <@userID>, <#channelID>, <@&roleID> and all other discord markdown' placeholder='Embed description:' text={registrationDescription} setText={setRegistrationDescription}></TextField>
+          <InputField title='Embed Footer:' info='You can make use of <@userID>, <#channelID>, <@&roleID>' placeholder='Embed footer' input={registrationFooter} setInput={setRegistrationFooter}></InputField>
         </Settings>
 
         <Settings title='Welcome Channel' description='Send a message whenever a new member joins the server.'>
-          <Selector itemCategory='channel' selectionMode='singular' items={channels} selectedItems={welcomeChannel ? [welcomeChannel] : []} setSelectedItems={(selected: string[]) => setWelcomeChannel(selected[0] || undefined)}></Selector>
-          <Toggle toggleValue={welcomeChannelPicture} setToggleValue={setWelcomeChannelPicture}></Toggle>
-          <InputField placeholder='Embed title:' input={welcomeChannelTitle} setInput={setWelcomeChannelTitle}></InputField>
-          <TextField placeholder='Embed description:' text={welcomeChannelDescription} setText={setWelcomeChannelDescription}></TextField>
-          <InputField placeholder='Embed footer' input={welcomeChannelFooter} setInput={setWelcomeChannelFooter}></InputField>
+          <Selector title='Channel:' info='Select the channel where the welcomne messages will be sent to:' itemCategory='channel' selectionMode='singular' items={channels} selectedItems={welcomeChannel ? [welcomeChannel] : []} setSelectedItems={(selected: string[]) => setWelcomeChannel(selected[0] || undefined)}></Selector>
+          <Toggle title='Profile Picture:' info='Add the profile pictures of joined members to embed?' toggleValue={welcomeChannelPicture} setToggleValue={setWelcomeChannelPicture}></Toggle>
+          <InputField title='Embed Title:' info='You can use: {username} {globalName} {guildName} {@user} {id}' placeholder='Embed title:' input={welcomeChannelTitle} setInput={setWelcomeChannelTitle}></InputField>
+          <TextField title='Embed Description:' info='You can use: {username} {globalName} {guildName} {@user} {id}' placeholder='Embed description:' text={welcomeChannelDescription} setText={setWelcomeChannelDescription}></TextField>
+          <InputField title='Embed Footer:' info='You can use: {username} {globalName} {guildName} {@user} {id}' placeholder='Embed footer' input={welcomeChannelFooter} setInput={setWelcomeChannelFooter}></InputField>
         </Settings>
 
         <Settings title='Goodbye Channel' description='Send a message whenever a member leaves the server.'>
-          <Selector itemCategory='channel' selectionMode='singular' items={channels} selectedItems={goodbyeChannel ? [goodbyeChannel] : []} setSelectedItems={(selected: string[]) => setGoodbyeChannel(selected[0] || undefined)}></Selector>
-          <Toggle toggleValue={goodbyeChannelPicture} setToggleValue={setGoodbyeChannelPicture}></Toggle>
-          <InputField placeholder='Embed title:' input={goodbyeChannelTitle} setInput={setGoodbyeChannelTitle}></InputField>
-          <TextField placeholder='Embed description:' text={goodbyeChannelDescription} setText={setGoodbyeChannelDescription}></TextField>
-          <InputField placeholder='Embed footer' input={goodbyeChannelFooter} setInput={setGoodbyeChannelFooter}></InputField>
+          <Selector title='Channel:' info='Select the channel where the goodbye messages will be sent to:' itemCategory='channel' selectionMode='singular' items={channels} selectedItems={goodbyeChannel ? [goodbyeChannel] : []} setSelectedItems={(selected: string[]) => setGoodbyeChannel(selected[0] || undefined)}></Selector>
+          <Toggle title='Profile Picture:' info='Add the profile pictures of leaving members to embed?' toggleValue={goodbyeChannelPicture} setToggleValue={setGoodbyeChannelPicture}></Toggle>
+          <InputField title='Embed Title:' info='You can use: {username} {globalName} {guildName} {@user} {id}' placeholder='Embed title:' input={goodbyeChannelTitle} setInput={setGoodbyeChannelTitle}></InputField>
+          <TextField title='Embed Description:' info='You can use: {username} {globalName} {guildName} {@user} {id}' placeholder='Embed description:' text={goodbyeChannelDescription} setText={setGoodbyeChannelDescription}></TextField>
+          <InputField title='Embed Footer:' info='You can use: {username} {globalName} {guildName} {@user} {id}' placeholder='Embed footer' input={goodbyeChannelFooter} setInput={setGoodbyeChannelFooter}></InputField>
         </Settings>
 
         <Settings title='Persistent Roles' description='Should users regain their old roles after leaving and rejoining?'>

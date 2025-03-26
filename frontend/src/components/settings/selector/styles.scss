@@ -10,7 +10,7 @@
                 display: flex;
                 flex-wrap: wrap;
                 gap: 10px;
-                background-color: $selection-input-color;
+                background-color: $setting-content-color;
                 padding: 10px;
                 border-radius: 10px;
 
@@ -18,7 +18,7 @@
                     padding: 5px 10px;
                     border-radius: 15px;
                     cursor: pointer;
-                    background-color: #252a3b;
+                    background-color: $setting-item-color;
                     border: 1px solid transparent;
                     transition: 250ms;
                     align-items: center;
@@ -38,7 +38,7 @@
                             height: 100%;
                             width: 100%;
                             background-color: #00FFFF;
-                            background-image: url("../../assets/img/icons/close.png");
+                            background-image: url("../../../assets/img/icons/close.png");
                             background-repeat: no-repeat;
                             background-position: center;
                             background-size: 40%;
@@ -76,7 +76,7 @@
                             visibility: hidden;
                             height: 100%;
                             width: 100%;
-                            background-image: url("../../assets/img/icons/close.png");
+                            background-image: url("../../../assets/img/icons/close.png");
                             background-repeat: no-repeat;
                             background-position: center;
                             background-size: 40%;
@@ -136,7 +136,7 @@
                     border: none;
                     border-radius: 15px;
                     cursor: pointer;
-                    background-color: #252a3b;
+                    background-color: $setting-button-color;
                     transition: 200ms;
 
                     &.hidden {
@@ -144,7 +144,7 @@
                     }
 
                     &:hover {
-                        background-color: #3a4059;
+                        background-color: $setting-button-color-hover;
                     }
                 }
             }
@@ -152,7 +152,7 @@
             .inactive-list-wrapper {
                 display: none;
                 position: absolute;
-                background-color: #3a4059;
+                background-color: $setting-dropdown-color;
                 border-radius: 10px;
                 width: 100%;
                 padding: 0 10px 0 0;
@@ -227,7 +227,7 @@
                         }
 
                         &:hover {
-                            background-color: #444c67;
+                            background-color: $setting-dropdown-color-hover;
                         }
                     }
                 }

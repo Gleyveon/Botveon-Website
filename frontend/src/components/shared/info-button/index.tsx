@@ -7,7 +7,7 @@ interface componentProps {
     info?: string;
 }
 
-const InputField = ({ title, info }: componentProps) => {
+const infoButton = ({ title, info }: componentProps) => {
 
     const [dropdownIsActive, setDropdownIsActive] = useState<boolean>(false)
     const timeoutID = useRef<number | null>(null);
@@ -27,8 +27,9 @@ const InputField = ({ title, info }: componentProps) => {
         }
     }
 
-    return (
-        <div className="setting-subcomponent item-title">
+    if (title || info ) return (
+
+        <div className="component info-button">
             <div className="setting-item-title-wrapper">
                 <div className="setting-item-title">{title}</div>
                 {info && (
@@ -43,9 +44,10 @@ const InputField = ({ title, info }: componentProps) => {
                 )}
             </div>
         </div>
+        
     );
 }
 
-export default InputField;
+export default infoButton;
 
 

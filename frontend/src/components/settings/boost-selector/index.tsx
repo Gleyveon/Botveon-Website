@@ -45,18 +45,23 @@ const BoostSelector = ({ items, selectedItems, setSelectedItems }: componentProp
     * =============================================================================================
     */
 
-    const toggleRoleDropdown = () => {
+    const toggleDropdown = () => {
         setDropdownActive(!isDropdownActive);
     };
 
     // Close dropdown after a delay
-    const handleRoleMouseOut = () => {
+    const handleMouseOut = (event: React.MouseEvent) => {
+        const relatedTarget = event.relatedTarget as HTMLElement | null;
+    
+        if (relatedTarget?.closest('.add-button, .inactive-list-wrapper')) {return};
+    
+        // Close dropdown after a delay
         const id = window.setTimeout(() => setDropdownActive(false), 200);
         setTimeoutId(id);
     };
 
     // Cancel closing dropdown if mouse comes back
-    const handleRoleMouseOver = () => {
+    const handleMouseOver = () => {
         if (timeoutId) {
             clearTimeout(timeoutId);
             //setTimeoutId(null);
@@ -88,7 +93,7 @@ const BoostSelector = ({ items, selectedItems, setSelectedItems }: componentProp
     */
 
     // toggle dropdown from being active:
-    function toggleStackableDropdown(id: string) {
+    function toggleMiniDropdown(id: string) {
         if (stackableDropdowns.some((obj) => obj.id === id)) {
             setStackableDropdowns((prevState) =>
                 prevState.filter((obj) => obj.id !== id)
@@ -99,7 +104,11 @@ const BoostSelector = ({ items, selectedItems, setSelectedItems }: componentProp
     }
 
     // Make the dropdown inactive in 200ms by creating a timeout
-    function handleMouseOut2(id: string) {
+    function exitMiniDropdown(event: React.MouseEvent, id: string) {
+
+        const relatedTarget = event.relatedTarget as HTMLElement | null;
+    
+        if (relatedTarget?.closest('.selector-button, .input-select-dropdown')) {return};
 
         // remove dropdown in 200ms
         const timeout = setTimeout(() => {
@@ -117,7 +126,7 @@ const BoostSelector = ({ items, selectedItems, setSelectedItems }: componentProp
     }
 
     // Cancel making the dropdown inactive by clearing the timeout
-    function handleMouseOver2(id: string) {
+    function enterMiniDropdown(id: string) {
 
         const existingTimeout = stackableDropdowns.find(obj => obj.id === id);
 
@@ -128,7 +137,7 @@ const BoostSelector = ({ items, selectedItems, setSelectedItems }: componentProp
     }
 
     // Close dropdown when a selection has been made
-    function closeStackableDropdown(id: string) {
+    function closeMiniDropdown(id: string) {
         setStackableDropdowns((prevState) =>
             prevState.filter((obj) => obj.id !== id)
         );
@@ -228,20 +237,20 @@ const BoostSelector = ({ items, selectedItems, setSelectedItems }: componentProp
                                                 <button
                                                     type="button"
                                                     className="selector-button"
-                                                    onClick={() => toggleStackableDropdown('stackable' + item.id)}
-                                                    onMouseEnter={() => handleMouseOver2('stackable' + item.id)}
-                                                    onMouseLeave={() => handleMouseOut2('stackable' + item.id)}>
+                                                    onClick={() => toggleMiniDropdown('stackable' + item.id)}
+                                                    onMouseEnter={() => enterMiniDropdown('stackable' + item.id)}
+                                                    onMouseLeave={(event) => exitMiniDropdown(event, 'stackable' + item.id)}>
                                                     {stackable ? "Yes" : "No"}
                                                 </button>
                                             </div>
                                             <div
                                                 className={`input-select-dropdown ${stackableDropdowns.some(obj => obj.id === 'stackable' + item.id) ? "active" : ""}`}
-                                                onMouseEnter={() => handleMouseOver2('stackable' + item.id)}
-                                                onMouseLeave={() => handleMouseOut2('stackable' + item.id)}>
-                                                <label onClick={() => {changeStackable(item.id, true); closeStackableDropdown('stackable' + item.id);}}>
+                                                onMouseEnter={() => enterMiniDropdown('stackable' + item.id)}
+                                                onMouseLeave={(event) => exitMiniDropdown(event, 'stackable' + item.id)}>
+                                                <label onClick={() => {changeStackable(item.id, true); closeMiniDropdown('stackable' + item.id);}}>
                                                     <span>Yes</span>
                                                 </label>
-                                                <label onClick={() => {changeStackable(item.id, false); closeStackableDropdown('stackable' + item.id);}}>
+                                                <label onClick={() => {changeStackable(item.id, false); closeMiniDropdown('stackable' + item.id);}}>
                                                     <span>No</span>
                                                 </label>
                                             </div>
@@ -253,20 +262,20 @@ const BoostSelector = ({ items, selectedItems, setSelectedItems }: componentProp
                                                     type="button"
                                                     className="selector-button"
                                                     disabled={stackable === false}
-                                                    onClick={() => toggleStackableDropdown('equation' + item.id)}
-                                                    onMouseEnter={() => handleMouseOver2('equation' + item.id)}
-                                                    onMouseLeave={() => handleMouseOut2('equation' + item.id)}>
+                                                    onClick={() => toggleMiniDropdown('equation' + item.id)}
+                                                    onMouseEnter={() => enterMiniDropdown('equation' + item.id)}
+                                                    onMouseLeave={(event) => exitMiniDropdown(event, 'equation' + item.id)}>
                                                     {equation ? equation : stackable ? "" : " - "}
                                                 </button>
                                             </div>
                                             <div
                                                 className={`input-select-dropdown ${stackableDropdowns.some(obj => obj.id === 'equation' + item.id) ? "active" : ""}`}
-                                                onMouseEnter={() => handleMouseOver2('equation' + item.id)}
-                                                onMouseLeave={() => handleMouseOut2('equation' + item.id)}>
-                                                <label onClick={(e) => { changeEquation(item.id, 'add'); closeStackableDropdown('equation' + item.id); }}>
+                                                onMouseEnter={() => enterMiniDropdown('equation' + item.id)}
+                                                onMouseLeave={(event) => exitMiniDropdown(event, 'equation' + item.id)}>
+                                                <label onClick={(e) => { changeEquation(item.id, 'add'); closeMiniDropdown('equation' + item.id); }}>
                                                     <span>Add</span>
                                                 </label>
-                                                <label onClick={(e) => { changeEquation(item.id, 'multiply'); closeStackableDropdown('equation' + item.id); }}>
+                                                <label onClick={(e) => { changeEquation(item.id, 'multiply'); closeMiniDropdown('equation' + item.id); }}>
                                                     <span>Multiply</span>
                                                 </label>
                                             </div>
@@ -280,9 +289,9 @@ const BoostSelector = ({ items, selectedItems, setSelectedItems }: componentProp
                             }
                             )}
                         </div>
-                        <button type="button" className="add-button" onClick={toggleRoleDropdown} onMouseEnter={handleRoleMouseOver} onMouseLeave={handleRoleMouseOut}>+ Add Role</button>
+                        <button type="button" className="add-button" onClick={toggleDropdown} onMouseEnter={handleMouseOver} onMouseLeave={handleMouseOut}>+ Add Role</button>
                     </div>
-                    <div className={`inactive-list-wrapper${isDropdownActive ? " active" : ""}`} onMouseEnter={handleRoleMouseOver} onMouseLeave={handleRoleMouseOut} ref={dropdownRef}>
+                    <div className={`inactive-list-wrapper${isDropdownActive ? " active" : ""}`} onMouseEnter={handleMouseOver} onMouseLeave={handleMouseOut} ref={dropdownRef}>
                         <div className="inactive-list">
                             {items.map((item) => (
                                 <div key={item.id} className={`list-item ${selectedItems.some(obj => obj.roleID === item.id) ? ' active' : ''}`} onClick={() => toggleItem(item.id)}>

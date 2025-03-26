@@ -14,7 +14,7 @@ const Settings = ({ title, description, children }: settingsProps) => {
 
       <div className="settings-section">
         <div className="settings-title">{title}</div>
-        <div className="settings-description">{description}</div>
+        <div className="settings-description" dangerouslySetInnerHTML={{ __html: description || '' }}></div>
 
         <div className="settings-items">
           {children}

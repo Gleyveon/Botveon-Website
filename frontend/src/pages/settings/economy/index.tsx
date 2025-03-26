@@ -57,7 +57,15 @@ function Economy() {
         
           try {
             const settings = {
-              
+              currency: {
+                nameSingular: currencySingular,
+                namePlural: currencyPlural,
+                icon: currencyIcon,
+              },
+              shopItems: [
+                ...(shopRoles?.map((role) => ({ ...role, category: "role" })) || []),
+                ...(shopChannels?.map((channel) => ({ ...channel, category: "channel" })) || []),
+              ],
             };
             await updateEconomySettings(guildId, settings);
             alert('Settings saved successfully!');
@@ -84,7 +92,11 @@ function Economy() {
           <InputSelector items={roles} itemsType="Role" selectedItems={shopRoles} setSelectedItems={setShopRoles}></InputSelector>
         </Settings>
 
-        <SaveChanges settings={{currencySingular, currencyPlural, currencyIcon, shopChannels}} onSave={handleSubmit}></SaveChanges>
+        {/* <Settings title='Shop channels'>
+          <InputSelector items={channels} itemsType="Channel" selectedItems={shopChannels} setSelectedItems={setShopChannels}></InputSelector>
+        </Settings> */}
+
+        <SaveChanges settings={{currencySingular, currencyPlural, currencyIcon, shopChannels, shopRoles}} onSave={handleSubmit}></SaveChanges>
       </div>
     </div>
   );

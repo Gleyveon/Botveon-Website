@@ -1,13 +1,18 @@
 // src/components/settings/subcomponents/text-field
 import './styles.scss';
 
+// components:
+import InfoButton from '../../shared/info-button';
+
 interface componentProps {
+    title?: string;
+    info?: string;
     placeholder?: string | undefined;
     text: string | undefined;
     setText: (value: string) => void;
 }
 
-const TextField = ({ placeholder, text, setText }: componentProps) => {
+const TextField = ({ title, info, placeholder, text, setText }: componentProps) => {
 
     function changeValue(value: string) {
         setText(value);
@@ -17,6 +22,7 @@ const TextField = ({ placeholder, text, setText }: componentProps) => {
         <div className='setting-subcomponent text-field'>
 
             <div className="setting-item">
+                <InfoButton title={title} info={info} />
                 <div className="text-field">
                     <textarea placeholder={placeholder} value={text} onChange={(e) => changeValue(e.target.value)} />
                 </div>

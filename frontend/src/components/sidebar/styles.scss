@@ -6,10 +6,10 @@
     transition: 0.5s;
     overflow: hidden;
 
-    background: linear-gradient(180deg, #121212, #191919);
+    background: $primary-background-color;
     background-repeat: no-repeat;
     background-attachment: fixed;
-    box-shadow: 5px 0 5px rgba(0, 0, 0, 0.1);
+    //box-shadow: 5px 0 5px rgba(0, 0, 0, 0.1);
     //border-right: 1px solid rgb(59, 59, 59);
 
     .menu {
