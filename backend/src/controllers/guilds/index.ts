@@ -212,7 +212,38 @@ export async function getEconomySettingsController(req: Request, res: Response) 
 }
 
 export async function updateEconomySettingsController(req: Request, res: Response) {
+    const user = req.user as User;
+    const { id: guildId } = req.params;
+    const { currency, shopItems } = req.body;
 
+    try {
+        // Ensure the user has access to the guild
+        const guilds = await getMutualGuildsService(user.id);
+        const valid = guilds.some((guild) => guild.id === guildId);
+        if (!valid) {
+            return res.status(403).json({ error: "Forbidden: You don't have access to this guild." });
+        }
+
+        const existingSettings = await GuildData.findOne({ serverID: guildId });
+
+        if (existingSettings) {
+            existingSettings.currency = currency;
+            existingSettings.shopItems = shopItems;
+
+            await existingSettings.save();
+        } else {
+            await GuildData.create({
+                guildId,
+                currency: currency,
+                shopItems: shopItems,
+            });
+        }
+
+        return res.status(200).json({ message: "economy settings updated successfully." });
+    } catch (err) {
+        console.error("Error updating economy settings:", err);
+        return res.status(500).json({ error: "Internal server error." });
+    }
 }
 
 export async function getLevelSettingsController(req: Request, res: Response) {
