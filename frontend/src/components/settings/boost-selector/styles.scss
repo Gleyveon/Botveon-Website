@@ -114,6 +114,10 @@
                                             margin: 0;
                                         }
                                     }
+                                    
+                                    &.invalid {
+                                        border: 1px solid red;
+                                    }
                                 }
 
                                 .input-select-stackable,
@@ -133,6 +137,10 @@
 
                                         &[disabled]:hover {
                                             cursor: not-allowed;
+                                        }
+
+                                        &.invalid {
+                                            border: 1px solid red;
                                         }
                                     }
                                 }

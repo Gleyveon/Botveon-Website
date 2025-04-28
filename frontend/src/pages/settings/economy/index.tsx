@@ -53,6 +53,7 @@ function Economy() {
     }, [guildId]);
 
     const handleSubmit = async () => {
+      
         console.log("submitting data!");
         
           try {
@@ -67,6 +68,8 @@ function Economy() {
                 ...(shopChannels?.map((channel) => ({ ...channel, category: "channel" })) || []),
               ],
             };
+
+            console.log(settings);
             await updateEconomySettings(guildId, settings);
             alert('Settings saved successfully!');
           } catch (err) {

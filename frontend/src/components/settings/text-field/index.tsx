@@ -24,7 +24,7 @@ const TextField = ({ title, info, placeholder, text, setText }: componentProps) 
             <div className="setting-item">
                 <InfoButton title={title} info={info} />
                 <div className="text-field">
-                    <textarea placeholder={placeholder} value={text} onChange={(e) => changeValue(e.target.value)} />
+                    <textarea placeholder={placeholder} value={text ?? ''} onChange={(e) => changeValue(e.target.value)} />
                 </div>
             </div>
 

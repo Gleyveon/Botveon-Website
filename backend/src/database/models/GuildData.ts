@@ -28,7 +28,6 @@ export interface Guild {
         price: number;
         metadata: Record<string, any>;
     }[];
-    modRoles: string[];
     bannedRole?: string;
     levelUpMessages: boolean;
     levelUpChannel: string;
@@ -151,16 +150,17 @@ const GuildSchema = new Schema<Guild>(
                     },
                     stackable: {
                         type: Boolean,
-                        required: true
+                        required: true,
+                        default: false,
                     },
                     equation: {
                         type: String,
                         enum: ["add", "multiply"],
-                        required: true
                     }
                 }
             ],
             default: [],
+            _id: false
         },
         joinRoles: {
             type: [Schema.Types.String],
@@ -208,7 +208,8 @@ const GuildSchema = new Schema<Guild>(
                     }
                 }
             ],
-            default: []
+            default: [],
+            _id: false
         },
         shopItems: {
             type: [
@@ -225,7 +226,6 @@ const GuildSchema = new Schema<Guild>(
                     },
                     name: {
                         type: Schema.Types.String,
-                        required: true,
                         maxlength: 64,
                         trim: true
                     },
@@ -251,17 +251,8 @@ const GuildSchema = new Schema<Guild>(
                     }
                 }
             ],
-            default: []
-        },
-        modRoles: {
-            type: [Schema.Types.String],
             default: [],
-            validate: {
-                validator: function (values: string[]) {
-                    return values.every(value => /^[0-9]{17,20}$/.test(value));
-                },
-                message: "Each role ID must be a numeric string between 17 and 20 characters."
-            }
+            _id: false
         },
         bannedRole: {
             type: Schema.Types.String,
@@ -349,6 +340,7 @@ const GuildSchema = new Schema<Guild>(
                             },
                         },
                     },
+                    _id: false,
                 },
                 includeUserAvatar: {
                     type: Schema.Types.Boolean,
@@ -359,6 +351,7 @@ const GuildSchema = new Schema<Guild>(
                     default: false,
                 },
             },
+            _id: false,
         },
         goodbyeChannel: {
             type: {
@@ -399,6 +392,7 @@ const GuildSchema = new Schema<Guild>(
                                 match: /^(https?:\/\/.*\.(?:png|jpg|jpeg|gif|bmp|webp|svg))$/, // Valid URL for image
                             },
                         },
+                        _id: false,
                     },
                 },
                 includeUserAvatar: {
@@ -407,9 +401,10 @@ const GuildSchema = new Schema<Guild>(
                 },
                 sendImmediate: {
                     type: Schema.Types.Boolean,
-                    default: true,
+                    default: false,
                 },
             },
+            _id: false,
         },
         infractionChannel: {
             type: Schema.Types.String,
@@ -467,11 +462,25 @@ const GuildSchema = new Schema<Guild>(
                     },
                 },
             },
+            _id: false,
         },
     },
     {
         versionKey: false,
     }
 );
+
+GuildSchema.pre("save", function (next) {
+    const guild = this as mongoose.Document & Guild;
+
+    if (Array.isArray(guild.boostRoles)) {
+        guild.boostRoles.forEach((boostRole) => {
+            if (boostRole.stackable && (boostRole.equation === undefined || boostRole.equation === null)) {
+                boostRole.equation = "add";
+            }
+        });
+    }
+    next();
+});
 
 export default mongoose.model<Guild>("servermodels", GuildSchema);

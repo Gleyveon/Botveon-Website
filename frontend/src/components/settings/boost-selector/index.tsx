@@ -2,14 +2,16 @@
 import { useState, useRef, useEffect, useDebugValue } from 'react';
 import { Role, BoostRole } from '../../../utils/types';
 import './styles.scss';
+import { update } from 'lodash';
 
 interface componentProps {
     items: Role[];
     selectedItems: BoostRole[];
     setSelectedItems: (items: BoostRole[]) => void;
+    invalidFields: Record<string, (keyof BoostRole)[]>;
 }
 
-const BoostSelector = ({ items, selectedItems, setSelectedItems }: componentProps) => {
+const BoostSelector = ({ items, selectedItems, setSelectedItems, invalidFields }: componentProps) => {
 
     const [isDropdownActive, setDropdownActive] = useState(false);
     const [timeoutId, setTimeoutId] = useState<number | null>(null);
@@ -25,14 +27,12 @@ const BoostSelector = ({ items, selectedItems, setSelectedItems }: componentProp
     * =============================================================================================
     */
 
-    const toggleItem = (id: string, boost: number) => {
-        console.log(selectedItems);
-        
+    const toggleItem = (id: string) => {
         const isActive = selectedItems.some(obj => obj.roleID === id);
 
         const updatedItems = isActive
             ? selectedItems.filter(obj => obj.roleID !== id)
-            : [...selectedItems, { roleID: id, boost }];
+            : [...selectedItems, { roleID: id }];
         setSelectedItems(updatedItems);
     };
 
@@ -152,31 +152,31 @@ const BoostSelector = ({ items, selectedItems, setSelectedItems }: componentProp
     * =============================================================================================
     */
 
-    const changeBoost = (roleID: string, boost: string) => {
-        const numericBoost = parseFloat(boost);
-        if (isNaN(numericBoost)) return;
 
-        const updatedItems = selectedItems.map((role) =>
-            role.roleID === roleID ? { ...role, boost: numericBoost } : role
-        );
-
+    const changeBoost = (roleID: string, boost: any) => {
+        const updatedItems = selectedItems.map((role) => {
+            if (role.roleID !== roleID) return role;
+            boost = parseFloat(boost);
+    
+            if (isNaN(boost) || boost === '' || boost === null) {
+                const { boost, ...rest } = role;
+                return rest;
+            }
+    
+            return { ...role, boost: boost };
+        });
         setSelectedItems(updatedItems);
     };
 
     const changeStackable = (roleID: string, stackable: boolean) => {
+        let updatedItems = selectedItems.map((role) => {
+            if (!stackable) {
+                const { stackable, equation, ...rest } = role;
+                return rest;
+            } 
 
-        let updatedItems = selectedItems;
-
-        if (stackable === false) {
-            updatedItems = updatedItems.map((role) =>
-                role.roleID === roleID ? { ...role, equation: undefined } : role
-            );
-        }
-
-        updatedItems = updatedItems.map((role) =>
-            role.roleID === roleID ? { ...role, stackable: stackable } : role
-        );
-
+            return role.roleID === roleID ? { ...role, stackable: stackable } : role
+        });
         setSelectedItems(updatedItems);
     };
 
@@ -184,7 +184,7 @@ const BoostSelector = ({ items, selectedItems, setSelectedItems }: componentProp
         if (equation !== 'add' && equation !== 'multiply') { return }
 
         const updatedItems = selectedItems.map((role) =>
-            role.roleID === roleID ? { ...role, equation: equation } : role
+            role.roleID === roleID ? { ...role, equation: equation as "add" | "multiply" } : role
         );
 
         setSelectedItems(updatedItems);
@@ -206,12 +206,15 @@ const BoostSelector = ({ items, selectedItems, setSelectedItems }: componentProp
                                 <div className="flex-table-col"><div className="flex-table-title"></div></div>
                             </div>
 
-                            {items.map((item, index) => {
+                            {items.map((item) => {
                                 const selectedItem = selectedItems.find(obj => obj.roleID === item.id);
 
                                 const boost = selectedItem?.boost;
                                 const stackable = selectedItem?.stackable || false;
                                 const equation = selectedItem?.equation;
+
+                                const invalidBoost = invalidFields[item.id]?.includes('boost');
+                                const invalidEquation = invalidFields[item.id]?.includes('equation');
 
                                 return (
                                     <div key={item.id} className={`flex-table-row list-item-wrapper ${!!selectedItem ? ' active' : ''}`}>
@@ -227,8 +230,8 @@ const BoostSelector = ({ items, selectedItems, setSelectedItems }: componentProp
                                         </div>
 
                                         <div className="flex-table-col list-item-input">
-                                            <div className="input-field-boost">
-                                                <input type="number" placeholder="2" value={boost} min="0.01" max="5" step="0.01" onChange={(e) => changeBoost(item.id, e.target.value)}></input>
+                                            <div className={`input-field-boost${invalidBoost ? ' invalid' : ''}`}>
+                                                <input type="number" placeholder="2" value={boost ?? ''} min="0.01" max="5" step="0.01" onChange={(e) => changeBoost(item.id, e.target.value)}></input>
                                             </div>
                                         </div>
 
@@ -260,7 +263,7 @@ const BoostSelector = ({ items, selectedItems, setSelectedItems }: componentProp
                                             <div className="input-select-equation">
                                                 <button
                                                     type="button"
-                                                    className="selector-button"
+                                                    className={`selector-button${invalidEquation ? ' invalid' : ''}`}
                                                     disabled={stackable === false}
                                                     onClick={() => toggleMiniDropdown('equation' + item.id)}
                                                     onMouseEnter={() => enterMiniDropdown('equation' + item.id)}

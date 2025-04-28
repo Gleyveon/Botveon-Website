@@ -27,8 +27,9 @@ function Level() {
 
   const [levelUpMessages, setLevelUpMessages] = useState<boolean>(false);
   const [levelUpRoles, setLevelUpRoles] = useState<LevelRole[]>([]);
+  const [invalidLevelUpRoles, setInvalidLevelUpRoles] = useState<Record<string, (keyof LevelRole)[]>>({});
   const [boostRoles, setBoostRoles] = useState<BoostRole[]>([]);
-  const [invalidFields, setInvalidFields] = useState<string[]>([]);
+  const [invalidBoostRoles, setInvalidBoostRoles] = useState<Record<string, (keyof BoostRole)[]>>({});
 
   if (!guildId) {
     return <p>Error loading data!</p>;
@@ -40,8 +41,8 @@ function Level() {
         setRoles(data.roles || []);
         setChannels(data.channels || []);
         setLevelUpMessages(data.levelUpMessages || false);
-        setLevelUpRoles(data.levelUpRoles)
-        setBoostRoles(data.boostRoles)
+        setLevelUpRoles(data.levelUpRoles || [])
+        setBoostRoles(data.boostRoles || [])
         setLoading(false);
       })
       .catch(err => {
@@ -50,19 +51,44 @@ function Level() {
       });
   }, [guildId]);
 
-  const validateFields = () => {
-    const invalidRoles = levelUpRoles
-      .filter((role) => role.level === undefined || isNaN(role.level) || role.level <= 0) // Check if level is undefined, not a number, or <= 0
-      .map((role) => role.roleID);
+  function validateFields () {
 
-    setInvalidFields(invalidRoles);
-    return invalidRoles.length === 0; // Return true if all fields are valid
+    let validFields = true;
+
+    const invalidBoostFields: Record<string, (keyof BoostRole)[]> = {};
+    boostRoles.forEach((role) => {
+      invalidBoostFields[role.roleID] = [];
+
+      if (role.boost === undefined || isNaN(role.boost) || role.boost <= 0) {
+        invalidBoostFields[role.roleID].push('boost');
+        validFields = false;
+      }
+
+      if (role.stackable && !role.equation) {
+        invalidBoostFields[role.roleID].push('equation');
+        validFields = false;
+      }
+    });
+    setInvalidBoostRoles(invalidBoostFields);
+
+    const invalidLevelUpFields: Record<string, (keyof LevelRole)[]> = {};
+    levelUpRoles.forEach((role) => {
+      invalidLevelUpFields[role.roleID] = [];
+
+      if (role.level === undefined || isNaN(role.level) || role.level <= 0) {
+        invalidLevelUpFields[role.roleID].push('level');
+        validFields = false;
+      }
+    });
+    setInvalidLevelUpRoles(invalidLevelUpFields)
+
+    return validFields;
   };
 
   const handleSubmit = async () => {
     const isValid = validateFields();
 
-    if (!isValid) { return; }
+    if (!isValid) { throw new Error }
 
     try {
       const settings = {
@@ -91,10 +117,10 @@ function Level() {
           <Select ></Select>
         </Settings> */}
         <Settings title='Level-up Role Rewards' description='Add Level Roles to reward your active members.'>
-          <LevelSelector items={roles} selectedItems={levelUpRoles} setSelectedItems={setLevelUpRoles} invalidFields={invalidFields}></LevelSelector>
+          <LevelSelector items={roles} selectedItems={levelUpRoles} setSelectedItems={setLevelUpRoles} invalidFields={invalidLevelUpRoles}></LevelSelector>
         </Settings>
         <Settings title='Xp Boost Roles' description='Give certain roles an additional xp boost.'>
-          <BoostSelector items={roles} selectedItems={boostRoles} setSelectedItems={setBoostRoles}></BoostSelector>
+          <BoostSelector items={roles} selectedItems={boostRoles} setSelectedItems={setBoostRoles} invalidFields={invalidBoostRoles}></BoostSelector>
         </Settings>
 
         <SaveChanges settings={{ levelUpMessages, levelUpRoles, boostRoles }} onSave={handleSubmit}></SaveChanges>

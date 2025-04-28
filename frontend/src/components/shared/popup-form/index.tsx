@@ -45,7 +45,7 @@ const PopupForm = ({ inputs, onSave, onCancel, classname, children }: PopupFormP
 
     function handleSave() {
         const formValues = formData.reduce((acc, input) => {
-            acc[input.title.toLowerCase()] = input.initialValue || "";
+            acc[input.title.toLowerCase()] = input.initialValue;
             return acc;
         }, {} as Record<string, string>);
         setSavedFormData(JSON.parse(JSON.stringify(formData)));

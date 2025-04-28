@@ -21,21 +21,21 @@ export interface Role {
 
 export interface LevelRole {
     roleID: string;
-    level: number | undefined;
+    level?: number | undefined;
 }
 
 export interface BoostRole {
     roleID: string;
-    boost: number;
-    stackable: boolean;
-    equation: "add" | "multiply" | undefined;
+    boost?: number;
+    stackable?: boolean;
+    equation?: "add" | "multiply";
 }
 
 export interface ShopItem {
     itemID: string | undefined;
-    name: string | undefined;
-    description: string | undefined;
+    name?: string | undefined;
+    description?: string | undefined;
     category: "role" | "channel" | "emoji" | "custom" | undefined;
-    price: Number;
-    metadata: any | undefined;
+    price?: Number;
+    metadata?: any | undefined;
 }

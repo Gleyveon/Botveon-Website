@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { getMutualGuildsService } from "../../services/guilds";
 import { getChannelsService, sortChannelsService } from "../../services/channels";
 import { getRolesService, sortRolesService } from "../../services/roles";
+import { initializeGuild } from "../../database/utility/initializeGuild"
 import { User } from "../../database/models/User";
 import { GuildData } from "../../database/models";
 
@@ -19,25 +20,21 @@ export async function getGuildsController(req: Request, res: Response) {
 
 export async function getCommunitySettingsController(req: Request, res: Response) {
     const user = req.user as User;
-    const { id } = req.params;
+    const { id: guildId } = req.params;
 
     try {
         const guilds = await getMutualGuildsService(user.id);
-        const valid = guilds.some((guild) => guild.id === id);
+        const valid = guilds.some((guild) => guild.id === guildId);
         if (!valid) { return res.sendStatus(403) };
 
-        let { data: channels } = await getChannelsService(id);
-        let { data: roles } = await getRolesService(id);
+        let { data: channels } = await getChannelsService(guildId);
+        let { data: roles } = await getRolesService(guildId);
 
         channels = sortChannelsService(channels);
         roles = sortRolesService(roles)
 
 
-        const guildSettings = await GuildData.findOne({ serverID: id });
-
-        if (!guildSettings) {
-            return res.status(404).send({ message: "Guild settings not found" });
-        }
+        const guildSettings = await initializeGuild(guildId);
 
         res.send({
             channels: channels,
@@ -66,21 +63,13 @@ export async function updateCommunitySettingsController(req: Request, res: Respo
             return res.status(403).json({ error: "Forbidden: You don't have access to this guild." });
         }
 
-        const existingSettings = await GuildData.findOne({ serverID: guildId });
+        const guildSettings = await initializeGuild(guildId);     
 
-        if (existingSettings) {
-            existingSettings.threadChannels = threadChannels;
-            existingSettings.upvoteChannels = upvoteChannels;
-            existingSettings.bumpChannel = bumpChannel;
-            await existingSettings.save();
-        } else {
-            await GuildData.create({
-                guildId,
-                threadChannels: threadChannels,
-                upvoteChannels: upvoteChannels,
-                bumpChannel: bumpChannel,
-            });
-        }
+        guildSettings.threadChannels = threadChannels;
+        guildSettings.upvoteChannels = upvoteChannels;
+        guildSettings.bumpChannel = bumpChannel;
+
+        await guildSettings.save();
 
         return res.status(200).json({ message: "Community settings updated successfully." });
     } catch (err) {
@@ -91,27 +80,21 @@ export async function updateCommunitySettingsController(req: Request, res: Respo
 
 export async function getJoinSettingsController(req: Request, res: Response) {
     const user = req.user as User;
-    const { id } = req.params;
+    const { id: guildId } = req.params;
 
     try {
         const guilds = await getMutualGuildsService(user.id);
-        const valid = guilds.some((guild) => guild.id === id);
+        const valid = guilds.some((guild) => guild.id === guildId);
         if (!valid) { return res.sendStatus(403) };
 
-        let { data: channels } = await getChannelsService(id);
-        let { data: roles } = await getRolesService(id);
+        let { data: channels } = await getChannelsService(guildId);
+        let { data: roles } = await getRolesService(guildId);
 
         channels = sortChannelsService(channels);
         roles = sortRolesService(roles)
 
 
-        const guildSettings = await GuildData.findOne({ serverID: id });
-
-        if (!guildSettings) {
-            return res.status(404).send({ message: "Guild settings not found" });
-        }
-
-        console.log(guildSettings);
+        const guildSettings = await initializeGuild(guildId);     
 
         res.send({
             channels: channels,
@@ -143,31 +126,16 @@ export async function updateJoinSettingsController(req: Request, res: Response) 
             return res.status(403).json({ error: "Forbidden: You don't have access to this guild." });
         }
 
-        const existingSettings = await GuildData.findOne({ serverID: guildId });
+        const guildSettings = await initializeGuild(guildId);      
 
-        console.log(existingSettings?.registration);
-        console.log(registration);        
+        guildSettings.joinRoles = joinRoles;
+        guildSettings.stickyRoles = stickyRoles;
+        guildSettings.registration = registration;
+        guildSettings.welcomeChannel = welcomeChannel;
+        guildSettings.goodbyeChannel = goodbyeChannel;
+        guildSettings.persistentRoles = persistentRoles;
 
-        if (existingSettings) {
-            existingSettings.joinRoles = joinRoles;
-            existingSettings.stickyRoles = stickyRoles;
-            existingSettings.registration = registration;
-            existingSettings.welcomeChannel = welcomeChannel;
-            existingSettings.goodbyeChannel = goodbyeChannel;
-            existingSettings.persistentRoles = persistentRoles;
-
-            await existingSettings.save();
-        } else {
-            await GuildData.create({
-                guildId,
-                joinRoles: joinRoles,
-                stickyRoles: stickyRoles,
-                registration: registration,
-                welcomeChannel: welcomeChannel,
-                goodbyeChannel: goodbyeChannel,
-                persistentRoles: persistentRoles,
-            });
-        }
+        await guildSettings.save();
 
         return res.status(200).json({ message: "Community settings updated successfully." });
     } catch (err) {
@@ -178,25 +146,20 @@ export async function updateJoinSettingsController(req: Request, res: Response) 
 
 export async function getEconomySettingsController(req: Request, res: Response) {
     const user = req.user as User;
-    const { id } = req.params;
+    const { id: guildId } = req.params;
 
     try {
         const guilds = await getMutualGuildsService(user.id);
-        const valid = guilds.some((guild) => guild.id === id);
+        const valid = guilds.some((guild) => guild.id === guildId);
         if (!valid) { return res.sendStatus(403) };
 
-        let { data: channels } = await getChannelsService(id);
-        let { data: roles } = await getRolesService(id);
+        let { data: channels } = await getChannelsService(guildId);
+        let { data: roles } = await getRolesService(guildId);
 
         channels = sortChannelsService(channels);
         roles = sortRolesService(roles)
 
-
-        const guildSettings = await GuildData.findOne({ serverID: id });
-
-        if (!guildSettings) {
-            return res.status(404).send({ message: "Guild settings not found" });
-        }
+        const guildSettings = await initializeGuild(guildId);
 
         res.send({
             channels: channels,
@@ -224,20 +187,12 @@ export async function updateEconomySettingsController(req: Request, res: Respons
             return res.status(403).json({ error: "Forbidden: You don't have access to this guild." });
         }
 
-        const existingSettings = await GuildData.findOne({ serverID: guildId });
+        const guildSettings = await initializeGuild(guildId);
 
-        if (existingSettings) {
-            existingSettings.currency = currency;
-            existingSettings.shopItems = shopItems;
+        guildSettings.currency = currency;
+        guildSettings.shopItems = shopItems;
 
-            await existingSettings.save();
-        } else {
-            await GuildData.create({
-                guildId,
-                currency: currency,
-                shopItems: shopItems,
-            });
-        }
+        await guildSettings.save();
 
         return res.status(200).json({ message: "economy settings updated successfully." });
     } catch (err) {
@@ -248,25 +203,21 @@ export async function updateEconomySettingsController(req: Request, res: Respons
 
 export async function getLevelSettingsController(req: Request, res: Response) {
     const user = req.user as User;
-    const { id } = req.params;
+    const { id: guildId } = req.params;
 
     try {
         const guilds = await getMutualGuildsService(user.id);
-        const valid = guilds.some((guild) => guild.id === id);
+        const valid = guilds.some((guild) => guild.id === guildId);
         if (!valid) { return res.sendStatus(403) };
 
-        let { data: channels } = await getChannelsService(id);
-        let { data: roles } = await getRolesService(id);
+        let { data: channels } = await getChannelsService(guildId);
+        let { data: roles } = await getRolesService(guildId);
 
         channels = sortChannelsService(channels);
         roles = sortRolesService(roles)
 
 
-        const guildSettings = await GuildData.findOne({ serverID: id });
-
-        if (!guildSettings) {
-            return res.status(404).send({ message: "Guild settings not found" });
-        }
+        const guildSettings = await initializeGuild(guildId);
 
         res.send({
             channels: channels,
@@ -295,22 +246,13 @@ export async function updateLevelSettingsController(req: Request, res: Response)
             return res.status(403).json({ error: "Forbidden: You don't have access to this guild." });
         }
 
-        const existingSettings = await GuildData.findOne({ serverID: guildId });
+        const guildSettings = await initializeGuild(guildId);
 
-        if (existingSettings) {
-            existingSettings.levelUpMessages = levelUpMessages;
-            existingSettings.levelUpRoles = levelUpRoles;
-            existingSettings.boostRoles = boostRoles;
+        guildSettings.levelUpMessages = levelUpMessages;
+        guildSettings.levelUpRoles = levelUpRoles;
+        guildSettings.boostRoles = boostRoles;
 
-            await existingSettings.save();
-        } else {
-            await GuildData.create({
-                guildId,
-                levelUpMessages: levelUpMessages,
-                levelUpRoles: levelUpRoles,
-                boostRoles: boostRoles,
-            });
-        }
+        await guildSettings.save();
 
         return res.status(200).json({ message: "Level settings updated successfully." });
     } catch (err) {

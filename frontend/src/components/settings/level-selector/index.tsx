@@ -7,7 +7,7 @@ interface componentProps {
     items: Role[];
     selectedItems: LevelRole[];
     setSelectedItems: (levelRole: LevelRole[]) => void;
-    invalidFields: string[];
+    invalidFields: Record<string, (keyof LevelRole)[]>;
 }
 
 const Selector = ({ items, selectedItems, setSelectedItems, invalidFields }: componentProps) => {
@@ -24,12 +24,12 @@ const Selector = ({ items, selectedItems, setSelectedItems, invalidFields }: com
     * =============================================================================================
     */
 
-    const toggleItem = (id: string, level: number) => {
+    const toggleItem = (id: string) => {
         const isActive = selectedItems.some(obj => obj.roleID === id);
 
         const updatedItems = isActive
             ? selectedItems.filter(obj => obj.roleID !== id)
-            : [...selectedItems, { roleID: id, level }];
+            : [...selectedItems, { roleID: id }];
         setSelectedItems(updatedItems);
     };
     
@@ -75,14 +75,21 @@ const Selector = ({ items, selectedItems, setSelectedItems, invalidFields }: com
     */
 
     const changeValue = (roleID: string, level: any) => {
-        const numericLevel = parseFloat(level);
-        
-        const updatedItems = selectedItems.map((role) =>
-            role.roleID === roleID ? { ...role, level: numericLevel } : role
-        );
-
+        const updatedItems = selectedItems.map((role) => {
+            if (role.roleID !== roleID) return role;
+            level = parseInt(level);
+    
+            if (isNaN(level) || level === '' || level === null) {
+                const { level, ...rest } = role;
+                return rest;
+            }
+    
+            return { ...role, level: level };
+        });
+    
         setSelectedItems(updatedItems);
     };
+    
 
     return (
         <div className="setting-subcomponent level-selector">
@@ -98,7 +105,11 @@ const Selector = ({ items, selectedItems, setSelectedItems, invalidFields }: com
                                 <div className="flex-table-col"><div className="flex-table-title"></div></div>
                             </div>
 
-                            {items.map((item) => (
+                            {items.map((item) => { 
+                                
+                                const invalidLevel = invalidFields[item.id]?.includes('level');
+
+                                return (
                                 <div key={item.id} className={`flex-table-row list-item-wrapper ${selectedItems.some(obj => obj.roleID === item.id) ? ' active' : ''}`}>
 
                                     <div className="flex-table-col list-item-role-wrapper">
@@ -112,8 +123,8 @@ const Selector = ({ items, selectedItems, setSelectedItems, invalidFields }: com
                                     </div>
 
                                     <div className="flex-table-col list-item-input">
-                                        <div className={`input-field-level${invalidFields.includes(item.id) ? ' invalid' : ''}`}>
-                                            <input className="number" type='number' placeholder="lvl 0" value={selectedItems.find(obj => obj.roleID === item.id)?.level} min="0" max="9999" onChange={(e) => changeValue(item.id, e.target.value)}></input>
+                                        <div className={`input-field-level${invalidLevel ? ' invalid' : ''}`}>
+                                            <input className="number" type='number' placeholder="lvl 0" value={selectedItems.find(obj => obj.roleID === item.id)?.level ?? ''} min="0" max="9999" onChange={(e) => changeValue(item.id, e.target.value)}></input>
                                         </div>
                                     </div>
 
@@ -121,7 +132,7 @@ const Selector = ({ items, selectedItems, setSelectedItems, invalidFields }: com
                                         <div className="list-item-delete" onClick={() => toggleItem(item.id)}></div>
                                     </div>
                                 </div>
-                            ))}
+                            )})}
                         </div>
                         <div className="bottom-wrapper">
                             <button type="button" className="add-button" onClick={toggleDropdown} onMouseEnter={handleMouseOver} onMouseLeave={handleMouseOut}>+ Add Role</button>
