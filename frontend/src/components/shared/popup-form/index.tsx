@@ -5,9 +5,10 @@ import { useEffect, useState } from 'react';
 
 interface InputField {
     title: string;
-    initialValue?: string | Number;
+    initialValue?: string | number;
     type: "text" | "number" | "textarea";
     placeholder?: string;
+    invalid?: boolean;
 }
 
 interface PopupFormProps {
@@ -39,7 +40,7 @@ const PopupForm = ({ inputs, onSave, onCancel, classname, children }: PopupFormP
 
     function handleChange(index: number, value: string) {
         const updatedFormData = [...formData];
-        updatedFormData[index].initialValue = value;
+        updatedFormData[index].initialValue = value === "" ? undefined : value;
         setFormData(updatedFormData);
     }
 
@@ -72,14 +73,18 @@ const PopupForm = ({ inputs, onSave, onCancel, classname, children }: PopupFormP
                     <div className="overlay" onClick={handleCancel}></div>
                     <div className="form-wrapper">
                         <form>
-                            {formData.map((input, index) => (
+                            {formData.map((input, index) => {
+
+                            const invalid = inputs[index].invalid;
+
+                            return (
                                 <div className="field" key={index}>
                                     <div className="title">{input.title ? input.title : ""}</div>
-                                    {input.type === "text" && <input type="text" value={input.initialValue || ""} placeholder={input.placeholder} onChange={(e) => handleChange(index, e.target.value)} />}
-                                    {input.type === "number" && <input type='number' value={input.initialValue || ""} placeholder={input.placeholder} onChange={(e) => handleChange(index, e.target.value)} />}
-                                    {input.type === "textarea" && <textarea value={input.initialValue || ""} placeholder={input.placeholder} onChange={(e) => handleChange(index, e.target.value)} />}
+                                    {input.type === "text" && <input className={`${invalid ? 'invalid' : ''}`} type="text" value={input.initialValue || ""} placeholder={input.placeholder} onChange={(e) => handleChange(index, e.target.value)} />}
+                                    {input.type === "number" && <input className={`${invalid ? 'invalid' : ''}`} type='number' value={input.initialValue || ""} placeholder={input.placeholder} onChange={(e) => handleChange(index, e.target.value)} />}
+                                    {input.type === "textarea" && <textarea className={`${invalid ? 'invalid' : ''}`} value={input.initialValue || ""} placeholder={input.placeholder} onChange={(e) => handleChange(index, e.target.value)} />}
                                 </div>
-                            ))}
+                            )})}
                             <div className="button-wrapper">
                                 <button className='cancel-button' type="button" onClick={handleCancel}>Cancel</button>
                                 <button className='save-button' type="button" onClick={handleSave}>Save</button>

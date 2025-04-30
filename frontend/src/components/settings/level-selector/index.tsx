@@ -15,6 +15,7 @@ const Selector = ({ items, selectedItems, setSelectedItems, invalidFields }: com
     const [isDropdownActive, setDropdownActive] = useState(false);
     const [timeoutId, setTimeoutId] = useState<number | null>(null);
 
+    const hasInvalidFields = () => Object.values(invalidFields).some(fields => fields.length > 0);
     
     /*
     * =============================================================================================
@@ -136,8 +137,8 @@ const Selector = ({ items, selectedItems, setSelectedItems, invalidFields }: com
                         </div>
                         <div className="bottom-wrapper">
                             <button type="button" className="add-button" onClick={toggleDropdown} onMouseEnter={handleMouseOver} onMouseLeave={handleMouseOut}>+ Add Role</button>
-                            { invalidFields.length > 0 && (
-                                <div className="error-message">* Please fill all out fields correctly!</div>
+                            { hasInvalidFields() && (
+                                <div className="error-message">* Please fill out all fields correctly!</div>
                             )}
                         </div>
                     </div>

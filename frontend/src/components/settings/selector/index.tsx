@@ -25,11 +25,12 @@ interface componentProps {
     itemCategory: "role" | "channel";
     selectionMode: "singular" | "multiple";
     items: Item[];
+    invalid?: boolean;
     selectedItems: string[];
     setSelectedItems: (value: string[]) => void;
 }
 
-const Selector = ({ title, info, itemCategory, selectionMode, items, selectedItems, setSelectedItems }: componentProps) => {
+const Selector = ({ title, info, itemCategory, selectionMode, items, invalid, selectedItems, setSelectedItems }: componentProps) => {
 
     const [isDropdownActive, setDropdownActive] = useState(false);
     const [isMouseInside, setIsMouseInside] = useState(false)
@@ -129,7 +130,7 @@ const Selector = ({ title, info, itemCategory, selectionMode, items, selectedIte
                                 {item.name}
                             </div>
                         ))}
-                        <button type="button" className={`add-button${selectionMode === "singular" && selectedItems.length > 0 ? " hidden" : ""}`} onClick={toggleDropdown} onMouseEnter={handleMouseOver} onMouseLeave={handleMouseOut}>+ Add {itemCategory === "channel" ? "Channel" : "Role"}</button>
+                        <button type="button" className={`add-button${selectionMode === "singular" && selectedItems.length > 0 ? " hidden" : ""}${invalid ? ' invalid' : ''}`} onClick={toggleDropdown} onMouseEnter={handleMouseOver} onMouseLeave={handleMouseOut}>+ Add {itemCategory === "channel" ? "Channel" : "Role"}</button>
                     </div>
                     <div className={`inactive-list-wrapper${isDropdownActive ? " active" : ""}`} onMouseEnter={handleMouseOver} onMouseLeave={handleMouseOut}>
                         <div className="inactive-list">

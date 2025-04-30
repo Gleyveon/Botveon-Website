@@ -4,7 +4,8 @@ import { getChannelsService, sortChannelsService } from "../../services/channels
 import { getRolesService, sortRolesService } from "../../services/roles";
 import { initializeGuild } from "../../database/utility/initializeGuild"
 import { User } from "../../database/models/User";
-import { GuildData } from "../../database/models";
+import isEqual from "lodash/isEqual";
+import { sendEmbed } from "../../services/messages";
 
 
 export async function getGuildsController(req: Request, res: Response) {
@@ -126,7 +127,27 @@ export async function updateJoinSettingsController(req: Request, res: Response) 
             return res.status(403).json({ error: "Forbidden: You don't have access to this guild." });
         }
 
-        const guildSettings = await initializeGuild(guildId);      
+        const guildSettings = await initializeGuild(guildId); 
+        
+        if (!isEqual(guildSettings.registration, registration && registration.channelID && registration.roleID)) {
+
+            console.log(registration);
+
+            const embed = {
+                title: registration.embed.title ,
+                description: registration.embed.description,
+                footer: {
+                  text: registration.embed.footer?.text,
+                },
+                color: 0xcf0044,
+              }
+
+            try {
+                sendEmbed(registration.channelID, embed);
+            } catch (error) {
+                
+            }
+        }
 
         guildSettings.joinRoles = joinRoles;
         guildSettings.stickyRoles = stickyRoles;

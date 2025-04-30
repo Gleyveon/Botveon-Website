@@ -143,6 +143,10 @@
                         display: none;
                     }
 
+                    &.invalid {
+                        border: 1px solid red;
+                    }
+
                     &:hover {
                         background-color: $setting-button-color-hover;
                     }

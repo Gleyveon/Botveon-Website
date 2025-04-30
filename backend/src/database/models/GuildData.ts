@@ -3,9 +3,9 @@ import mongoose, { Schema } from "mongoose";
 export interface Guild {
     serverID: string;
     currency: {
-        icon: string;
-        nameSingular: string;
-        namePlural: string;
+        icon?: string;
+        nameSingular?: string;
+        namePlural?: string;
     };
     adminRoles: string[];
     boostRoles: {
@@ -37,7 +37,7 @@ export interface Guild {
     welcomeChannel?: {
         channelID: string;
         message: string;
-        embeds: {
+        embed: {
             title?: string;
             description?: string;
             url?: string;
@@ -53,7 +53,7 @@ export interface Guild {
     goodbyeChannel?: {
         channelID: string;
         message: string;
-        embeds: {
+        embed: {
             title?: string;
             description?: string;
             url?: string;
@@ -73,7 +73,7 @@ export interface Guild {
         messageID: string;
         roleID: string;
         message: string;
-        embeds: {
+        embed: {
             title?: string;
             description?: string;
             url?: string;
@@ -344,7 +344,7 @@ const GuildSchema = new Schema<Guild>(
                 },
                 includeUserAvatar: {
                     type: Schema.Types.Boolean,
-                    default: true,
+                    default: false,
                 },
                 sendImmediate: {
                     type: Schema.Types.Boolean,
@@ -397,7 +397,7 @@ const GuildSchema = new Schema<Guild>(
                 },
                 includeUserAvatar: {
                     type: Schema.Types.Boolean,
-                    default: true,
+                    default: false,
                 },
                 sendImmediate: {
                     type: Schema.Types.Boolean,
@@ -469,6 +469,28 @@ const GuildSchema = new Schema<Guild>(
         versionKey: false,
     }
 );
+
+GuildSchema.pre("validate", function (next) {
+    const guild = this as mongoose.Document & Guild;
+  
+    const { icon, nameSingular, namePlural } = guild.currency || {};
+  
+    // Check if any of the fields are provided
+    const hasAnyField = icon || nameSingular || namePlural;
+  
+    // If any field is provided, ensure all three are filled
+    if (hasAnyField) {
+      if (!icon || !nameSingular || !namePlural) {
+        return next(
+          new Error(
+            'If any of "icon", "nameSingular", or "namePlural" is filled, all three must be filled.'
+          )
+        );
+      }
+    }
+  
+    next();
+});
 
 GuildSchema.pre("save", function (next) {
     const guild = this as mongoose.Document & Guild;

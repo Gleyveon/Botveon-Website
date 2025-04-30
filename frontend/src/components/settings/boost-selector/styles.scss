@@ -114,7 +114,7 @@
                                             margin: 0;
                                         }
                                     }
-                                    
+
                                     &.invalid {
                                         border: 1px solid red;
                                     }
@@ -202,21 +202,31 @@
                     }
                 }
 
-                .add-button {
-                    color: white;
-                    padding: 5px 10px;
-                    border: none;
-                    border-radius: 15px;
-                    cursor: pointer;
-                    background-color: $setting-button-color;
-                    transition: 200ms;
+                .bottom-wrapper {
+                    display: flex;
+                    align-items: center;
+                    gap: 20px;
 
-                    &.hidden {
-                        display: none;
+                    .add-button {
+                        color: white;
+                        padding: 5px 10px;
+                        border: none;
+                        border-radius: 15px;
+                        cursor: pointer;
+                        background-color: $setting-button-color;
+                        transition: 200ms;
+
+                        &.hidden {
+                            display: none;
+                        }
+
+                        &:hover {
+                            background-color: $setting-button-color-hover;
+                        }
                     }
 
-                    &:hover {
-                        background-color: $setting-button-color-hover;
+                    .error-message {
+                        color: red;
                     }
                 }
             }

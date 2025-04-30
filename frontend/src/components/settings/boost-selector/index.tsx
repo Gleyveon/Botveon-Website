@@ -1,8 +1,7 @@
 // src/components/settings/selector-levels
-import { useState, useRef, useEffect, useDebugValue } from 'react';
+import { useState, useRef } from 'react';
 import { Role, BoostRole } from '../../../utils/types';
 import './styles.scss';
-import { update } from 'lodash';
 
 interface componentProps {
     items: Role[];
@@ -17,6 +16,8 @@ const BoostSelector = ({ items, selectedItems, setSelectedItems, invalidFields }
     const [timeoutId, setTimeoutId] = useState<number | null>(null);
     const [stackableDropdowns, setStackableDropdowns] = useState<{ id: string, timeout: any }[]>([]);
     const dropdownRef = useRef<HTMLDivElement | null>(null);
+
+    const hasInvalidFields = () => Object.values(invalidFields).some(fields => fields.length > 0);
 
 
     /*
@@ -170,6 +171,8 @@ const BoostSelector = ({ items, selectedItems, setSelectedItems, invalidFields }
 
     const changeStackable = (roleID: string, stackable: boolean) => {
         let updatedItems = selectedItems.map((role) => {
+            if (role.roleID !== roleID) return role;
+
             if (!stackable) {
                 const { stackable, equation, ...rest } = role;
                 return rest;
@@ -292,7 +295,12 @@ const BoostSelector = ({ items, selectedItems, setSelectedItems, invalidFields }
                             }
                             )}
                         </div>
-                        <button type="button" className="add-button" onClick={toggleDropdown} onMouseEnter={handleMouseOver} onMouseLeave={handleMouseOut}>+ Add Role</button>
+                        <div className="bottom-wrapper">
+                            <button type="button" className="add-button" onClick={toggleDropdown} onMouseEnter={handleMouseOver} onMouseLeave={handleMouseOut}>+ Add Role</button>
+                            {hasInvalidFields() && (
+                                <div className="error-message">* Please fill out all fields correctly!</div>
+                            )}
+                        </div>
                     </div>
                     <div className={`inactive-list-wrapper${isDropdownActive ? " active" : ""}`} onMouseEnter={handleMouseOver} onMouseLeave={handleMouseOut} ref={dropdownRef}>
                         <div className="inactive-list">

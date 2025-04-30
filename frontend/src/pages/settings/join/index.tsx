@@ -35,6 +35,9 @@ function Join() {
   const [registrationTitle, setRegistrationTitle] = useState<string | undefined>(undefined);
   const [registrationDescription, setRegistrationDescription] = useState<string | undefined>(undefined);
   const [registrationFooter, setRegistrationFooter] = useState<string | undefined>(undefined);
+  
+  const [invalidRegistrationRole, setInvalidRegistrationRole] = useState<boolean>(false);
+  const [invalidRegistrationChannel, setInvalidRegistrationChannel] = useState<boolean>(false);
 
   const [welcomeChannel, setWelcomeChannel] = useState<string | undefined>(undefined);
   const [welcomeChannelPicture, setWelcomeChannelPicture] = useState<boolean>(true);
@@ -92,7 +95,26 @@ function Join() {
       });
   }, [guildId]);
 
+  function validateFields () {
+      let validFields = true;
+  
+      if (( registrationRole || registrationChannel) && !(registrationRole && registrationChannel)) {
+        setInvalidRegistrationRole(!registrationRole);
+        setInvalidRegistrationChannel(!registrationChannel);
+        return false;
+      } else {
+        setInvalidRegistrationRole(false);
+        setInvalidRegistrationChannel(false);
+      }
+  
+      return validFields;
+    };
+
   const handleSubmit = async () => {
+
+    const isValid = validateFields();
+    if (!isValid) { throw new Error }
+
     try {
       const settings = {
         joinRoles,
@@ -156,9 +178,9 @@ function Join() {
           <Selector itemCategory='role' selectionMode='multiple' items={roles} selectedItems={stickyRoles} setSelectedItems={setStickyRoles}></Selector>
         </Settings>
 
-        <Settings title='Registration' description='Add an extra step before new members gain access to the server.'>
-          <Selector title='Role:' info='This role will be given upon joining and taken away upon registering.' itemCategory='role' selectionMode='singular' items={roles} selectedItems={registrationRole ? [registrationRole] : []} setSelectedItems={(selected: string[]) => setRegistrationRole(selected[0] || undefined)}></Selector>
-          <Selector title='Channel:' info='This will be the channel where the registration message will be sent to.' itemCategory='channel' selectionMode='singular' items={channels} selectedItems={registrationChannel ? [registrationChannel] : []} setSelectedItems={(selected: string[]) => setRegistrationChannel(selected[0] || undefined)}></Selector>
+        <Settings title='Registration' description='Add an extra step before new members gain access to the server.' errorMessage={invalidRegistrationRole || invalidRegistrationChannel ? 'Select both a role and a channel, or leave both empty to enable/disable the feature.' : ''}>
+          <Selector title='Role:' info='This role will be given upon joining and taken away upon registering.' itemCategory='role' selectionMode='singular' items={roles} selectedItems={registrationRole ? [registrationRole] : []} setSelectedItems={(selected: string[]) => setRegistrationRole(selected[0] || undefined)} invalid={invalidRegistrationRole}></Selector>
+          <Selector title='Channel:' info='This will be the channel where the registration message will be sent to.' itemCategory='channel' selectionMode='singular' items={channels} selectedItems={registrationChannel ? [registrationChannel] : []} setSelectedItems={(selected: string[]) => setRegistrationChannel(selected[0] || undefined)} invalid={invalidRegistrationChannel}></Selector>
           <InputField title='Embed Title:' info='You can make use of <@userID>, <#channelID>, <@&roleID>' placeholder='Embed title:' input={registrationTitle} setInput={setRegistrationTitle}></InputField>
           <TextField title='Embed Description:' info='You can make use of <@userID>, <#channelID>, <@&roleID> and all other discord markdown' placeholder='Embed description:' text={registrationDescription} setText={setRegistrationDescription}></TextField>
           <InputField title='Embed Footer:' info='You can make use of <@userID>, <#channelID>, <@&roleID>' placeholder='Embed footer' input={registrationFooter} setInput={setRegistrationFooter}></InputField>

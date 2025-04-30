@@ -13,7 +13,28 @@ export const economySettingsSchema = Joi.object({
     namePlural: Joi.string()
       .max(32)
       .message('Currency plural name must not exceed 32 characters.'),
-  }),
+  })
+  .optional() // Make the entire currency object optional
+    .custom((value, helpers) => {
+      const { icon, nameSingular, namePlural } = value || {};
+
+      // Check if any of the fields are provided
+      const hasAnyField = icon || nameSingular || namePlural;
+
+      // If any field is provided, ensure all three are filled
+      if (hasAnyField) {
+        if (!icon || !nameSingular || !namePlural) {
+          return helpers.error('object.missing', {
+            message: 'If any of "icon", "nameSingular", or "namePlural" is filled, all three must be filled.',
+          });
+        }
+      }
+
+      return value;
+    })
+    .messages({
+      'object.missing': 'If any of "icon", "nameSingular", or "namePlural" is filled, all three must be filled.',
+    }),
   shopItems: Joi.array().items(
     Joi.object({
       itemID: Joi.string()
@@ -53,7 +74,7 @@ export const economySettingsSchema = Joi.object({
         }),
     })
   )
-    .messages({
-      'array.base': 'Shop items must be an array of objects.',
-    }),
+  .messages({
+    'array.base': 'Shop items must be an array of objects.',
+  }),
 });

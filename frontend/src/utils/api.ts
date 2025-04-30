@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { mergeConfig } from "axios";
 import { Guild } from "./types";
 
 const API_BASE_URL = 'http://localhost:3001/api';
@@ -8,9 +8,36 @@ const api = axios.create({
   withCredentials: true,
 });
 
+api.interceptors.response.use(
+  (response) => response, // Pass through successful responses
+  (error) => {
+
+    const skipAuthRedirect = error.config?.headers?.["skip-auth-redirect"];
+    
+    if (skipAuthRedirect) {
+      return Promise.reject(error);
+    };
+
+    if (error.response?.status === 401 || error.response?.status === 403) {
+
+      const currentUrl = `${window.location.origin}${window.location.pathname}${window.location.search}${window.location.hash}`;
+      
+      // Redirect to the login page
+      window.location.href = `http://localhost:3001/api/auth/discord?redirect=${encodeURIComponent(currentUrl)}`;
+    }
+    return Promise.reject(error); // Reject the error so it can still be handled locally if needed
+  }
+);
+
+export default api;
+
 export const fetchUser = async () => {
   try {
-    const response = await api.get('/auth/user');
+    const response = await api.get('/auth/user', {
+      headers: {
+        "skip-auth-redirect": "true",
+      }
+    });
     return response.data;
   } catch (err) {
     console.error('Error fetching data: ', err);

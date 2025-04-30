@@ -11,7 +11,7 @@ import Loading from '../../../components/shared/loading';
 
 // import subcomponents
 import InputField from '../../../components/settings/input-field';
-import InputSelector from '../../../components/settings/input-selector'
+import InputSelector from '../../../components/settings/shop-selector'
 import SaveChanges from '../../../components/settings/save-changes';
 
 
@@ -25,10 +25,16 @@ function Economy() {
   const [roles, setRoles] = useState<Role[]>([]);
 
   const [currencySingular, setCurrencySingular] = useState<string>()
+  const [invalidCurrencySingular, setInvalidCurrencySingular] = useState<boolean>(false);
   const [currencyPlural, setCurrencyPlural] = useState<string>()
+  const [invalidCurrencyPlural, setInvalidCurrencyPlural] = useState<boolean>(false);
   const [currencyIcon, setCurrencyIcon] = useState<string>()
-  const [shopRoles, setShopRoles] = useState<ShopItem[]>()
+  const [invalidCurrencyIcon, setInvalidCurrencyIcon] = useState<boolean>(false);
+  
+  const [shopRoles, setShopRoles] = useState<ShopItem[]>([])
+  const [invalidShopRoles, setInvalidShopRoles] = useState<Record<string, (keyof ShopItem)[]>>({});
   const [shopChannels, setShopChannels] = useState<ShopItem[]>()
+  const [invalidShopChannels, setInvalidShopChannels] = useState<Record<string, (keyof ShopItem)[]>>({});
 
   if (!guildId) {
     return <p>Error loading data!</p>;
@@ -52,9 +58,38 @@ function Economy() {
         });
     }, [guildId]);
 
+    function validateFields () {
+        let validFields = true;
+    
+        const invalidShopRoles: Record<string, (keyof ShopItem)[]> = {};
+        shopRoles.forEach((role) => {
+          invalidShopRoles[role.itemID] = [];
+    
+          if (role.price === undefined || isNaN(role.price) || role.price <= 0) {
+            invalidShopRoles[role.itemID].push('price');
+            validFields = false;
+          }
+        });
+        setInvalidShopRoles(invalidShopRoles);
+
+        if ((currencySingular || currencyPlural || currencyIcon) && !(currencySingular && currencyPlural && currencyIcon)) {
+          setInvalidCurrencySingular(!currencySingular);
+          setInvalidCurrencyPlural(!currencyPlural);
+          setInvalidCurrencyIcon(!currencyIcon);
+          return false;
+        } else {
+          setInvalidCurrencySingular(false);
+          setInvalidCurrencyPlural(false);
+          setInvalidCurrencyIcon(false);
+        }
+    
+        return validFields;
+      };
+
     const handleSubmit = async () => {
       
-        console.log("submitting data!");
+        const isValid = validateFields();
+        if (!isValid) { throw new Error }
         
           try {
             const settings = {
@@ -85,14 +120,14 @@ function Economy() {
     <div className="page page-economy">
       <div className="container">
       
-        <Settings title='Currency' description='Add a custom currency to your server!'>
-          <InputField title='Currency name (singular)' info='The singular version of you currency (example: coin)' placeholder='coin' input={currencySingular} setInput={setCurrencySingular}></InputField>
-          <InputField title='Currency name (plural)' info='When you have multiple of your currency (example: coins)' placeholder='coins' input={currencyPlural} setInput={setCurrencyPlural}></InputField>
-          <InputField title='Currency icon' info="You can use a custom server emoji by using its ID: <a:mariocoin:846082537222045708>" placeholder='🪙' input={currencyIcon} setInput={setCurrencyIcon}></InputField>
+        <Settings title='Currency' description='Add a custom currency to your server!' errorMessage={invalidCurrencySingular || invalidCurrencyPlural || invalidCurrencyIcon ? 'if any field is filled, all three must be filled.' : ''}>
+          <InputField title='Currency name (singular)' info='The singular version of you currency (example: coin)' placeholder='coin' input={currencySingular} setInput={setCurrencySingular} invalid={invalidCurrencySingular}></InputField>
+          <InputField title='Currency name (plural)' info='When you have multiple of your currency (example: coins)' placeholder='coins' input={currencyPlural} setInput={setCurrencyPlural} invalid={invalidCurrencyPlural}></InputField>
+          <InputField title='Currency icon' info="You can use a custom server emoji by using its ID: <a:mariocoin:846082537222045708>" placeholder='🪙' input={currencyIcon} setInput={setCurrencyIcon} invalid={invalidCurrencyIcon}></InputField>
         </Settings>
 
         <Settings title='Shop roles'>
-          <InputSelector items={roles} itemsType="Role" selectedItems={shopRoles} setSelectedItems={setShopRoles}></InputSelector>
+          <InputSelector items={roles} itemsType="Role" selectedItems={shopRoles} setSelectedItems={setShopRoles} invalidFields={invalidShopRoles}></InputSelector>
         </Settings>
 
         {/* <Settings title='Shop channels'>

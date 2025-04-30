@@ -52,7 +52,6 @@ function Level() {
   }, [guildId]);
 
   function validateFields () {
-
     let validFields = true;
 
     const invalidBoostFields: Record<string, (keyof BoostRole)[]> = {};

@@ -74,6 +74,10 @@
                     select {
                         vertical-align: bottom;
                         margin-bottom: 10px;
+
+                        &.invalid {
+                            border: 1px solid red;
+                        }
                     }
                 }
 

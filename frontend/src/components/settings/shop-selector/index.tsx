@@ -14,12 +14,15 @@ interface componentProps {
     itemsType: "Role" | "Channel";
     selectedItems: ShopItem[];
     setSelectedItems: (ShopItems: ShopItem[]) => void;
+    invalidFields: Record<string, (keyof ShopItem)[]>;
 }
 
-const Selector = ({ items, itemsType, selectedItems, setSelectedItems }: componentProps) => {
+const Selector = ({ items, itemsType, selectedItems, setSelectedItems, invalidFields}: componentProps) => {
 
     const [isDropdownActive, setDropdownActive] = useState(false);
     const [timeoutId, setTimeoutId] = useState<number | null>(null);
+
+    const hasInvalidFields = () => Object.values(invalidFields).some(fields => fields.length > 0);
 
     /*
     * =============================================================================================
@@ -144,6 +147,12 @@ const Selector = ({ items, itemsType, selectedItems, setSelectedItems }: compone
                             {items.map((item) => {
                                 const selectedItem = selectedItems.find(obj => obj.itemID === item.id);
 
+                                const invalidName = invalidFields[item.id]?.includes('name');
+                                const invalidDescription = invalidFields[item.id]?.includes('description');
+                                const invalidPrice = invalidFields[item.id]?.includes('price');
+
+                                console.log(invalidPrice);
+
                                 // const boost = selectedItem?.boost;
                                 // const stackable = selectedItem?.stackable || false;
                                 // const equation = selectedItem?.equation;
@@ -180,12 +189,12 @@ const Selector = ({ items, itemsType, selectedItems, setSelectedItems }: compone
                                                 inputs={[
                                                     { title: "Title", initialValue: selectedItem?.name, type: "text" },
                                                     { title: "Description", initialValue: selectedItem?.description, type: "textarea" },
-                                                    { title: "Price", initialValue: selectedItem?.price, type: "number" }
+                                                    { title: "Price", initialValue: selectedItem?.price, type: "number", invalid: invalidPrice }
                                                 ]}
                                                 onSave={(values) => onSave(item.id, values)}
                                                 onCancel={onCancel}
-                                                classname='list-item-input input-field-edit' >
-                                                <button className='edit-button'>Edit</button>
+                                                classname="list-item-input input-field-edit">
+                                                <button className={`edit-button${(invalidPrice || invalidName || invalidDescription) ? ' invalid' : ''}`}>Edit</button>
                                             </PopupForm>
                                         </div>
 
@@ -197,7 +206,12 @@ const Selector = ({ items, itemsType, selectedItems, setSelectedItems }: compone
                             }
                             )}
                         </div>
-                        <button type="button" className="add-button" onClick={toggleDropdown} onMouseEnter={handleMouseOver} onMouseLeave={handleMouseOut}>+ Add Role</button>
+                        <div className="bottom-wrapper">
+                            <button type="button" className="add-button" onClick={toggleDropdown} onMouseEnter={handleMouseOver} onMouseLeave={handleMouseOut}>+ Add Role</button>
+                            {hasInvalidFields() && (
+                                <div className="error-message">* Please fill out all fields correctly!</div>
+                            )}
+                        </div>
                     </div>
                     <div className={`inactive-list-wrapper${isDropdownActive ? " active" : ""}`} onMouseEnter={handleMouseOver} onMouseLeave={handleMouseOut}>
                         <div className="inactive-list">

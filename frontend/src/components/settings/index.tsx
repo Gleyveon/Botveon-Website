@@ -4,10 +4,11 @@ import './styles.scss';
 interface settingsProps {
   title?: string;
   description?: string;
+  errorMessage?: string;
   children: React.ReactNode;
 }
 
-const Settings = ({ title, description, children }: settingsProps) => {
+const Settings = ({ title, description, errorMessage, children }: settingsProps) => {
 
   return (
     <div className="component settings-component">
@@ -19,6 +20,11 @@ const Settings = ({ title, description, children }: settingsProps) => {
         <div className="settings-items">
           {children}
         </div>
+
+        {errorMessage && (
+          <div className="setting-error">* {errorMessage}</div>
+        )}
+        
 
       </div>
     </div>
