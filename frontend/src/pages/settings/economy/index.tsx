@@ -99,8 +99,8 @@ function Economy() {
                 icon: currencyIcon,
               },
               shopItems: [
-                ...(shopRoles?.map((role) => ({ ...role, category: "role" })) || []),
-                ...(shopChannels?.map((channel) => ({ ...channel, category: "channel" })) || []),
+                ...(shopRoles ?? []),
+                ...(shopChannels ?? []),
               ],
             };
 
@@ -127,7 +127,7 @@ function Economy() {
         </Settings>
 
         <Settings title='Shop roles'>
-          <InputSelector items={roles} itemsType="Role" selectedItems={shopRoles} setSelectedItems={setShopRoles} invalidFields={invalidShopRoles}></InputSelector>
+          <InputSelector items={roles} itemsType="role" selectedItems={shopRoles} setSelectedItems={setShopRoles} invalidFields={invalidShopRoles}></InputSelector>
         </Settings>
 
         {/* <Settings title='Shop channels'>

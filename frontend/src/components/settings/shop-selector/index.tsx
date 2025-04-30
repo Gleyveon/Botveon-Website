@@ -11,7 +11,7 @@ type Item = Role | Channel;
 
 interface componentProps {
     items: Role[] | Channel[];
-    itemsType: "Role" | "Channel";
+    itemsType: "role" | "channel";
     selectedItems: ShopItem[];
     setSelectedItems: (ShopItems: ShopItem[]) => void;
     invalidFields: Record<string, (keyof ShopItem)[]>;
@@ -37,7 +37,7 @@ const Selector = ({ items, itemsType, selectedItems, setSelectedItems, invalidFi
 
         const updatedItems: ShopItem[] = isActive
             ? selectedItems.filter(obj => obj.itemID !== id)
-            : [...selectedItems, { itemID: id }];
+            : [...selectedItems, { itemID: id, category: itemsType }];
         setSelectedItems(updatedItems);
     };
 
@@ -82,44 +82,29 @@ const Selector = ({ items, itemsType, selectedItems, setSelectedItems, invalidFi
     * =============================================================================================
     */
 
-    const changeTitle = (itemID: string, title: any) => {
-
-        const updatedItems = selectedItems.map((role) =>
-            role.itemID === itemID ? { ...role, title } : role
-        );
-
-        setSelectedItems(updatedItems);
-    };
-
-    const changeDescription = (itemID: string, description: any) => {
-
-        const updatedItems = selectedItems.map((role) =>
-            role.itemID === itemID ? { ...role, description } : role
-        );
-
-        setSelectedItems(updatedItems);
-    };
-
-    const changePrice = (itemID: string, price: any) => {
-
-        const updatedItems = selectedItems.map((role) =>
-            role.itemID === itemID ? { ...role, price } : role
-        );
-
-        setSelectedItems(updatedItems);
-    };
+    console.log(selectedItems);
 
     const onSave = (itemID: string, value: any) => {
 
-        const updatedItems = selectedItems.map((role) =>
-            role.itemID === itemID ? { ...role, name: value.title, description: value.description, price: value.price } : role
-        );
+        console.log(value);
+
+        const updatedItems = selectedItems.map((role) => {
+            if (role.itemID !== itemID) return role;
+
+            const updatedRole: ShopItem = { itemID: role.itemID, category: role.category };
+
+            if (value.title) updatedRole.name = value.title;
+            if (value.description) updatedRole.description = value.description;
+            if (value.price) updatedRole.price = value.price;
+
+            return updatedRole;
+        });
 
         setSelectedItems(updatedItems);
     }
 
     const onCancel = () => {
-        console.log("cancelled lole");
+
     }
 
     function isChannel(item: Item): item is Channel {
@@ -151,12 +136,6 @@ const Selector = ({ items, itemsType, selectedItems, setSelectedItems, invalidFi
                                 const invalidDescription = invalidFields[item.id]?.includes('description');
                                 const invalidPrice = invalidFields[item.id]?.includes('price');
 
-                                console.log(invalidPrice);
-
-                                // const boost = selectedItem?.boost;
-                                // const stackable = selectedItem?.stackable || false;
-                                // const equation = selectedItem?.equation;
-
                                 return (
                                     <div key={item.id} className={`flex-table-row list-item-wrapper ${selectedItems.some(obj => obj.itemID === item.id) ? ' active' : ''}`}>
 
@@ -176,7 +155,7 @@ const Selector = ({ items, itemsType, selectedItems, setSelectedItems, invalidFi
                                         ) : isRole(item) ? (
                                                     <div className="role-color-wrapper">
                                                         <div className="role-delete-color" style={{ backgroundColor: "#00FFFF" }}></div>
-                                                        <div className="role-color" style={{ backgroundColor: `#${item.color.toString(16).padStart(6, '0')}` }}></div>
+                                                        <div className="role-color" style={{ backgroundColor: `#${Number(item.color).toString(16).padStart(6, '0')}` }}></div>
                                                     </div>
                                                     
                                         ) : null}
@@ -187,11 +166,11 @@ const Selector = ({ items, itemsType, selectedItems, setSelectedItems, invalidFi
                                         <div className="flex-table-col list-item-input">
                                             <PopupForm
                                                 inputs={[
-                                                    { title: "Title", initialValue: selectedItem?.name, type: "text" },
-                                                    { title: "Description", initialValue: selectedItem?.description, type: "textarea" },
-                                                    { title: "Price", initialValue: selectedItem?.price, type: "number", invalid: invalidPrice }
+                                                    { title: "Title", value: selectedItem?.name, type: "text" },
+                                                    { title: "Description", value: selectedItem?.description, type: "textarea" },
+                                                    { title: "Price", value: selectedItem?.price, type: "number", invalid: invalidPrice }
                                                 ]}
-                                                onSave={(values) => onSave(item.id, values)}
+                                                onSave={(value) => onSave(item.id, value)}
                                                 onCancel={onCancel}
                                                 classname="list-item-input input-field-edit">
                                                 <button className={`edit-button${(invalidPrice || invalidName || invalidDescription) ? ' invalid' : ''}`}>Edit</button>
@@ -234,7 +213,7 @@ const Selector = ({ items, itemsType, selectedItems, setSelectedItems, invalidFi
 
                                             <div className="role-color-wrapper">
                                                 <div className="role-delete-color" style={{ backgroundColor: "#00FFFF" }}></div>
-                                                <div className="role-color" style={{ backgroundColor: `#${item.color.toString(16).padStart(6, '0')}` }}></div>
+                                                <div className="role-color" style={{ backgroundColor: `#${Number(item.color).toString(16).padStart(6, '0')}` }}></div>
                                             </div>
                                         ) : null}
                                         <div className="item-name">

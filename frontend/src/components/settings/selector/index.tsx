@@ -124,7 +124,7 @@ const Selector = ({ title, info, itemCategory, selectionMode, items, invalid, se
                                 ) : isRole(item) ? (
                                     <div className="role-color-wrapper">
                                         <div className="role-delete-color" style={{ backgroundColor: "#00FFFF" }}></div>
-                                        <div className="role-color" style={{ backgroundColor: `#${item.color.toString(16).padStart(6, '0')}` }}></div>
+                                        <div className="role-color" style={{ backgroundColor: `#${Number(item.color).toString(16).padStart(6, '0')}` }}></div>
                                     </div>
                                 ) : null}
                                 {item.name}
@@ -151,7 +151,7 @@ const Selector = ({ title, info, itemCategory, selectionMode, items, invalid, se
                                 ) : isRole(item) ? (
                                     <div className="role-color-wrapper">
                                         <div className="role-delete-color" style={{ backgroundColor: "#00FFFF" }}></div>
-                                        <div className="role-color" style={{ backgroundColor: `#${item.color.toString(16).padStart(6, '0')}` }}></div>
+                                        <div className="role-color" style={{ backgroundColor: `#${Number(item.color).toString(16).padStart(6, '0')}` }}></div>
                                     </div>
                                 ) : null}
 

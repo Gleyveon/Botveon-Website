@@ -117,7 +117,7 @@ const Selector = ({ items, selectedItems, setSelectedItems, invalidFields }: com
                                         <div className="list-item-role">
                                             <div className="role-color-wrapper">
                                                 <div className="role-delete-color" style={{ backgroundColor: "#00FFFF" }}></div>
-                                                <div className="role-color" style={{ backgroundColor: `#${item.color.toString(16).padStart(6, '0')}` }}></div>
+                                                <div className="role-color" style={{ backgroundColor: `#${Number(item.color).toString(16).padStart(6, '0')}` }}></div>
                                             </div>
                                             <div className="text-content">{item.name}</div>
                                         </div>
@@ -148,7 +148,7 @@ const Selector = ({ items, selectedItems, setSelectedItems, invalidFields }: com
                                 <div key={item.id} className={`list-item ${selectedItems.some(obj => obj.roleID === item.id) ? ' active' : ''}`} onClick={() => toggleItem(item.id)}>
                                     <div className="role-color-wrapper">
                                         <div className="role-delete-color" style={{ backgroundColor: "#00FFFF" }}></div>
-                                        <div className="role-color" style={{ backgroundColor: `#${item.color.toString(16).padStart(6, '0')}` }}></div>
+                                        <div className="role-color" style={{ backgroundColor: `#${Number(item.color).toString(16).padStart(6, '0')}` }}></div>
                                     </div>
                                     <div className="item-name">
                                         {item.name}
