@@ -2,7 +2,7 @@
 import './styles.scss';
 
 import threadsImage from '../../assets/img/discord messages/threads.png';
-import upvotesImage from '../../assets/img/discord messages/upvote.png';
+import upvotesImage from '../../assets/img/discord messages/upvotes.png';
 import rankImage from '../../assets/img/discord messages/rank.png';
 
 function Features() {
