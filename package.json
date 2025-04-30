@@ -1,0 +1,14 @@
+{
+  "name": "botveon-website",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build:full": "cd frontend && npm install && npm run build && cd ../backend && npm install && npm run build",
+    "prod": "SET NODE_ENV=production&& cd backend && npm start",
+    "dev": "cd frontend && npm run dev & cd backend && npm run dev"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

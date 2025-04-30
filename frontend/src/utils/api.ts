@@ -37,6 +37,8 @@ export const fetchUser = async () => {
         "skip-auth-redirect": "true",
       }
     });
+    console.log(API_BASE_URL);
+    console.log('Full response:', response)
     return response.data;
   } catch (err) {
     console.error('Error fetching data: ', err);

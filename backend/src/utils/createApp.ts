@@ -6,6 +6,7 @@ import routes from "../routes";
 import cors from "cors";
 import store = require("connect-mongo");
 import rateLimit from "express-rate-limit";
+import path from 'path';
 
 
 config();
@@ -31,7 +32,12 @@ export function createApp (): Express {
     app.use(express.urlencoded({ extended: true }));
 
     // Enable cors
-    app.use(cors({ origin: ["http://localhost:5173"], credentials: true, }));
+    if (process.env.NODE_ENV !== 'production') {
+        app.use(cors({
+            origin: "http://localhost:5173",  // Replace with your frontend's URL
+            credentials: true,               // Allow credentials if you're sending cookies
+        }));
+    }
 
     //Enable sessions
     app.use(session({
@@ -47,6 +53,14 @@ export function createApp (): Express {
     app.use(passport.session());
 
     app.use('/api', routes);
+
+    if (process.env.NODE_ENV === 'production') {
+        // Serve static files from the 'frontend/dist' directory
+        app.use(express.static(path.join(__dirname, '../../../frontend/dist')))
+        app.get('*', (req, res) => {
+          res.sendFile(path.resolve(__dirname, '../../../frontend/dist', 'index.html'))
+        })
+      }
 
     return app;
 }

@@ -5,7 +5,10 @@ import { isAuthenticated } from "../../utils/middlewares/authenticationMiddlewar
 import { getUserController } from "../../controllers/user";
 
 const router = Router();
-dotenv.config();
+dotenv.config({
+    path: process.env.NODE_ENV === 'production' ? '.env.production' : '.env',
+});
+
 
 const FRONTEND_URL = process.env.FRONTEND_URL as string;
 
