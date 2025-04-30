@@ -3,7 +3,7 @@ import './styles.scss';
 
 import threadsImage from '../../assets/img/discord messages/Threads.png';
 import upvotesImage from '../../assets/img/discord messages/Upvotes.png';
-import rankImage from '../../assets/img/discord messages/rank.png';
+import rankImage from '../../assets/img/discord messages/Rank.png';
 
 function Features() {
     return (
