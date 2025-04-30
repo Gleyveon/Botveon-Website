@@ -4,11 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build:full": "cd frontend && npm install && npm run build && cd ../backend && npm install && npm run build",
-    "prod": "SET NODE_ENV=production&& cd backend && npm start",
+    "build": "npm install && cd frontend && npm install && npm run build && cd ../backend && npm install && npm run build",
+    "prod": "cd backend && npm install && cross-env NODE_ENV=production npm start",
     "dev": "cd frontend && npm run dev & cd backend && npm run dev"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "cross-env": "^7.0.3"
+  }
 }
