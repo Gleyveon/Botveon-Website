@@ -7,6 +7,9 @@ import './styles.scss';
 // import components:
 import Dropdown from '../shared/dropdown';
 
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+const API_BASE_URL = import.meta.env.VITE_API_URL;
+
 function Header() {
   const { guildId } = useParams();
   const user = useUser();
@@ -79,9 +82,9 @@ function Header() {
                 <NavLink className='link' to="/dashboard">dashboard</NavLink>
                 {user ? (
                   // <a className="username">{user.username}</a>
-                  <a className="logout-button" href={`http://localhost:3001/api/auth/logout`}>Logout</a>
+                  <a className="logout-button" href={`${BACKEND_URL}/${API_BASE_URL}/auth/logout`}>Logout</a>
                 ) : (
-                  <a className='login-button' href={`http://localhost:3001/api/auth/discord?redirect=${encodeURIComponent(redirectUrl)}`}>Login</a>
+                  <a className='login-button' href={`${BACKEND_URL}/${API_BASE_URL}/auth/discord?redirect=${encodeURIComponent(redirectUrl)}`}>Login</a>
                 )}
               </nav>
             </div>
@@ -137,9 +140,9 @@ function Header() {
               <div className="login-button-wrapper">
               {user ? (
                   // <a className="username">{user.username}</a>
-                  <a className="logout-button" href={`http://localhost:3001/api/auth/logout`}>Logout</a>
+                  <a className="logout-button" href={`${BACKEND_URL}/${API_BASE_URL}/auth/logout`}>Logout</a>
                 ) : (
-                  <a className='login-button' href={`http://localhost:3001/api/auth/discord?redirect=${encodeURIComponent(redirectUrl)}`}>Login with Discord</a>
+                  <a className='login-button' href={`${BACKEND_URL}/${API_BASE_URL}/auth/discord?redirect=${encodeURIComponent(redirectUrl)}`}>Login with Discord</a>
                 )}
               </div>
             </div>

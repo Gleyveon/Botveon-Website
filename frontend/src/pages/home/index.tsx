@@ -15,7 +15,7 @@ function Home() {
         <div className="home-wrapper">
           <h1 className='home-title'>Botveon</h1>
           <h2 className='home-description'>The best <u>all-in-one</u> Yu-Gi-Oh bot!</h2>
-          <a className='home-invite' href="https://discord.com/oauth2/authorize?client_id=817845132363038750&scope=bot&permissions=1095216131705&redirect_uri=http%3A%2F%2Flocalhost%3A5173%2Ftesting" target='_blank' rel="noopener noreferrer">Invite me!</a>
+          <a className='home-invite' href="https://discord.com/oauth2/authorize?client_id=817845132363038750" target='_blank' rel="noopener noreferrer">Invite me!</a>
         </div>
       </div>
 

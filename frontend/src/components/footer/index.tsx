@@ -16,7 +16,7 @@ function Footer() {
                 <div className="footer-section">
                   <div className="section-title">Get started:</div>
                   <div className="section-links">
-                    <a href="https://discord.com/oauth2/authorize?client_id=817845132363038750&scope=bot&permissions=1095216131705&redirect_uri=http%3A%2F%2Flocalhost%3A5173%2Ftesting" target='_blank' rel="noopener noreferrer">Invite bot</a>
+                    <a href="https://discord.com/oauth2/authorize?client_id=817845132363038750" target='_blank' rel="noopener noreferrer">Invite bot</a>
                   </div>
                 </div>
               </div>
