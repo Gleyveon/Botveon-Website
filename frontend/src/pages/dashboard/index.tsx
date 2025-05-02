@@ -7,6 +7,10 @@ import { Guild } from "../../utils/types";
 import './styles.scss';
 import Loading from '../../components/shared/loading';
 
+const FRONTEND_URL = import.meta.env.VITE_FRONTEND_URL;
+
+const CLIENT_ID = '1063785082193711125';
+const DISCORD_OAUTH_URL = `https://discord.com/oauth2/authorize?client_id=${CLIENT_ID}`;
 
 function Dashboard() {
 
@@ -64,10 +68,19 @@ function Dashboard() {
   return (
     <div className='page dashboard-page'>
       <div className="container">
-          <h1>Configure servers:</h1>
+        <h1>Configure servers:</h1>
 
+        
           <div className="guild-cards">
             {guilds}
+            <a className="guild-link" href={DISCORD_OAUTH_URL} target='_blank' rel="noopener noreferrer">
+              <div className="add-server-button">
+                <div className="add-server-icon-wrapper">
+                  <img src='src\assets\img\icons\add.png' alt="server icon" className="guild-icon" />
+                </div>
+                <div className="title">Add Server</div>
+              </div>
+            </a>
           </div>
       </div>
     </div>

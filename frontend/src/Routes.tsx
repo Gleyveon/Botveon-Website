@@ -39,8 +39,8 @@ function RouteApp() {
           <Route path="/" element={<Home />} />
           <Route path="/home" element={<Home />} />
           <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/commands" element={<Commands />} />
-          <Route path="/features" element={<Features />} />
+          {/* <Route path="/commands" element={<Commands />} />
+          <Route path="/features" element={<Features />} /> */}
         </Route>
 
         <Route path='/testing' element={<Testing />}></Route>

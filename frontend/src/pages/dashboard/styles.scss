@@ -22,7 +22,7 @@
 
     .guild-link {
       text-decoration: none;
-      flex: 1 1 calc(25% - 20px); 
+      flex: 1 1 calc(25% - 20px);
       max-width: calc(25% - 20px);
 
       .guild-card {
@@ -41,7 +41,7 @@
           transform: scale(1.05);
           //box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
         }
-  
+
         .guild-background {
           position: absolute;
           height: 100%;
@@ -50,10 +50,11 @@
           top: 0;
           left: 0;
           z-index: 1;
-          filter: blur(12px) brightness(0.5);;
+          filter: blur(12px) brightness(0.5);
+          ;
           transform: scale(1.3);
         }
-  
+
         .guild-icon-wrapper {
           flex-shrink: 0;
           position: relative;
@@ -86,12 +87,12 @@
             z-index: 2;
           }
         }
-        
-  
+
+
         .guild-content {
           position: relative;
           z-index: 3;
-  
+
           .title {
             color: white;
             font-size: 20px;
@@ -101,13 +102,73 @@
         }
       }
     }
+
+    .add-server-button {
+      padding: 10px;
+      display: flex;
+      position: relative;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      height: 100px;
+      overflow: hidden;
+      border-radius: 10px;
+      transition: 0.3s;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background-color: #121929;
+
+      .add-server-icon-wrapper {
+        flex-shrink: 0;
+        position: relative;
+        height: 40px;
+        width: 40px;
+        //border-radius: 50px;
+        overflow: hidden;
+        z-index: 3;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        .guild-icon {
+          position: relative;
+          object-fit: cover;
+          height: 100%;
+          width: 100%;
+          z-index: 3;
+        }
+
+        &:before {
+          content: "";
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          // background-color: rgba(255, 255, 255, 0.1);
+          z-index: 2;
+        }
+      }
+
+      .title {
+        color: white;
+        font-size: 15px;
+        word-wrap: break-word;
+      }
+
+      &:hover {
+        transform: scale(1.05);
+        //box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+      }
+    }
   }
 
   //for small laptops
   @media (max-width: 1199px) {
     .guild-cards {
       .guild-link {
-        flex: 1 1 calc(33.33% - 20px); /* 3 cards per row */
+        flex: 1 1 calc(33.33% - 20px);
+        /* 3 cards per row */
         max-width: calc(33.33% - 20px);
       }
     }
@@ -117,7 +178,8 @@
   @media (max-width: 991px) {
     .guild-cards {
       .guild-link {
-        flex: 1 1 calc(50% - 20px); /* 3 cards per row */
+        flex: 1 1 calc(50% - 20px);
+        /* 3 cards per row */
         max-width: calc(50% - 20px);
       }
     }
@@ -128,7 +190,8 @@
     @media (max-width: 767px) {
       .guild-cards {
         .guild-link {
-          flex: 1 1 100%; /* 3 cards per row */
+          flex: 1 1 100%;
+          /* 3 cards per row */
           max-width: 100%;
         }
       }
