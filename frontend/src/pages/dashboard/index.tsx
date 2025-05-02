@@ -6,6 +6,8 @@ import { Guild } from "../../utils/types";
 
 import './styles.scss';
 import Loading from '../../components/shared/loading';
+import placeholderImage from '../../assets/img/placeholderImage.svg'
+import addIcon from '../../assets/img/icons/add.png'
 
 const FRONTEND_URL = import.meta.env.VITE_FRONTEND_URL;
 
@@ -38,7 +40,7 @@ function Dashboard() {
     // Define the guild icon URL with a fallback for missing icons
     const guildIcon = guild.icon
       ? `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.png`
-      : 'src/assets/img/landscape-placeholder-svgrepo-com.svg';
+      : placeholderImage;
 
     return (
       <Link to={`/guild/${guild.id}`} className="guild-link" key={guild.id}>
@@ -76,7 +78,7 @@ function Dashboard() {
             <a className="guild-link" href={DISCORD_OAUTH_URL} target='_blank' rel="noopener noreferrer">
               <div className="add-server-button">
                 <div className="add-server-icon-wrapper">
-                  <img src='src\assets\img\icons\add.png' alt="server icon" className="guild-icon" />
+                  <img src={addIcon} alt="server icon" className="guild-icon" />
                 </div>
                 <div className="title">Add Server</div>
               </div>
