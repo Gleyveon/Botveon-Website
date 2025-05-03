@@ -15,15 +15,15 @@ function Guild() {
             <h2>Community</h2>
             <p>Auto Threads, Upvotes/Downvotes, Bumps.</p>
           </Link>
-          <Link to="economy" className="category-card">
+          <Link to="join" className="category-card">
             <h2>Joining/Leaving</h2>
             <p>Join Roles, Sticky Roles, Registration, Welcome/Goodbye, Persistent Roles.</p>
           </Link>
-          <Link to="moderation" className="category-card">
+          <Link to="economy" className="category-card">
             <h2>Economy</h2>
             <p>Currency, Shop Roles.</p>
           </Link>
-          <Link to="levels" className="category-card">
+          <Link to="level" className="category-card">
             <h2>Level/Xp</h2>
             <p>Level-Up Messages, Role Rewards, Boost Roles.</p>
           </Link>
