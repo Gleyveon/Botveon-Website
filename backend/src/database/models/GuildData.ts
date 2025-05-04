@@ -69,11 +69,11 @@ export interface Guild {
     infractionChannel?: string;
     bumpChannel?: string;
     registration?: {
-        channelID: string;
-        messageID: string;
-        roleID: string;
-        message: string;
-        embed: {
+        channelID?: string;
+        messageID?: string;
+        roleID?: string;
+        message?: string;
+        embed?: {
             title?: string;
             description?: string;
             url?: string;

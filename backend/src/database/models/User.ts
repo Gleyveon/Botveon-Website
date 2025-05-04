@@ -21,15 +21,23 @@ const UserSchema = new Schema<User>({
 
 UserSchema.post("findOne", function (doc: User | null) {
     if (doc) {
-        doc.accessToken = decrypt(doc.accessToken, doc.accessTokenIV);
-        doc.refreshToken = decrypt(doc.refreshToken, doc.refreshTokenIV);
+        try {
+            doc.accessToken = decrypt(doc.accessToken, doc.accessTokenIV);
+            doc.refreshToken = decrypt(doc.refreshToken, doc.refreshTokenIV);
+        } catch (error) {
+            console.error("Failed to decrypt tokens for user:", doc.discordId, error);
+        }
     }
 });
 
 UserSchema.post("find", function (docs: User[]) {
     docs.forEach((doc) => {
-        doc.accessToken = decrypt(doc.accessToken, doc.accessTokenIV);
-        doc.refreshToken = decrypt(doc.refreshToken, doc.refreshTokenIV);
+        try {
+            doc.accessToken = decrypt(doc.accessToken, doc.accessTokenIV);
+            doc.refreshToken = decrypt(doc.refreshToken, doc.refreshTokenIV);
+        } catch (error) {
+            console.error("Failed to decrypt tokens for user:", doc.discordId, error);
+        }
     });
 });
 

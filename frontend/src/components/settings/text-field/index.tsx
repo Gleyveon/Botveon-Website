@@ -9,13 +9,14 @@ interface componentProps {
     info?: string;
     placeholder?: string | undefined;
     text: string | undefined;
-    setText: (value: string) => void;
+    invalid?: boolean;
+    setText: (value?: string) => void;
 }
 
-const TextField = ({ title, info, placeholder, text, setText }: componentProps) => {
+const TextField = ({ title, info, placeholder, text, invalid, setText }: componentProps) => {
 
     function changeValue(value: string) {
-        setText(value);
+        setText(value === "" ? undefined : value);
     }
 
     return (
@@ -23,7 +24,7 @@ const TextField = ({ title, info, placeholder, text, setText }: componentProps) 
 
             <div className="setting-item">
                 <InfoButton title={title} info={info} />
-                <div className="text-field">
+                <div className={`text-field${invalid ? ' invalid' : ''}`}>
                     <textarea placeholder={placeholder} value={text ?? ''} onChange={(e) => changeValue(e.target.value)} />
                 </div>
             </div>

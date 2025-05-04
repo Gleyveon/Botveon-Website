@@ -1,7 +1,7 @@
 // src/components/settings/subcomponents/input-field
 import './styles.scss';
 
-// import subcomponents
+// components:
 import ItemTitle from '../../shared/info-button'
 
 interface componentProps {
@@ -24,8 +24,8 @@ const InputField = ({ title, info, placeholder, input, invalid, setInput }: comp
 
             <div className="setting-item">
                 <ItemTitle title={title} info={info}></ItemTitle>
-                <div className={`input-field ${invalid ? ' invalid' : ''}`}>
-                    <input type="text" placeholder={placeholder} value={input} onChange={(e) => changeValue(e.target.value)} />
+                <div className={`input-field${invalid ? ' invalid' : ''}`}>
+                    <input type="text" placeholder={placeholder} value={input ?? ''} onChange={(e) => changeValue(e.target.value)} />
                 </div>
             </div>
 

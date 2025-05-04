@@ -6,6 +6,7 @@ import { initializeGuild } from "../../database/utility/initializeGuild"
 import { User } from "../../database/models/User";
 import isEqual from "lodash/isEqual";
 import { sendEmbed } from "../../services/messages";
+import omit from "lodash/omit";
 
 
 export async function getGuildsController(req: Request, res: Response) {
@@ -128,24 +129,46 @@ export async function updateJoinSettingsController(req: Request, res: Response) 
         }
 
         const guildSettings = await initializeGuild(guildId); 
-        
-        if (!isEqual(guildSettings.registration, registration && registration.channelID && registration.roleID)) {
 
-            console.log(registration);
+        const embed1 = JSON.parse(JSON.stringify(guildSettings.registration?.embed));
+        const embed2 = JSON.parse(JSON.stringify(registration.embed));
 
+        // If there is a channelID and roleID + the channel or embed has changed, send a message. 
+        let messageID; 
+        if ((!isEqual(embed1, embed2) || guildSettings.registration?.channelID !== registration.channelID) && registration.channelID && registration.roleID) {
+            
+            let title = registration.embed.title;
+            let description =  registration.embed.description;
+            const footer = registration.embed.footer?.text; 
+
+            if (!title && !description && !footer) {
+                title = 'Verify Your Account';
+                description = 'Click the button below to verify and gain access to this Discord server!';
+            }
+            
             const embed = {
-                title: registration.embed.title ,
-                description: registration.embed.description,
+                title: title ,
+                description: description,
                 footer: {
-                  text: registration.embed.footer?.text,
+                  text: footer,
                 },
                 color: 0xcf0044,
-              }
+            }
+
+            const button = {
+                type: 2,
+                style: 2,
+                custom_id: "registration",
+                emoji: {
+                    name: "✅",
+                },
+            };
 
             try {
-                sendEmbed(registration.channelID, embed);
+                const message = await sendEmbed(registration.channelID, embed, button);
+                messageID = message.id;                
             } catch (error) {
-                
+                console.error("Failed to send embed with button:", error);
             }
         }
 
@@ -155,6 +178,9 @@ export async function updateJoinSettingsController(req: Request, res: Response) 
         guildSettings.welcomeChannel = welcomeChannel;
         guildSettings.goodbyeChannel = goodbyeChannel;
         guildSettings.persistentRoles = persistentRoles;
+
+        guildSettings.registration = guildSettings.registration ?? {};
+        guildSettings.registration.messageID = messageID; // Save the message ID
 
         await guildSettings.save();
 
