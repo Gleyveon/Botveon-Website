@@ -44,12 +44,12 @@ export const economySettingsSchema = Joi.object({
           'string.pattern.base': 'Item ID must be a numeric string between 17 and 20 characters.',
           'any.required': 'Item ID is required.',
         }),
-      name: Joi.string()
+      title: Joi.string()
         .max(64)
         .allow(null) // Allow null values
         .optional()
         .messages({
-          'string.max': 'Item name must not exceed 64 characters.',
+          'string.max': 'Item title must not exceed 64 characters.',
         }),
       description: Joi.string()
         .max(256)
