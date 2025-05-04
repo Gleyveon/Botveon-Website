@@ -22,13 +22,12 @@ export interface Guild {
     }[];
     shopItems: {
         itemID: string;
-        name: string;
+        title: string;
         description: string;
         category: "role" | "channel" | "emoji" | "custom";
         price: number;
         metadata: Record<string, any>;
     }[];
-    bannedRole?: string;
     levelUpMessages: boolean;
     levelUpChannel: string;
     persistentRoles: boolean;
@@ -66,7 +65,6 @@ export interface Guild {
         includeUserAvatar: boolean;
         sendImmediate: boolean;
     };
-    infractionChannel?: string;
     bumpChannel?: string;
     registration?: {
         channelID?: string;
@@ -224,7 +222,7 @@ const GuildSchema = new Schema<Guild>(
                             message: "Item ID must be a numeric string between 17 and 20 characters."
                         }
                     },
-                    name: {
+                    title: {
                         type: Schema.Types.String,
                         maxlength: 64,
                         trim: true
@@ -254,15 +252,6 @@ const GuildSchema = new Schema<Guild>(
             default: [],
             _id: false
         },
-        bannedRole: {
-            type: Schema.Types.String,
-            validate: {
-                validator: function (value: string) {
-                    return /^[0-9]{17,20}$/.test(value);
-                },
-                message: "Banned role ID must be a numeric string between 17 and 20 characters."
-            }
-        },
         levelUpMessages: {
             type: Schema.Types.Boolean,
             default: true
@@ -274,7 +263,7 @@ const GuildSchema = new Schema<Guild>(
                     return /^[0-9]{17,20}$/.test(value);
                 },
                 message: "LevelUpChannel must be a numeric string between 17 and 20 characters."
-            } 
+            }
         },
         persistentRoles: {
             type: Schema.Types.Boolean,
@@ -330,14 +319,17 @@ const GuildSchema = new Schema<Guild>(
                             max: 16777215, // Hex range (0xFFFFFF)
                         },
                         footer: {
-                            text: {
-                                type: Schema.Types.String,
-                                maxlength: 2048,
+                            type: {
+                                text: {
+                                    type: Schema.Types.String,
+                                    maxlength: 2048,
+                                },
+                                icon_url: {
+                                    type: Schema.Types.String,
+                                    match: /^(https?:\/\/.*\.(?:png|jpg|jpeg|gif|bmp|webp|svg))$/, // Valid URL for image
+                                },
                             },
-                            icon_url: {
-                                type: Schema.Types.String,
-                                match: /^(https?:\/\/.*\.(?:png|jpg|jpeg|gif|bmp|webp|svg))$/, // Valid URL for image
-                            },
+                            _id: false,
                         },
                     },
                     _id: false,
@@ -383,17 +375,20 @@ const GuildSchema = new Schema<Guild>(
                             max: 16777215, // Hex range (0xFFFFFF)
                         },
                         footer: {
-                            text: {
-                                type: Schema.Types.String,
-                                maxlength: 2048,
+                            type: {
+                                text: {
+                                    type: Schema.Types.String,
+                                    maxlength: 2048,
+                                },
+                                icon_url: {
+                                    type: Schema.Types.String,
+                                    match: /^(https?:\/\/.*\.(?:png|jpg|jpeg|gif|bmp|webp|svg))$/, // Valid URL for image
+                                },
                             },
-                            icon_url: {
-                                type: Schema.Types.String,
-                                match: /^(https?:\/\/.*\.(?:png|jpg|jpeg|gif|bmp|webp|svg))$/, // Valid URL for image
-                            },
+                            _id: false,
                         },
-                        _id: false,
                     },
+                    _id: false,
                 },
                 includeUserAvatar: {
                     type: Schema.Types.Boolean,
@@ -405,10 +400,6 @@ const GuildSchema = new Schema<Guild>(
                 },
             },
             _id: false,
-        },
-        infractionChannel: {
-            type: Schema.Types.String,
-            match: /^[0-9]{17,20}$/,
         },
         bumpChannel: {
             type: Schema.Types.String,
@@ -433,33 +424,40 @@ const GuildSchema = new Schema<Guild>(
                     maxlength: 2000,
                 },
                 embed: {
-                    title: {
-                        type: Schema.Types.String,
-                        maxlength: 256,
-                    },
-                    description: {
-                        type: Schema.Types.String,
-                        maxlength: 4096,
-                    },
-                    url: {
-                        type: Schema.Types.String,
-                        match: /^(https?:\/\/)?[a-zA-Z0-9.-]+\.[a-zA-Z]{2,3}(\/\S*)?$/, // URL validation
-                    },
-                    color: {
-                        type: Schema.Types.Number, // Hex color for embed
-                        min: 0,
-                        max: 16777215, // Hex range (0xFFFFFF)
-                    },
-                    footer: {
-                        text: {
+                    type: {
+                        title: {
                             type: Schema.Types.String,
-                            maxlength: 2048,
+                            maxlength: 256,
                         },
-                        icon_url: {
+                        description: {
                             type: Schema.Types.String,
-                            match: /^(https?:\/\/.*\.(?:png|jpg|jpeg|gif|bmp|webp|svg))$/, // Valid URL for image
+                            maxlength: 4096,
+                        },
+                        url: {
+                            type: Schema.Types.String,
+                            match: /^(https?:\/\/)?[a-zA-Z0-9.-]+\.[a-zA-Z]{2,3}(\/\S*)?$/, // URL validation
+                        },
+                        color: {
+                            type: Schema.Types.Number, // Hex color for embed
+                            min: 0,
+                            max: 16777215, // Hex range (0xFFFFFF)
+                        },
+                        footer: {
+                            type: {
+                                text: {
+                                    type: Schema.Types.String,
+                                    maxlength: 2048,
+                                },
+                                icon_url: {
+                                    type: Schema.Types.String,
+                                    match: /^(https?:\/\/.*\.(?:png|jpg|jpeg|gif|bmp|webp|svg))$/, // Valid URL for image
+                                },
+
+                            },
+                            _id: false,
                         },
                     },
+                    _id: false,
                 },
             },
             _id: false,
@@ -472,23 +470,23 @@ const GuildSchema = new Schema<Guild>(
 
 GuildSchema.pre("validate", function (next) {
     const guild = this as mongoose.Document & Guild;
-  
+
     const { icon, nameSingular, namePlural } = guild.currency || {};
-  
+
     // Check if any of the fields are provided
     const hasAnyField = icon || nameSingular || namePlural;
-  
+
     // If any field is provided, ensure all three are filled
     if (hasAnyField) {
-      if (!icon || !nameSingular || !namePlural) {
-        return next(
-          new Error(
-            'If any of "icon", "nameSingular", or "namePlural" is filled, all three must be filled.'
-          )
-        );
-      }
+        if (!icon || !nameSingular || !namePlural) {
+            return next(
+                new Error(
+                    'If any of "icon", "nameSingular", or "namePlural" is filled, all three must be filled.'
+                )
+            );
+        }
     }
-  
+
     next();
 });
 

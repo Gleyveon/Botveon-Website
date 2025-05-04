@@ -33,7 +33,7 @@ export interface BoostRole {
 
 export interface ShopItem {
     itemID: string;
-    name?: string | undefined;
+    title?: string | undefined;
     description?: string | undefined;
     category: "role" | "channel" | "emoji" | "custom" | undefined;
     price?: number;

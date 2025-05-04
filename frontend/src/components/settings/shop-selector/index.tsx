@@ -93,7 +93,7 @@ const Selector = ({ items, itemsType, selectedItems, setSelectedItems, invalidFi
 
             const updatedRole: ShopItem = { itemID: role.itemID, category: role.category };
 
-            if (value.title) updatedRole.name = value.title;
+            if (value.title) updatedRole.title = value.title;
             if (value.description) updatedRole.description = value.description;
             if (value.price) updatedRole.price = value.price;
 
@@ -132,7 +132,7 @@ const Selector = ({ items, itemsType, selectedItems, setSelectedItems, invalidFi
                             {items.map((item) => {
                                 const selectedItem = selectedItems.find(obj => obj.itemID === item.id);
 
-                                const invalidName = invalidFields[item.id]?.includes('name');
+                                const invalidTitle = invalidFields[item.id]?.includes('title');
                                 const invalidDescription = invalidFields[item.id]?.includes('description');
                                 const invalidPrice = invalidFields[item.id]?.includes('price');
 
@@ -166,14 +166,14 @@ const Selector = ({ items, itemsType, selectedItems, setSelectedItems, invalidFi
                                         <div className="flex-table-col list-item-input">
                                             <PopupForm
                                                 inputs={[
-                                                    { title: "Title", value: selectedItem?.name, type: "text" },
+                                                    { title: "Title", value: selectedItem?.title, type: "text" },
                                                     { title: "Description", value: selectedItem?.description, type: "textarea" },
                                                     { title: "Price", value: selectedItem?.price, type: "number", invalid: invalidPrice }
                                                 ]}
                                                 onSave={(value) => onSave(item.id, value)}
                                                 onCancel={onCancel}
                                                 classname="list-item-input input-field-edit">
-                                                <button className={`edit-button${(invalidPrice || invalidName || invalidDescription) ? ' invalid' : ''}`}>Edit</button>
+                                                <button className={`edit-button${(invalidPrice || invalidTitle || invalidDescription) ? ' invalid' : ''}`}>Edit</button>
                                             </PopupForm>
                                         </div>
 
