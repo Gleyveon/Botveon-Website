@@ -10,8 +10,8 @@ import placeholderImage from '../../assets/img/placeholderImage.svg'
 import addIcon from '../../assets/img/icons/add.png'
 
 const FRONTEND_URL = import.meta.env.VITE_FRONTEND_URL;
+const CLIENT_ID = import.meta.env.VITE_DISCORD_CLIENT_ID || "817845132363038750";
 
-const CLIENT_ID = '1063785082193711125';
 const DISCORD_OAUTH_URL = `https://discord.com/oauth2/authorize?client_id=${CLIENT_ID}`;
 
 function Dashboard() {

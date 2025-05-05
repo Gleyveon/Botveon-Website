@@ -4,6 +4,8 @@ import './styles.scss';
 import WaveSection from '../../components/shared/wave-section';
 import { useState } from 'react';
 
+const CLIENT_ID = import.meta.env.VITE_DISCORD_CLIENT_ID || "817845132363038750";
+
 function Home() {
   const [serverCount, setServerCount] = useState("440+");
   const [userCount, setUserCount] = useState("87410+");
@@ -15,7 +17,7 @@ function Home() {
         <div className="home-wrapper">
           <h1 className='home-title'>Botveon</h1>
           <h2 className='home-description'>The best <u>all-in-one</u> Yu-Gi-Oh bot!</h2>
-          <a className='home-invite' href="https://discord.com/oauth2/authorize?client_id=817845132363038750" target='_blank' rel="noopener noreferrer">Invite me!</a>
+          <a className='home-invite' href={`https://discord.com/oauth2/authorize?client_id=${CLIENT_ID}`} target='_blank' rel="noopener noreferrer">Invite me!</a>
         </div>
       </div>
 
