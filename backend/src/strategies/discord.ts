@@ -2,9 +2,11 @@ import passport from 'passport';
 import { encrypt, decrypt } from "../utils/crypto";
 import { Profile, Strategy } from 'passport-discord';
 import { VerifyCallback } from 'passport-oauth2';
-import { config } from "dotenv";
 import { User } from '../database/models';
-config();
+import dotenv from 'dotenv';
+import path from 'path';
+
+dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
 passport.serializeUser((user: any, done) => {
     return done(null, user.id);

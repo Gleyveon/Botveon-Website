@@ -1,6 +1,8 @@
 import mongoose from "mongoose";
-import { config } from "dotenv";
-config();
+import dotenv from 'dotenv';
+import path from 'path';
+
+dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
 mongoose
     .connect(process.env.MONGODB_SRV!)

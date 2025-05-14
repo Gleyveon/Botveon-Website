@@ -82,9 +82,9 @@ function Header() {
                 <NavLink className='link' to="/dashboard">dashboard</NavLink>
                 {user ? (
                   // <a className="username">{user.username}</a>
-                  <a className="logout-button" href={`${BACKEND_URL}/${API_BASE_URL}/auth/logout`}>Logout</a>
+                  <a className="logout-button" href={`${BACKEND_URL}${API_BASE_URL}/auth/logout`}>Logout</a>
                 ) : (
-                  <a className='login-button' href={`${BACKEND_URL}/${API_BASE_URL}/auth/discord?redirect=${encodeURIComponent(redirectUrl)}`}>Login</a>
+                  <a className='login-button' href={`${BACKEND_URL}${API_BASE_URL}/auth/discord?redirect=${encodeURIComponent(redirectUrl)}`}>Login</a>
                 )}
               </nav>
             </div>
@@ -140,9 +140,9 @@ function Header() {
               <div className="login-button-wrapper">
               {user ? (
                   // <a className="username">{user.username}</a>
-                  <a className="logout-button" href={`${BACKEND_URL}/${API_BASE_URL}/auth/logout`}>Logout</a>
+                  <a className="logout-button" href={`${BACKEND_URL}${API_BASE_URL}/auth/logout`}>Logout</a>
                 ) : (
-                  <a className='login-button' href={`${BACKEND_URL}/${API_BASE_URL}/auth/discord?redirect=${encodeURIComponent(redirectUrl)}`}>Login with Discord</a>
+                  <a className='login-button' href={`${BACKEND_URL}${API_BASE_URL}/auth/discord?redirect=${encodeURIComponent(redirectUrl)}`}>Login with Discord</a>
                 )}
               </div>
             </div>

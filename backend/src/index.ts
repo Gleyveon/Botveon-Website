@@ -1,7 +1,9 @@
 import { createApp } from "./utils/createApp";
-import { config } from "dotenv"; 
+import dotenv from 'dotenv';
+import path from 'path';
 import './database/index';
-config();
+
+dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
 const PORT = process.env.PORT || 3001;
 

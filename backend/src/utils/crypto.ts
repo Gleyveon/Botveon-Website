@@ -1,7 +1,9 @@
 // utils/crypto.ts
-import { config } from "dotenv";
+import dotenv from 'dotenv';
+import path from 'path';
 import crypto from "crypto";
-config();
+
+dotenv.config({ path: path.resolve(__dirname, '../../../.env') });
 
 const ENCRYPTION_KEY = process.env.ENCRYPTION_KEY!;
 const algorithm = 'aes-256-cbc';

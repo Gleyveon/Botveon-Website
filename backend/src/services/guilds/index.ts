@@ -2,39 +2,40 @@ import axios from "axios";
 import { User } from '../../database/models'
 import { DISCORD_API_URL } from "../../utils/constants";
 import { Guild } from "../../utils/types";
+import GuildData, { Guild as GuildModel } from "../../database/models/GuildData";
 import NodeCache from 'node-cache';
 
-const cache = new NodeCache({ stdTTL: 10 });
-const pendingRequests: Record<string, Promise<{ data: Guild[] }> | undefined> = {};
+const GuildsModelCache = new NodeCache({ stdTTL: 10 });
+const GuildsCache = new NodeCache({ stdTTL: 10 });
 
-export async function getBotGuildsService(): Promise<{ data: Guild[] }> {
+const PendingGuildsModel: Record<string, Promise<{ data: GuildModel[] }> | undefined> = {};
+const PendingGuilds: Record<string, Promise<{ data: Guild[] }> | undefined> = {};
+
+export async function getBotGuildsService(): Promise<{ data: GuildModel[] }> {
     const cacheKey = 'botGuilds';
-    const TOKEN = process.env.DISCORD_BOT_TOKEN;
 
-    if (cache.has(cacheKey)) {
-        const cachedData = cache.get<Guild[]>(cacheKey);
+    if (GuildsModelCache.has(cacheKey)) {
+        const cachedData = GuildsModelCache.get<GuildModel[]>(cacheKey);
         if (cachedData) {
             return { data: cachedData };
         }
     }
 
-    if (pendingRequests[cacheKey]) {
-        return pendingRequests[cacheKey];
+    if (PendingGuildsModel[cacheKey]) {
+        return PendingGuildsModel[cacheKey];
     }
 
-    const promise = (async (): Promise<{ data: Guild[] }> => {
-        const response = await axios.get<Guild[]>(`${DISCORD_API_URL}/users/@me/guilds`, {
-            headers: { Authorization: `Bot ${TOKEN}` },
-        });
+    const promise = (async (): Promise<{ data: GuildModel[] }> => {
+        const response = await GuildData.find().lean();
 
-        cache.set(cacheKey, response.data);
-        return { data: response.data };
+        GuildsModelCache.set(cacheKey, response);
+        return { data: response };
     })()
         .finally(() => {
-            delete pendingRequests[cacheKey];
+            delete PendingGuildsModel[cacheKey];
         });
 
-    pendingRequests[cacheKey] = promise;
+    PendingGuildsModel[cacheKey] = promise;
     return promise;
 }
 
@@ -43,15 +44,15 @@ export async function getUserGuildsService(userID: string): Promise<{ data: Guil
     if (!user) { throw new Error('No user found') }
 
     const cacheKey = `userGuilds_${userID}`;
-    if (cache.has(cacheKey)) {
-        const cachedData = cache.get<Guild[]>(cacheKey);
+    if (GuildsCache.has(cacheKey)) {
+        const cachedData = GuildsCache.get<Guild[]>(cacheKey);
         if (cachedData) {
             return { data: cachedData };
         }
     }
 
-    if (pendingRequests[cacheKey] !== undefined) {
-        return pendingRequests[cacheKey]!;
+    if (PendingGuilds[cacheKey] !== undefined) {
+        return PendingGuilds[cacheKey]!;
     }
 
     const promise = (async (): Promise<{ data: Guild[] }> => {
@@ -59,23 +60,23 @@ export async function getUserGuildsService(userID: string): Promise<{ data: Guil
             headers: { Authorization: `Bearer ${user.accessToken}` },
         });
 
-        cache.set(cacheKey, response.data);
+        GuildsCache.set(cacheKey, response.data);
         return { data: response.data };
     })()
         .finally(() => {
-            delete pendingRequests[cacheKey];
+            delete PendingGuilds[cacheKey];
         });
 
-    pendingRequests[cacheKey] = promise;
+    PendingGuilds[cacheKey] = promise;
     return promise;
 }
 
 export async function getMutualGuildsService(userID: string) {
-    const { data: botGuilds } = await getBotGuildsService();
     const { data: userGuilds } = await getUserGuildsService(userID);
+    const { data: botGuilds } = await getBotGuildsService();
 
     const adminUserGuilds = userGuilds.filter(({ permissions }) => (parseInt(permissions) & 0x8) === 0x8);
-    const mutualGuilds = adminUserGuilds.filter((guild) => botGuilds.some((botGuilds) => botGuilds.id === guild.id));
+    const mutualGuilds = adminUserGuilds.filter((guild) => botGuilds.some((botGuilds) => botGuilds.serverID === guild.id));
 
     return mutualGuilds;
 }

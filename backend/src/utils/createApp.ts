@@ -1,4 +1,5 @@
-import { config } from "dotenv";
+import dotenv from 'dotenv';
+import path from 'path';
 import express, { Express } from "express";
 import session from "express-session"
 import passport from "passport";
@@ -6,10 +7,9 @@ import routes from "../routes";
 import cors from "cors";
 import store = require("connect-mongo");
 import rateLimit from "express-rate-limit";
-import path from 'path';
 
+dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
-config();
 require('../strategies/discord');
 
 export function createApp (): Express {

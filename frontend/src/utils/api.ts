@@ -4,7 +4,7 @@ const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 const API_BASE_URL = import.meta.env.VITE_API_URL;
 
 const api = axios.create({
-  baseURL: `${BACKEND_URL}/${API_BASE_URL}`,
+  baseURL: `${BACKEND_URL}${API_BASE_URL}`,
   withCredentials: true,
 });
 
@@ -23,7 +23,7 @@ api.interceptors.response.use(
       const currentUrl = `${window.location.origin}${window.location.pathname}${window.location.search}${window.location.hash}`;
       
       // Redirect to the login page
-      window.location.href = `${BACKEND_URL}/${API_BASE_URL}/auth/discord?redirect=${encodeURIComponent(currentUrl)}`;
+      window.location.href = `${BACKEND_URL}${API_BASE_URL}/auth/discord?redirect=${encodeURIComponent(currentUrl)}`;
     }
     return Promise.reject(error); // Reject the error so it can still be handled locally if needed
   }
@@ -47,7 +47,10 @@ export const fetchUser = async () => {
 
 export const fetchMutualGuilds = async () => {
   try {
+    console.log("Attempting to fetch guilds!");
     const response = await api.get('/guilds');
+    console.log('response: ');
+    console.log(response);
     return response.data;
   } catch (err) {
     console.error('Error fetching data: ', err);
