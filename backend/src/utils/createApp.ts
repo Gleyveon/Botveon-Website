@@ -15,7 +15,9 @@ require('../strategies/discord');
 export function createApp (): Express {
     const app = express();
 
-    // Rate Limiting: Limit to 100 requests per IP per 15 minutes
+    app.set('trust proxy', 1);
+
+    // Rate Limiting: Limit to 100 requests per IP
     const limiter = rateLimit({
         windowMs: 1000 * 60, // 1 minutes
         max: 100, // Limit each IP to 100 requests
@@ -34,8 +36,8 @@ export function createApp (): Express {
     // Enable cors
     if (process.env.NODE_ENV !== 'production') {
         app.use(cors({
-            origin: "http://localhost:5173",  // Replace with your frontend's URL
-            credentials: true,               // Allow credentials if you're sending cookies
+            origin: process.env.FRONTEND_URL,
+            credentials: true,
         }));
     }
 

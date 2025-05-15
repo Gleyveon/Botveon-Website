@@ -31,6 +31,16 @@ api.interceptors.response.use(
 
 export default api;
 
+export const fetchUserStatistics = async () => {
+  try {
+    const response = await api.get('/statistics');
+    return response.data;
+  } catch (err) {
+    console.error('Error fetching data: ', err);
+    throw err;
+  }
+};
+
 export const fetchUser = async () => {
   try {
     const response = await api.get('/auth/user', {
@@ -47,10 +57,7 @@ export const fetchUser = async () => {
 
 export const fetchMutualGuilds = async () => {
   try {
-    console.log("Attempting to fetch guilds!");
     const response = await api.get('/guilds');
-    console.log('response: ');
-    console.log(response);
     return response.data;
   } catch (err) {
     console.error('Error fetching data: ', err);

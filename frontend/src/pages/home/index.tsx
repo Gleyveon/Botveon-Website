@@ -1,15 +1,57 @@
 // src/pages/home
+import { useState, useEffect } from 'react';
+import { fetchUserStatistics } from '../../utils/api';
+import { useInView } from '../../hooks/useInView';
+import { useCountUp } from '../../hooks/useCountUp';
 import './styles.scss';
 
 import WaveSection from '../../components/shared/wave-section';
-import { useState } from 'react';
 
 const CLIENT_ID = import.meta.env.VITE_DISCORD_CLIENT_ID || "817845132363038750";
 
 function Home() {
-  const [serverCount, setServerCount] = useState("440+");
-  const [userCount, setUserCount] = useState("87410+");
-  const [commands, setCommands] = useState("30+");
+  const [guildCount, setGuildCount] = useState<number>();
+  const [userCount, setUserCount] = useState<number>();
+  const [commands, setCommands] = useState<number>(30);
+  const [uptime, setUptime] = useState<number>(99);
+
+  // fetch server and user count
+  useEffect(() => {
+    fetchUserStatistics()
+      .then((data) => {
+        setUserCount(Math.floor(Number(data.userCount) / 10) * 10);
+        setGuildCount(Math.floor(Number(data.guildCount) / 10) * 10);
+      });
+  }, []);
+
+  // Animation state and refs
+  const [hasAnimated, setHasAnimated] = useState({ guild: false, user: false, command: false, uptime: false });
+  const [guildRef, guildInView] = useInView();
+  const [userRef, userInView] = useInView();
+  const [commandRef, commandInView] = useInView();
+  const [uptimeRef, uptimeInView] = useInView();
+
+  useEffect(() => {
+    if (guildInView && !hasAnimated.guild) setHasAnimated(s => ({ ...s, guild: true }));
+  }, [guildInView, hasAnimated.guild]);
+
+  useEffect(() => {
+    if (userInView && !hasAnimated.user) setHasAnimated(s => ({ ...s, user: true }));
+  }, [userInView, hasAnimated.user]);
+
+  useEffect(() => {
+    if (commandInView && !hasAnimated.command) setHasAnimated(s => ({ ...s, command: true }));
+  }, [commandInView, hasAnimated.command]);
+
+  useEffect(() => {
+    if (uptimeInView && !hasAnimated.uptime) setHasAnimated(s => ({ ...s, uptime: true }));
+  }, [uptimeInView, hasAnimated.uptime]);
+
+  const animatedGuild = useCountUp(guildCount, hasAnimated.guild);
+  const animatedUser = useCountUp(userCount, hasAnimated.user);
+  const animatedCommand = useCountUp(commands, hasAnimated.command);
+  const animatedUptime = useCountUp(uptime, hasAnimated.uptime);
+
 
   return (
     <div className="page home-page">
@@ -79,28 +121,30 @@ function Home() {
 
             <div className="column col-md-3">
               <div className="stat">
-                <div className="stat-number">{serverCount}</div>
+                <div className="stat-number" ref={guildRef}>
+                  <div className="stat-number">{guildCount !== undefined ? `${animatedGuild}+` : "?"}</div>
+                </div>
                 <div className="stat-label">Servers</div>
               </div>
             </div>
 
             <div className="column col-md-3">
-              <div className="stat">
-                <div className="stat-number">{userCount}</div>
+              <div className="stat" ref={userRef}>
+                <div className="stat-number">{userCount !== undefined ? `${animatedUser} +` : '?'}</div>
                 <div className="stat-label">Users</div>
               </div>
             </div>
 
             <div className="column col-md-3">
-              <div className="stat">
-                <div className="stat-number">{commands}</div>
+              <div className="stat" ref={commandRef}>
+                <div className="stat-number">{commands !== undefined ? `${animatedCommand} +` : '?'}</div>
                 <div className="stat-label">commands</div>
               </div>
             </div>
 
             <div className="column col-md-3">
-              <div className="stat">
-                <div className="stat-number">99%</div>
+              <div className="stat" ref={uptimeRef}>
+                <div className="stat-number">{uptime !== undefined ? `${animatedUptime} %` : '?'}</div>
                 <div className="stat-label">Uptime</div>
               </div>
             </div>

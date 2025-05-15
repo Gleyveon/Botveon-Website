@@ -76,7 +76,7 @@ function Header() {
 
             <div className="nav-wrapper">
               <nav>
-                <NavLink className='link' to="/home">home</NavLink>
+                <NavLink className='link' to="/">home</NavLink>
                 {/* <NavLink className='link' to="/features">features</NavLink>
                 <NavLink className='link' to="/commands">commands</NavLink> */}
                 <NavLink className='link' to="/dashboard">dashboard</NavLink>
@@ -111,7 +111,7 @@ function Header() {
 
             {!isGuildPage && (
               <>
-                <NavLink className='link' to="/home">Home</NavLink>
+                <NavLink className='link' to="/">Home</NavLink>
                 {/* <NavLink className='link' to="/features">Features</NavLink>
                 <NavLink className='link' to="/commands">Commands</NavLink> */}
                 <NavLink className='link' to="/dashboard">Dashboard</NavLink>
@@ -127,7 +127,7 @@ function Header() {
 
                 
                 <Dropdown classname='dropdown' title='Additional links'>
-                  <NavLink className='link' to="/home">Home</NavLink>
+                  <NavLink className='link' to="/">Home</NavLink>
                   {/* <NavLink className='link' to="/features">Features</NavLink>
                   <NavLink className='link' to="/commands">Commands</NavLink> */}
                   <NavLink className='link' to="/dashboard">Dashboard</NavLink>
